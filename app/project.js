@@ -25,7 +25,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { getBridgeList } from "../fetches/getBridgeList";
 
 export default function Page() {
-
   const [image, setImage] = useState(null);
 
   const { data } = useLocalSearchParams();
@@ -37,16 +36,14 @@ export default function Page() {
   const [formList, setFormList] = useState([]);
 
   const thisApiCall = async () => {
+    let returnApiCall;
 
-    let returnApiCall
-
-    if(thisdata.project_type === "Toll Plaza"){
+    if (thisdata.project_type === "Toll Plaza") {
+      returnApiCall = await getBridgeList();
+    } else if (thisdata.project_type === "Bridge") {
       returnApiCall = await getBridgeList();
     }
-    else if(thisdata.project_type === "Bridge"){
-     returnApiCall = await getBridgeList();
-    }
-    
+
     setFormList(returnApiCall);
   };
 
@@ -55,70 +52,143 @@ export default function Page() {
   }, []);
 
   const FormItems = ({ item, index }) => {
-    let materials = [];
-    let componentNames = [];
+    let materialNames = [];
+    let typeOfDamageNames = [];
 
-    let thisstructure = JSON.parse(item.structure)
+    let thisstructure = JSON.parse(item.structure);
+
+    // console.log(index + "--" + JSON.stringify(thisstructure));
 
     if (thisstructure.component.material) {
       materials = thisstructure.component.material.map((item2) => {
-        if (item2.name) {
-          let thiscomponentNames = item2.name.map((item3) => {
-            return (
-              <View className="ml-2 mb-2">
-                <View className="flex-row items-center p-2 bg-emerald-400 rounded-lg mb-2">
+        if (item2.material_details) {
+          material_details = item2.material_details.map((item3) => {
+            if (item3.name) {
+              return (
+                <TouchableOpacity
+                  style={{ elevation: 5 }}
+                  className="bg-blue-600 mb-2 p-2 rounded-md flex-row justify-start items-center"
+                >
                   <FontAwesomeIcon
                     icon="fa-regular fa-square"
-                    color="black"
-                    size={25}
+                    color="white"
+                    size={18}
+                    style={{ marginRight: 8 }}
                   />
-                  <Text className="ml-2 text-[20px] font-semibold">
-                    {item3}
+                  <Text className="text-[16px] text-white font-semibold">
+                    {item3.name}
                   </Text>
-                </View>
-                {item2.type_of_damage.map((item4) => {
-                  let filteredData = formList.thisdamage.filter(
-                    (thisitem) => item4 == thisitem.code
-                  );
-                  return (
-                    <View className="mb-2">
-                      <View className="bg-sky-300 p-2 rounded-lg mb-2">
-                        <Text className="ml-2 text-[20px] font-semibold">
-                          Code: {filteredData[0].code} - {filteredData[0].name}
+                </TouchableOpacity>
+              );
+            }
+          });
+          materialNames.push(material_details);
+        }
+        if (item2.type_of_damages) {
+          damages_details = item2.type_of_damages.map((item3, index3) => {
+            if (item3.name) {
+              if (item3.severity_of_damage_list) {
+                return (
+                  <View className="mb-2 rounded-md">
+                    <View className="w-full flex-row justify-start items-center mb-3">
+                      <FontAwesomeIcon
+                        icon="house-damage"
+                        color="black"
+                        size={20}
+                        style={{ marginRight: 8 }}
+                      />
+                      <Text className="text-[18px] font-bold">
+                        {index3 + 1}- {item3.name}
+                      </Text>
+                    </View>
+                    <View className="mb-2 p-0 rounded-md justify-center items-end">
+                      {item3.severity_of_damage_list.map(
+                        (severityItem, severityIndex) => {
+                          return (
+                            <TouchableOpacity
+                              style={{ elevation: 5, width: "90%" }}
+                              className={`${
+                                severityIndex == 0
+                                  ? "bg-gray-100"
+                                  : severityIndex == 1
+                                  ? "bg-gray-100"
+                                  : severityIndex == 2
+                                  ? "bg-gray-100"
+                                  : "bg-gray-100"
+                              } p-3 mb-2 rounded-md flex-row`}
+                            >
+                              <Text
+                                className={`${
+                                  severityIndex == 1
+                                    ? "text-black"
+                                    : "text-black"
+                                } font-bold leading-5 text-[16px]`}
+                              >
+                                {severityItem.level} -{" "}
+                                <Text className="font-semibold">
+                                  {" "}
+                                  {severityItem.details}
+                                </Text>
+                              </Text>
+                            </TouchableOpacity>
+                          );
+                        }
+                      )}
+                    </View>
+                    <View className="mb-3">
+                      <View className="mb-2">
+                        <Text className="text-blue-600 text-[16px] mb-2 font-semibold">
+                          Percentage Affected
                         </Text>
+                        <TextInput className="bg-gray-100 rounded-md h-[35px]" />
                       </View>
-                      <View>
-                        <Text className="font-bold text-[18px] mb-1">
-                          Light
+                      <View className="mb-2">
+                        <Text className="text-blue-600 text-[16px] mb-2 font-semibold">
+                          Remarks
                         </Text>
-                        <Text className="font-bold text-[18px] mb-1">
-                          Medium
+                        <TextInput className="bg-gray-100 rounded-md h-[35px]" />
+                      </View>
+                      <View className="mb-2">
+                        <Text className="text-blue-600 text-[16px] mb-2 font-semibold">
+                          Rating of Damage
                         </Text>
-                        <Text className="font-bold text-[18px] mb-1">
-                          Severe
-                        </Text>
-                        <Text className="font-bold text-[18px] mb-1">
-                          V.Severe
-                        </Text>
+                        <TextInput className="bg-gray-100 rounded-md h-[35px]" />
                       </View>
                     </View>
-                  );
-                })}
-              </View>
-            );
+                  </View>
+                );
+              }
+            }
           });
-
-          componentNames.push(thiscomponentNames);
+          typeOfDamageNames.push(damages_details);
         }
       });
     }
 
     return (
-      <View>
-        <Text className="text-black font-bold text-[20px] mb-2">
-          {thisstructure.component.name}
-        </Text>
-        {componentNames}
+      <View className="mb-5 border-b-2">
+        <View className="bg-yellow-400 p-2 flex-row justify-start items-center mb-4">
+          <FontAwesomeIcon
+            icon="truck-loading"
+            color="black"
+            size={20}
+            style={{ marginRight: 8 }}
+          />
+          <Text className="text-black font-bold text-[20px]">
+            {thisstructure.component.component_details.name}
+          </Text>
+        </View>
+        {/* {materialNames}
+        {typeOfDamageNames} */}
+        {materialNames.map((thisItem, thisIndex) => {
+          return (
+            <View className="mb-3">
+              {thisItem}
+              <View className="h-[8px]" />
+              {typeOfDamageNames[thisIndex]}
+            </View>
+          );
+        })}
       </View>
     );
   };
@@ -148,7 +218,7 @@ export default function Page() {
       type: "image/jpeg",
     });
 
-    fetch(API_URL +"/api/upload", {
+    fetch(API_URL + "/api/upload", {
       method: "post",
       body: fd,
       // headers: {
@@ -161,7 +231,6 @@ export default function Page() {
       })
       .catch((error) => console.log(error.message));
   };
-
 
   return (
     <View className="flex-1 justify-start bg-gray-200">
@@ -202,9 +271,13 @@ export default function Page() {
         Form List
       </Text>
       <View className="bg-white w-[95%] self-center rounded-md p-3">
-        {
-          formList.length < 1 ? <Text className="text-black font-semibold text-[20px]">No Form Created Yet!</Text> : <Text className="text-black font-semibold text-[20px]"></Text>
-        }
+        {formList.length < 1 ? (
+          <Text className="text-black font-semibold text-[20px]">
+            No Form Created Yet!
+          </Text>
+        ) : (
+          <Text className="text-black font-semibold text-[20px]"></Text>
+        )}
       </View>
 
       <TouchableOpacity
@@ -236,18 +309,25 @@ export default function Page() {
             activeOpacity={1}
           >
             <View className="bg-blue-600 h-[50px] rounded-t-md w-full justify-center">
-            <Text className="text-white text-[22px] text-center font-bold">
-              New {thisdata.project_type} Form
-            </Text>
-            <TouchableOpacity
-              onPress={() => {
-                setModalVisible(!modalVisible);
-              }}
-              style={{ position: "absolute", right: 0, top: 0, height: 50, width: 50 }}
-              className="flex justify-center items-center rounded-tr-md p-4 bg-red-600"
-            >
-              <FontAwesomeIcon icon="xmark" color="white" size={30} />
-            </TouchableOpacity>
+              <Text className="text-white text-[22px] text-center font-bold">
+                New {thisdata.project_type} Form
+              </Text>
+              {/* <Text>{JSON.stringify(formList)}</Text> */}
+              <TouchableOpacity
+                onPress={() => {
+                  setModalVisible(!modalVisible);
+                }}
+                style={{
+                  position: "absolute",
+                  right: 0,
+                  top: 0,
+                  height: 50,
+                  width: 50,
+                }}
+                className="flex justify-center items-center rounded-tr-md p-4 bg-red-600"
+              >
+                <FontAwesomeIcon icon="xmark" color="white" size={30} />
+              </TouchableOpacity>
             </View>
             <FlatList
               data={formList.bridgelist}
@@ -256,32 +336,36 @@ export default function Page() {
               )}
               keyExtractor={(item) => item.id}
               contentContainerStyle={{
-                flexGrow: 1, paddingHorizontal: 15, marginTop: 10
-                }}
+                flexGrow: 1,
+                paddingHorizontal: 15,
+                marginTop: 10,
+              }}
             />
-            <Button title="Pick an image from camera-roll" onPress={pickImage} style={{marginVertical: 30}} />
+            {/* <Button
+              title="Pick an image from camera-roll"
+              onPress={pickImage}
+              style={{ marginVertical: 30 }}
+            />
             {image ? (
-          <Image
-            source={{
-              uri: image,
-            }}
-            style={{
-              width: 200,
-              height: 150,
-              marginVertical: 30
-            }}
-          />
-        ) : null}
+              <Image
+                source={{
+                  uri: image,
+                }}
+                style={{
+                  width: 200,
+                  height: 150,
+                  marginVertical: 30,
+                }}
+              />
+            ) : null}
 
-        <Button title="Upload" onPress={uploadImage} />
-            
+            <Button title="Upload" onPress={uploadImage} /> */}
+
             <TouchableOpacity onPress={() => setModalVisible(!modalVisible)}>
               <Text className=""></Text>
             </TouchableOpacity>
           </View>
         </View>
-        {/* <TouchableOpacity style={{flex: 1}}>
-        </TouchableOpacity> */}
       </Modal>
     </View>
   );

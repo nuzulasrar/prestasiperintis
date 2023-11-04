@@ -12,6 +12,9 @@ import { faChevronRight } from "@fortawesome/free-solid-svg-icons/faChevronRight
 import { faRightToBracket } from "@fortawesome/free-solid-svg-icons/faRightToBracket";
 import { faXmark } from "@fortawesome/free-solid-svg-icons/faXmark";
 import { faArrowsRotate } from "@fortawesome/free-solid-svg-icons/faArrowsRotate";
+import { faSquareCheck } from "@fortawesome/free-solid-svg-icons/faSquareCheck";
+import { faTruckLoading } from "@fortawesome/free-solid-svg-icons/faTruckLoading";
+import { faHouseDamage } from "@fortawesome/free-solid-svg-icons/faHouseDamage";
 
 import NetInfo from "@react-native-community/netinfo";
 
@@ -23,7 +26,11 @@ library.add(
   faChevronRight,
   faRightToBracket,
   faXmark,
-  faArrowsRotate
+  faArrowsRotate,
+  faSquare,
+  faSquareCheck,
+  faTruckLoading,
+  faHouseDamage
 );
 
 export default function Page() {
@@ -84,7 +91,7 @@ export default function Page() {
       <TouchableOpacity
         onPress={() =>
           router.push({
-            pathname: "/draw"
+            pathname: "/draw",
           })
         }
         className="p-2 bg-emerald-600 w-1/2 rounded-full justify-center items-center "
