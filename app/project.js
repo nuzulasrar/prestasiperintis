@@ -51,8 +51,137 @@ export default function Page() {
     thisApiCall();
   }, []);
 
+  const captureInput = (
+    code,
+    whichDetail,
+    component,
+    material,
+    type_of_damages,
+    material_rating
+  ) => {
+    //ambik yg lama
+    const thisMaterial = { ...formList };
+
+    //parse structure
+    let thisStructure = JSON.parse(
+      thisMaterial.bridgelist[component].structure
+    );
+
+    //x pernah set
+    if (
+      String(
+        thisStructure["component"].material[material].type_of_damages[
+          type_of_damages
+        ].tick
+      ) == "0"
+    ) {
+      //set rating of damage
+      thisStructure["component"].material[material].type_of_damages[
+        type_of_damages
+      ].severity_of_damage = material_rating + 1;
+
+      //set tick for the material
+      thisStructure["component"].material[material].type_of_damages[
+        type_of_damages
+      ].tick = 1;
+
+      //set percentage affected
+      if (whichDetail == 1) {
+        thisStructure["component"].material[material].type_of_damages[
+          type_of_damages
+        ].percentage_affected =
+          thisStructure["component"].material[material].type_of_damages[
+            type_of_damages
+          ].severity_of_damage_list[material_rating].details;
+      } else if (whichDetail == 2) {
+        thisStructure["component"].material[material].type_of_damages[
+          type_of_damages
+        ].percentage_affected =
+          thisStructure["component"].material[material].type_of_damages[
+            type_of_damages
+          ].severity_of_damage_list[material_rating].details_2;
+      } else if (whichDetail == 3) {
+        thisStructure["component"].material[material].type_of_damages[
+          type_of_damages
+        ].percentage_affected =
+          thisStructure["component"].material[material].type_of_damages[
+            type_of_damages
+          ].severity_of_damage_list[material_rating].details_3;
+      }
+    }
+    // pernah set
+    else {
+      //sama
+      if (
+        String(
+          thisStructure["component"].material[material].type_of_damages[
+            type_of_damages
+          ].severity_of_damage
+        ) == String(Number(material_rating + 1))
+      ) {
+        //set rating of damage
+        thisStructure["component"].material[material].type_of_damages[
+          type_of_damages
+        ].severity_of_damage = 0;
+
+        //set tick for the material
+        thisStructure["component"].material[material].type_of_damages[
+          type_of_damages
+        ].tick = 0;
+
+        //set percentage affected
+        thisStructure["component"].material[material].type_of_damages[
+          type_of_damages
+        ].percentage_affected = "";
+      }
+      //x sama
+      else {
+        //set rating of damage
+        thisStructure["component"].material[material].type_of_damages[
+          type_of_damages
+        ].severity_of_damage = material_rating + 1;
+
+        //set percentage affected
+        if (whichDetail == 1) {
+          thisStructure["component"].material[material].type_of_damages[
+            type_of_damages
+          ].percentage_affected =
+            thisStructure["component"].material[material].type_of_damages[
+              type_of_damages
+            ].severity_of_damage_list[material_rating].details;
+        } else if (whichDetail == 2) {
+          thisStructure["component"].material[material].type_of_damages[
+            type_of_damages
+          ].percentage_affected =
+            thisStructure["component"].material[material].type_of_damages[
+              type_of_damages
+            ].severity_of_damage_list[material_rating].details_2;
+        } else if (whichDetail == 3) {
+          thisStructure["component"].material[material].type_of_damages[
+            type_of_damages
+          ].percentage_affected =
+            thisStructure["component"].material[material].type_of_damages[
+              type_of_damages
+            ].severity_of_damage_list[material_rating].details_3;
+        }
+      }
+    }
+
+    // convert to string to store to DB
+    thisMaterial.bridgelist[component].structure =
+      JSON.stringify(thisStructure);
+
+    console.log(
+      JSON.stringify(JSON.parse(thisMaterial.bridgelist[component].structure))
+    );
+
+    // set to the original list to FE
+    setFormList(thisMaterial);
+  };
+
   const FormItems = ({ item, index }) => {
     let materialNames = [];
+    let ratingOfMember = [];
     let typeOfDamageNames = [];
 
     let thisstructure = JSON.parse(item.structure);
@@ -60,69 +189,108 @@ export default function Page() {
     // console.log(index + "--" + JSON.stringify(thisstructure));
 
     if (thisstructure.component.material) {
-      materials = thisstructure.component.material.map((item2) => {
+      materials = thisstructure.component.material.map((item2, index2) => {
         if (item2.material_details) {
           material_details = item2.material_details.map((item3) => {
             if (item3.name) {
               return (
-                <TouchableOpacity
-                  style={{ elevation: 5 }}
-                  className="bg-blue-600 mb-2 p-2 rounded-md flex-row justify-start items-center"
-                >
-                  <FontAwesomeIcon
-                    icon="fa-regular fa-square"
-                    color="white"
-                    size={18}
-                    style={{ marginRight: 8 }}
-                  />
-                  <Text className="text-[16px] text-white font-semibold">
-                    {item3.name}
-                  </Text>
-                </TouchableOpacity>
+                <View className="w-full">
+                  <TouchableOpacity
+                    style={{ elevation: 5 }}
+                    className="bg-blue-600 mb-2 p-2 rounded-md flex-row justify-start items-center"
+                  >
+                    <FontAwesomeIcon
+                      icon="fa-regular fa-square"
+                      color="white"
+                      size={18}
+                      style={{ marginRight: 8 }}
+                    />
+                    <Text className="text-[16px] text-white font-semibold">
+                      {item3.name}
+                    </Text>
+                  </TouchableOpacity>
+                </View>
               );
             }
           });
+          ratingOfMember.push(item2.rating_of_member);
           materialNames.push(material_details);
         }
+
         if (item2.type_of_damages) {
           damages_details = item2.type_of_damages.map((item3, index3) => {
             if (item3.name) {
               if (item3.severity_of_damage_list) {
                 return (
                   <View className="mb-2 rounded-md">
-                    <View className="w-full flex-row justify-start items-center mb-3">
+                    <View className="w-full flex-row justify-start items-center mb-4">
                       <FontAwesomeIcon
                         icon="house-damage"
-                        color="black"
+                        color="rgba(37, 99, 275, 1)"
                         size={20}
                         style={{ marginRight: 8 }}
                       />
-                      <Text className="text-[18px] font-bold">
-                        {index3 + 1}- {item3.name}
-                      </Text>
+                      <View className="flex-row justify-center items-center">
+                        <Text className="text-[18px] font-bold underline mr-3">
+                          {index3 + 1}- {item3.name}{" "}
+                        </Text>
+                        <View
+                          style={{ elevation: 3 }}
+                          className="bg-green-600 rounded-full h-[25px] w-[100px] justify-center items-center"
+                        >
+                          <Text className="text-white text-[16px] font-bold">
+                            Code: {item3.code}
+                          </Text>
+                        </View>
+                      </View>
                     </View>
-                    <View className="mb-2 p-0 rounded-md justify-center items-end">
+                    <View className="mb-4 p-0 rounded-md justify-center items-end">
+                      <View
+                        className="h-[50px] justify-center"
+                        style={{ width: "90%" }}
+                      >
+                        <Text className="text-black text-[16px] font-semibold">
+                          {item3.type_of_damages_array[0]}
+                        </Text>
+                      </View>
                       {item3.severity_of_damage_list.map(
                         (severityItem, severityIndex) => {
                           return (
                             <TouchableOpacity
-                              style={{ elevation: 5, width: "90%" }}
-                              className={`${
-                                severityIndex == 0
-                                  ? "bg-gray-100"
-                                  : severityIndex == 1
-                                  ? "bg-gray-100"
-                                  : severityIndex == 2
-                                  ? "bg-gray-100"
-                                  : "bg-gray-100"
-                              } p-3 mb-2 rounded-md flex-row`}
+                              style={{
+                                elevation: 5,
+                                width: "90%",
+                                backgroundColor:
+                                  String(item3.tick) == "1" &&
+                                  severityIndex ==
+                                    String(Number(item3.severity_of_damage - 1))
+                                    ? "rgba(27,99,235,1)"
+                                    : "rgba(243,244,246,1)",
+                              }}
+                              className={`p-3 mb-2 rounded-md flex-row`}
+                              onPress={() => {
+                                captureInput(
+                                  item3.code,
+                                  1,
+                                  index,
+                                  index2,
+                                  index3,
+                                  severityIndex
+                                );
+                              }}
                             >
                               <Text
-                                className={`${
-                                  severityIndex == 1
-                                    ? "text-black"
-                                    : "text-black"
-                                } font-bold leading-5 text-[16px]`}
+                                className={`font-bold leading-5 text-[16px]`}
+                                style={{
+                                  color:
+                                    String(item3.tick) == "1" &&
+                                    severityIndex ==
+                                      String(
+                                        Number(item3.severity_of_damage - 1)
+                                      )
+                                      ? "white"
+                                      : "black",
+                                }}
                               >
                                 {severityItem.level} -{" "}
                                 <Text className="font-semibold">
@@ -134,25 +302,201 @@ export default function Page() {
                           );
                         }
                       )}
+
+                      {item3.code == 3 ||
+                      item3.code == 6 ||
+                      item3.code == 7 ||
+                      item3.code == 10 ||
+                      item3.code == 14 ||
+                      item3.code == 17 ||
+                      item3.code == 35 ? (
+                        <View
+                          className="h-[50px] justify-center"
+                          style={{ width: "90%" }}
+                        >
+                          <Text className="text-black text-[16px] font-semibold">
+                            {item3.type_of_damages_array[1]}
+                          </Text>
+                        </View>
+                      ) : null}
+
+                      {item3.code == 3 ||
+                      item3.code == 6 ||
+                      item3.code == 7 ||
+                      item3.code == 10 ||
+                      item3.code == 14 ||
+                      item3.code == 17 ||
+                      item3.code == 35
+                        ? item3.severity_of_damage_list.map(
+                            (severityItem, severityIndex) => {
+                              return (
+                                <TouchableOpacity
+                                  style={{
+                                    elevation: 5,
+                                    width: "90%",
+                                    backgroundColor:
+                                      String(item3.tick) == "1" &&
+                                      severityIndex ==
+                                        String(
+                                          Number(item3.severity_of_damage - 1)
+                                        )
+                                        ? "rgba(27,99,235,1)"
+                                        : "rgba(243,244,246,1)",
+                                  }}
+                                  className={`p-3 mb-2 rounded-md flex-row`}
+                                  onPress={() => {
+                                    captureInput(
+                                      item3.code,
+                                      2,
+                                      index,
+                                      index2,
+                                      index3,
+                                      severityIndex
+                                    );
+                                  }}
+                                >
+                                  <Text
+                                    style={{
+                                      color:
+                                        String(item3.tick) == "1" &&
+                                        severityIndex ==
+                                          String(
+                                            Number(item3.severity_of_damage - 1)
+                                          )
+                                          ? "white"
+                                          : "black",
+                                    }}
+                                    className={`font-bold leading-5 text-[16px]`}
+                                  >
+                                    {severityItem.level} -{" "}
+                                    <Text className="font-semibold">
+                                      {" "}
+                                      {severityItem.details_2}
+                                    </Text>
+                                  </Text>
+                                </TouchableOpacity>
+                              );
+                            }
+                          )
+                        : null}
+
+                      {item3.code == 17 ? (
+                        <View
+                          className="h-[50px] justify-center"
+                          style={{ width: "90%" }}
+                        >
+                          <Text className="text-black text-[16px] font-semibold">
+                            {item3.type_of_damages_array[2]}
+                          </Text>
+                        </View>
+                      ) : null}
+
+                      {item3.code == 17
+                        ? item3.severity_of_damage_list.map(
+                            (severityItem, severityIndex) => {
+                              return (
+                                <TouchableOpacity
+                                  style={{
+                                    elevation: 5,
+                                    width: "90%",
+                                    backgroundColor:
+                                      String(item3.tick) == "1" &&
+                                      severityIndex ==
+                                        String(
+                                          Number(item3.severity_of_damage - 1)
+                                        )
+                                        ? "rgba(27,99,235,1)"
+                                        : "rgba(243,244,246,1)",
+                                  }}
+                                  className={`p-3 mb-2 rounded-md flex-row`}
+                                  onPress={() => {
+                                    // alert("hi");
+                                    captureInput(
+                                      item3.code,
+                                      3,
+                                      index,
+                                      index2,
+                                      index3,
+                                      severityIndex
+                                    );
+                                  }}
+                                >
+                                  <Text
+                                    style={{
+                                      color:
+                                        String(item3.tick) == "1" &&
+                                        severityIndex ==
+                                          String(
+                                            Number(item3.severity_of_damage - 1)
+                                          )
+                                          ? "white"
+                                          : "black",
+                                    }}
+                                    className={`font-bold leading-5 text-[16px]`}
+                                  >
+                                    {severityItem.level} -{" "}
+                                    <Text className="font-semibold">
+                                      {" "}
+                                      {severityItem.details_3}
+                                    </Text>
+                                  </Text>
+                                </TouchableOpacity>
+                              );
+                            }
+                          )
+                        : null}
                     </View>
-                    <View className="mb-3">
+                    <View className="mb-3 self-end" style={{ width: "90%" }}>
                       <View className="mb-2">
-                        <Text className="text-blue-600 text-[16px] mb-2 font-semibold">
-                          Percentage Affected
-                        </Text>
-                        <TextInput className="bg-gray-100 rounded-md h-[35px]" />
+                        <View className="flex-row justify-start items-center mb-2">
+                          <FontAwesomeIcon
+                            icon="percent"
+                            color="rgba(37, 99, 275, 1)"
+                            size={18}
+                            style={{ marginRight: 8 }}
+                          />
+                          <Text className="text-black text-[18px] font-semibold">
+                            Percentage Affected
+                          </Text>
+                        </View>
+                        <TextInput
+                          value={String(item3.percentage_affected)}
+                          className="bg-gray-100 rounded-md h-[35px] pl-3"
+                        />
                       </View>
                       <View className="mb-2">
-                        <Text className="text-blue-600 text-[16px] mb-2 font-semibold">
-                          Remarks
-                        </Text>
-                        <TextInput className="bg-gray-100 rounded-md h-[35px]" />
+                        <View className="flex-row justify-start items-center mb-2">
+                          <FontAwesomeIcon
+                            icon="comment"
+                            color="rgba(37, 99, 275, 1)"
+                            size={18}
+                            style={{ marginRight: 8 }}
+                          />
+                          <Text className="text-black text-[18px] font-semibold">
+                            Remarks
+                          </Text>
+                        </View>
+                        <TextInput
+                          value={String(item3.remarks)}
+                          className="bg-gray-100 rounded-md h-[35px] pl-3"
+                        />
                       </View>
                       <View className="mb-2">
-                        <Text className="text-blue-600 text-[16px] mb-2 font-semibold">
-                          Rating of Damage
-                        </Text>
-                        <TextInput className="bg-gray-100 rounded-md h-[35px]" />
+                        <View className="flex-row justify-start items-center mb-2">
+                          <FontAwesomeIcon
+                            icon="chart-bar"
+                            color="rgba(37, 99, 275, 1)"
+                            size={18}
+                            style={{ marginRight: 8 }}
+                          />
+                          <Text className="text-black text-[18px] font-semibold">
+                            Rating of Damage
+                          </Text>
+                        </View>
+                        <TextInput
+                          value={String(item3.severity_of_damage)}
+                          className="bg-gray-100 rounded-md h-[35px] pl-3"
+                        />
                       </View>
                     </View>
                   </View>
@@ -178,12 +522,13 @@ export default function Page() {
             {thisstructure.component.component_details.name}
           </Text>
         </View>
-        {/* {materialNames}
-        {typeOfDamageNames} */}
         {materialNames.map((thisItem, thisIndex) => {
           return (
             <View className="mb-3">
               {thisItem}
+              <Text className="mb-2 text-black text-[18px] font-semibold">
+                Rating of Member: {ratingOfMember[thisIndex]}
+              </Text>
               <View className="h-[8px]" />
               {typeOfDamageNames[thisIndex]}
             </View>
@@ -361,9 +706,13 @@ export default function Page() {
 
             <Button title="Upload" onPress={uploadImage} /> */}
 
-            <TouchableOpacity onPress={() => setModalVisible(!modalVisible)}>
-              <Text className=""></Text>
-            </TouchableOpacity>
+            <View className="h-[80px] w-full bg-white border-t-2 pt-4 border-t-black rounded-b-md">
+              <TouchableOpacity className="bg-blue-600 self-center flex-row justify-center items-center w-6/12 mb-4 py-2 mx-2 rounded-full">
+                <Text className="text-white text-[18px] font-semibold">
+                  Submit Form
+                </Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
       </Modal>

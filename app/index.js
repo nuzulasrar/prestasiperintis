@@ -15,6 +15,9 @@ import { faArrowsRotate } from "@fortawesome/free-solid-svg-icons/faArrowsRotate
 import { faSquareCheck } from "@fortawesome/free-solid-svg-icons/faSquareCheck";
 import { faTruckLoading } from "@fortawesome/free-solid-svg-icons/faTruckLoading";
 import { faHouseDamage } from "@fortawesome/free-solid-svg-icons/faHouseDamage";
+import { faPercent } from "@fortawesome/free-solid-svg-icons/faPercent";
+import { faComment } from "@fortawesome/free-solid-svg-icons/faComment";
+import { faChartBar } from "@fortawesome/free-solid-svg-icons/faChartBar";
 
 import NetInfo from "@react-native-community/netinfo";
 
@@ -30,7 +33,10 @@ library.add(
   faSquare,
   faSquareCheck,
   faTruckLoading,
-  faHouseDamage
+  faHouseDamage,
+  faPercent,
+  faComment,
+  faChartBar
 );
 
 export default function Page() {
