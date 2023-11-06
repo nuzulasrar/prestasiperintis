@@ -18,6 +18,8 @@ import { faHouseDamage } from "@fortawesome/free-solid-svg-icons/faHouseDamage";
 import { faPercent } from "@fortawesome/free-solid-svg-icons/faPercent";
 import { faComment } from "@fortawesome/free-solid-svg-icons/faComment";
 import { faChartBar } from "@fortawesome/free-solid-svg-icons/faChartBar";
+import { faAngleUp } from "@fortawesome/free-solid-svg-icons/faAngleUp";
+import { faAngleDown } from "@fortawesome/free-solid-svg-icons/faAngleDown";
 
 import NetInfo from "@react-native-community/netinfo";
 
@@ -36,7 +38,9 @@ library.add(
   faHouseDamage,
   faPercent,
   faComment,
-  faChartBar
+  faChartBar,
+  faAngleUp,
+  faAngleDown
 );
 
 export default function Page() {

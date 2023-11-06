@@ -12,6 +12,8 @@ import {
 } from "react-native";
 import React, { useState, useEffect } from "react";
 
+import Collapsible from "react-native-collapsible";
+
 import { Link } from "expo-router";
 
 import axios from "axios";
@@ -36,7 +38,12 @@ export default function Page() {
 
   const [modalVisible, setModalVisible] = useState(false);
 
+  const [isCollapsed, setIsCollapsed] = useState(false);
+
+  const [formInfo, setFormInfo] = useState({});
+  const [debounceTimer, setDebounceTimer] = useState(null);
   const [formList, setFormList] = useState([]);
+  const [activeIndex, setActiveIndex] = useState(0);
 
   const thisApiCall = async () => {
     let returnApiCall;
@@ -47,12 +54,44 @@ export default function Page() {
       returnApiCall = await getBridgeList();
     }
 
+    console.log("api", returnApiCall.bridgelist);
+
+    // setFormList([returnApiCall.bridgelist[0]]);
     setFormList(returnApiCall);
   };
 
   useEffect(() => {
     thisApiCall();
   }, []);
+
+  const minusActiveIndex = (index) => {
+    if (index !== 0) {
+      setActiveIndex(activeIndex - 1);
+    }
+  };
+  const plusActiveIndex = (index) => {
+    setActiveIndex(activeIndex + 1);
+  };
+
+  const captureFormInfo = (name, value) => {
+    if (debounceTimer) {
+      clearTimeout(debounceTimer);
+    }
+    setDebounceTimer(
+      setTimeout(() => {
+        setFormInfo({ ...formInfo, [name]: value });
+      }, 500) // Adjust the delay as needed
+    );
+  };
+
+  useEffect(() => {
+    // Clean up any existing debounce timer when the component unmounts
+    return () => {
+      if (debounceTimer) {
+        clearTimeout(debounceTimer);
+      }
+    };
+  }, [debounceTimer]);
 
   const captureInput = (
     code,
@@ -210,6 +249,10 @@ export default function Page() {
   };
 
   const FormItems = ({ item, index }) => {
+    if (index !== activeIndex) {
+      return;
+    }
+
     let materialNames = [];
     let ratingOfMember = [];
     let typeOfDamageNames = [];
@@ -684,7 +727,10 @@ export default function Page() {
       >
         <View
           className="h-full flex-1 justify-center items-center"
-          style={{ backgroundColor: "rgba(0,0,0,0.4)", paddingVertical: 150 }}
+          style={{
+            backgroundColor: "rgba(0,0,0,0.4)",
+            paddingVertical: !isCollapsed ? 250 : 150,
+          }}
         >
           <View
             className="bg-white w-11/12 rounded-lg"
@@ -720,14 +766,53 @@ export default function Page() {
                 <FontAwesomeIcon icon="xmark" color="white" size={30} />
               </TouchableOpacity>
             </View>
-            <View className="w-full p-3">
-              <View className="mb-2">
-                <Text className="text-black text-[18px] font-semibold">
-                  SPAN No:
-                </Text>
-                <TextInput className="bg-gray-200 h-[40px] w-full rounded-md" />
+            <Collapsible collapsed={isCollapsed}>
+              <View className="w-full p-3">
+                {thisdata.project_type === "Bridge" ? (
+                  <View className="mb-2">
+                    <Text className="text-black text-[18px] font-semibold">
+                      SPAN No: {String(activeIndex)}{" "}
+                      {String(formList.bridgelist.length)}
+                    </Text>
+                    <TextInput
+                      value={formInfo?.span_no}
+                      onChangeText={(e) => captureFormInfo("span_no", e)}
+                      className="bg-gray-200 h-[40px] w-full rounded-md"
+                    />
+                  </View>
+                ) : null}
+
+                <View className="mb-2">
+                  <Text className="text-black text-[18px] font-semibold">
+                    Route No:
+                  </Text>
+                  <TextInput
+                    value={formInfo?.route_no}
+                    onChangeText={(e) => captureFormInfo("route_no", e)}
+                    className="bg-gray-200 h-[40px] w-full rounded-md"
+                  />
+                </View>
               </View>
-            </View>
+            </Collapsible>
+
+            <TouchableOpacity
+              onPress={() => {
+                setIsCollapsed(!isCollapsed);
+              }}
+              className="p-2 w-full flex-row justify-center items-center"
+            >
+              <Text className="text-black text-[16px] font-semibold mr-3">
+                {isCollapsed ? "Show" : "Hide"} Form Information
+              </Text>
+              <FontAwesomeIcon
+                icon={isCollapsed ? "angle-down" : "angle-up"}
+                color="black"
+                size={16}
+              />
+            </TouchableOpacity>
+            <Text>{JSON.stringify(formInfo)}</Text>
+
+            {/* main flatlist */}
             <FlatList
               data={formList.bridgelist}
               renderItem={({ item, index }) => (
@@ -739,7 +824,9 @@ export default function Page() {
                 paddingHorizontal: 15,
                 marginTop: 10,
               }}
+              extraData={activeIndex}
             />
+
             {/* <Button
               title="Pick an image from camera-roll"
               onPress={pickImage}
@@ -760,12 +847,31 @@ export default function Page() {
 
             <Button title="Upload" onPress={uploadImage} /> */}
 
-            <View className="h-[80px] w-full bg-white border-t-2 pt-4 border-t-black rounded-b-md">
-              <TouchableOpacity className="bg-blue-600 self-center flex-row justify-center items-center w-6/12 mb-4 py-2 mx-2 rounded-full">
+            <View className="h-[80px] w-full bg-white border-t-2 pt-4 border-t-black rounded-b-md flex-row justify-around items-center">
+              <TouchableOpacity
+                onPress={() => minusActiveIndex(activeIndex)}
+                className="bg-blue-600 self-center flex-row justify-center items-center w-4/12 mb-4 py-2 mx-2 rounded-full"
+              >
                 <Text className="text-white text-[18px] font-semibold">
-                  Submit Form
+                  Previous
                 </Text>
               </TouchableOpacity>
+              {activeIndex + 1 !== formList.bridgelist.length ? (
+                <TouchableOpacity
+                  onPress={() => plusActiveIndex(activeIndex)}
+                  className="bg-blue-600 self-center flex-row justify-center items-center w-4/12 mb-4 py-2 mx-2 rounded-full"
+                >
+                  <Text className="text-white text-[18px] font-semibold">
+                    Next
+                  </Text>
+                </TouchableOpacity>
+              ) : (
+                <TouchableOpacity className="bg-green-600 self-center flex-row justify-center items-center w-4/12 mb-4 py-2 mx-2 rounded-full">
+                  <Text className="text-white text-[18px] font-semibold">
+                    Submit Form
+                  </Text>
+                </TouchableOpacity>
+              )}
             </View>
           </View>
         </View>
