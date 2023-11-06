@@ -8,6 +8,7 @@ import {
   Button,
   Image,
   Modal,
+  useWindowDimensions,
 } from "react-native";
 import React, { useState, useEffect } from "react";
 
@@ -25,6 +26,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { getBridgeList } from "../fetches/getBridgeList";
 
 export default function Page() {
+  const { width, height } = useWindowDimensions();
+
   const [image, setImage] = useState(null);
 
   const { data } = useLocalSearchParams();
@@ -75,6 +78,10 @@ export default function Page() {
         ].tick
       ) == "0"
     ) {
+      //set active details
+      thisStructure["component"].material[material].type_of_damages[
+        type_of_damages
+      ].active_details = whichDetail;
       //set rating of damage
       thisStructure["component"].material[material].type_of_damages[
         type_of_damages
@@ -119,6 +126,10 @@ export default function Page() {
           ].severity_of_damage
         ) == String(Number(material_rating + 1))
       ) {
+        //set active details
+        thisStructure["component"].material[material].type_of_damages[
+          type_of_damages
+        ].active_details = 0;
         //set rating of damage
         thisStructure["component"].material[material].type_of_damages[
           type_of_damages
@@ -136,6 +147,10 @@ export default function Page() {
       }
       //x sama
       else {
+        //set active details
+        thisStructure["component"].material[material].type_of_damages[
+          type_of_damages
+        ].active_details = whichDetail;
         //set rating of damage
         thisStructure["component"].material[material].type_of_damages[
           type_of_damages
@@ -167,13 +182,28 @@ export default function Page() {
       }
     }
 
+    thisStructure.component.material.forEach((item, index) => {
+      let maxSeverity = 0;
+
+      // Iterate through the "type_of_damages" array for each "material" item
+      item.type_of_damages.forEach((damage) => {
+        const severity = damage.severity_of_damage;
+        if (severity > maxSeverity) {
+          maxSeverity = severity;
+        }
+      });
+
+      // Update the "rating_of_member" with the maximum severity
+      item.rating_of_member = maxSeverity;
+    });
+
     // convert to string to store to DB
     thisMaterial.bridgelist[component].structure =
       JSON.stringify(thisStructure);
 
-    console.log(
-      JSON.stringify(JSON.parse(thisMaterial.bridgelist[component].structure))
-    );
+    // console.log(
+    //   JSON.stringify(JSON.parse(thisMaterial.bridgelist[component].structure))
+    // );
 
     // set to the original list to FE
     setFormList(thisMaterial);
@@ -263,7 +293,10 @@ export default function Page() {
                                 backgroundColor:
                                   String(item3.tick) == "1" &&
                                   severityIndex ==
-                                    String(Number(item3.severity_of_damage - 1))
+                                    String(
+                                      Number(item3.severity_of_damage - 1)
+                                    ) &&
+                                  String(item3.active_details) == "1"
                                     ? "rgba(27,99,235,1)"
                                     : "rgba(243,244,246,1)",
                               }}
@@ -287,7 +320,8 @@ export default function Page() {
                                     severityIndex ==
                                       String(
                                         Number(item3.severity_of_damage - 1)
-                                      )
+                                      ) &&
+                                    String(item3.active_details) == "1"
                                       ? "white"
                                       : "black",
                                 }}
@@ -339,7 +373,8 @@ export default function Page() {
                                       severityIndex ==
                                         String(
                                           Number(item3.severity_of_damage - 1)
-                                        )
+                                        ) &&
+                                      String(item3.active_details) == "2"
                                         ? "rgba(27,99,235,1)"
                                         : "rgba(243,244,246,1)",
                                   }}
@@ -362,7 +397,8 @@ export default function Page() {
                                         severityIndex ==
                                           String(
                                             Number(item3.severity_of_damage - 1)
-                                          )
+                                          ) &&
+                                        String(item3.active_details) == "2"
                                           ? "white"
                                           : "black",
                                     }}
@@ -404,7 +440,8 @@ export default function Page() {
                                       severityIndex ==
                                         String(
                                           Number(item3.severity_of_damage - 1)
-                                        )
+                                        ) &&
+                                      String(item3.active_details) == "3"
                                         ? "rgba(27,99,235,1)"
                                         : "rgba(243,244,246,1)",
                                   }}
@@ -428,7 +465,8 @@ export default function Page() {
                                         severityIndex ==
                                           String(
                                             Number(item3.severity_of_damage - 1)
-                                          )
+                                          ) &&
+                                        String(item3.active_details) == "3"
                                           ? "white"
                                           : "black",
                                     }}
@@ -646,16 +684,24 @@ export default function Page() {
       >
         <View
           className="h-full flex-1 justify-center items-center"
-          style={{ backgroundColor: "rgba(0,0,0,0.4)", paddingVertical: 100 }}
+          style={{ backgroundColor: "rgba(0,0,0,0.4)", paddingVertical: 150 }}
         >
           <View
             className="bg-white w-11/12 rounded-lg"
             style={{}}
             activeOpacity={1}
           >
-            <View className="bg-blue-600 h-[50px] rounded-t-md w-full justify-center">
-              <Text className="text-white text-[22px] text-center font-bold">
-                New {thisdata.project_type} Form
+            <View
+              className="bg-blue-600 rounded-t-md w-full justify-center"
+              style={{ height: width * 0.15 }}
+            >
+              <Text
+                className="text-white text-[15px] text-left font-bold ml-3"
+                style={{ width: "83%" }}
+              >
+                {thisdata.project_type === "Bridge"
+                  ? "ROUTINE CONDITION INSPECTION - STRUCTURAL CONDITION CHECKLIST (BRIDGE)"
+                  : "TOLL PLAZA CANOPY - INSPECTION CHECKLIST"}
               </Text>
               {/* <Text>{JSON.stringify(formList)}</Text> */}
               <TouchableOpacity
@@ -666,13 +712,21 @@ export default function Page() {
                   position: "absolute",
                   right: 0,
                   top: 0,
-                  height: 50,
-                  width: 50,
+                  height: width * 0.15,
+                  width: width * 0.15,
                 }}
                 className="flex justify-center items-center rounded-tr-md p-4 bg-red-600"
               >
                 <FontAwesomeIcon icon="xmark" color="white" size={30} />
               </TouchableOpacity>
+            </View>
+            <View className="w-full p-3">
+              <View className="mb-2">
+                <Text className="text-black text-[18px] font-semibold">
+                  SPAN No:
+                </Text>
+                <TextInput className="bg-gray-200 h-[40px] w-full rounded-md" />
+              </View>
             </View>
             <FlatList
               data={formList.bridgelist}
