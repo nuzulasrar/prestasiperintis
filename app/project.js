@@ -794,7 +794,6 @@ export default function Page() {
                 </View>
               </View>
             </Collapsible>
-
             <TouchableOpacity
               onPress={() => {
                 setIsCollapsed(!isCollapsed);
@@ -811,7 +810,6 @@ export default function Page() {
               />
             </TouchableOpacity>
             <Text>{JSON.stringify(formInfo)}</Text>
-
             {/* main flatlist */}
             <FlatList
               data={formList.bridgelist}
@@ -826,7 +824,7 @@ export default function Page() {
               }}
               extraData={activeIndex}
             />
-
+            {activeIndex !== formList.bridgelist.length ? <View></View> : null}}
             {/* <Button
               title="Pick an image from camera-roll"
               onPress={pickImage}
@@ -846,7 +844,6 @@ export default function Page() {
             ) : null}
 
             <Button title="Upload" onPress={uploadImage} /> */}
-
             <View className="h-[80px] w-full bg-white border-t-2 pt-4 border-t-black rounded-b-md flex-row justify-around items-center">
               <TouchableOpacity
                 onPress={() => minusActiveIndex(activeIndex)}
@@ -856,7 +853,7 @@ export default function Page() {
                   Previous
                 </Text>
               </TouchableOpacity>
-              {activeIndex + 1 !== formList.bridgelist.length ? (
+              {activeIndex !== formList.bridgelist.length ? (
                 <TouchableOpacity
                   onPress={() => plusActiveIndex(activeIndex)}
                   className="bg-blue-600 self-center flex-row justify-center items-center w-4/12 mb-4 py-2 mx-2 rounded-full"
