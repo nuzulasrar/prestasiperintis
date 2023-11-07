@@ -8,14 +8,20 @@ import {
   useImage,
   useTouchHandler,
   useCanvasRef,
-  ImageFormat
+  ImageFormat,
 } from "@shopify/react-native-skia";
 import React, { useCallback, useState } from "react";
-import { Pressable, StyleSheet, Text, View, Image as RNImage } from "react-native";
+import {
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+  Image as RNImage,
+  ScrollView,
+} from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-
 
 export default function Page() {
   const [paths, setPaths] = useState([]);
@@ -63,11 +69,20 @@ export default function Page() {
     [onDrawingActive, onDrawingStart]
   );
 
-  const canvasRef = useCanvasRef()
+  const canvasRef = useCanvasRef();
 
-  const image = useImage("https://as1.ftcdn.net/v2/jpg/02/95/94/94/1000_F_295949484_8BrlWkTrPXTYzgMn3UebDl1O13PcVNMU.jpg");
+  const image = useImage(require("../assets/ATP2020/ALOR_SETAR_SELATAN-1.png"));
 
-  const [capturedImage, setCapturedImage] = useState()
+  const [capturedImage, setCapturedImage] = useState();
+
+  const images = [
+    {
+      name: "ALOR_SETAR_SELATAN-1.png",
+    },
+    {
+      name: "ALOR_SETAR_UTARA-1.png",
+    },
+  ];
 
   return (
     <View style={style.container} className="bg-gray-400">
@@ -78,12 +93,74 @@ export default function Page() {
         setColor={setColor}
         setStrokeWidth={setStrokeWidth}
       />
-      <TouchableOpacity className="self-center flex-row justify-center items-center m-3 rounded-full bg-yellow-400 px-5 py-2" onPress={()=>{setPaths([])}}>
+      <TouchableOpacity
+        className="self-center flex-row justify-center items-center m-3 rounded-full bg-yellow-400 px-5 py-2"
+        onPress={() => {
+          setPaths([]);
+        }}
+      >
         <FontAwesomeIcon icon="arrows-rotate" size={20} color="black" />
         <Text className="text-black ml-2 text-[20px]">Reset Drawing</Text>
       </TouchableOpacity>
-      <Canvas ref={canvasRef} onTouch={touchHandler} style={{height: "50%", width: "100%", backgroundColor: "white"}}>
-      {image ? <Image image={image} width={400} height={300} /> : null}
+
+      <View className="bg-sky-200 flex-row justify-center items-center w-full">
+        <View>
+          <Text className="text-black font-semibold" style={{ width: 100 }}>
+            ALOR_SETAR_SELATAN-1.png
+          </Text>
+          <TouchableOpacity>
+            <RNImage
+              source={require("../assets/ATP2020/ALOR_SETAR_SELATAN-1.png")}
+              style={{ width: 100, height: 100 }}
+            />
+          </TouchableOpacity>
+        </View>
+        <View>
+          <Text className="text-black font-semibold" style={{ width: 100 }}>
+            HUTAN_KAMPUNG-1.png
+          </Text>
+          <TouchableOpacity>
+            <RNImage
+              source={require("../assets/ATP2020/HUTAN_KAMPUNG-1.png")}
+              style={{ width: 100, height: 100 }}
+            />
+          </TouchableOpacity>
+        </View>
+        <View>
+          <Text className="text-black font-semibold" style={{ width: 100 }}>
+            ALOR_SETAR_UTARA-1.png
+          </Text>
+          <TouchableOpacity>
+            <RNImage
+              source={require("../assets/ATP2020/ALOR_SETAR_UTARA-1.png")}
+              style={{ width: 100, height: 100 }}
+            />
+          </TouchableOpacity>
+        </View>
+        {/* <TouchableOpacity>
+          <Text className="text-black font-semibold">
+            ALOR_SETAR_UTARA-1.png
+          </Text>
+          <RNImage
+            source={require("../assets/ATP2020/ALOR_SETAR_UTARA-1.png")}
+            style={{ width: 100, height: 100 }}
+          />
+        </TouchableOpacity>
+        <TouchableOpacity>
+          <Text className="text-black font-semibold">HUTAN_KAMPUNG-1.png</Text>
+          <RNImage
+            source={require("../assets/ATP2020/HUTAN_KAMPUNG-1.png")}
+            style={{ width: 100, height: 100 }}
+          />
+        </TouchableOpacity> */}
+      </View>
+
+      <Canvas
+        ref={canvasRef}
+        onTouch={touchHandler}
+        style={{ height: "30%", width: "100%", backgroundColor: "white" }}
+      >
+        {image ? <Image image={image} width={500} height={400} /> : null}
         {paths.map((path, index) => (
           <Path
             key={index}
@@ -94,42 +171,35 @@ export default function Page() {
           />
         ))}
       </Canvas>
-      <TouchableOpacity 
-      className="bg-green-400 w-[100px] rounded-full px-5 py-2 justify-center items-center self-center mt-4"
-      onPress={() => {
-                const skImg = canvasRef.current?.makeImageSnapshot()
-                if (skImg) {
-                    const base64 = skImg.encodeToBase64(ImageFormat.PNG, 100)
-                    setCapturedImage('data:image/png;base64,' + base64);
-                }
-            }}>
-                <Text >Save</Text>
-            </TouchableOpacity>
-            <View>
-                {capturedImage ?
-                    <RNImage
-                        source={{ uri: capturedImage }}
-                        style={{ width: 400, height: 300 }}
-                    />
-                    : null}
-            </View>
+      <TouchableOpacity
+        className="bg-green-400 w-[100px] rounded-full px-5 py-2 justify-center items-center self-center mt-4"
+        onPress={() => {
+          const skImg = canvasRef.current?.makeImageSnapshot();
+          if (skImg) {
+            const base64 = skImg.encodeToBase64(ImageFormat.PNG, 100);
+            setCapturedImage("data:image/png;base64," + base64);
+          }
+        }}
+      >
+        <Text>Save</Text>
+      </TouchableOpacity>
+      <View>
+        {capturedImage ? (
+          <RNImage
+            source={{ uri: capturedImage }}
+            style={{ width: 400, height: 300 }}
+          />
+        ) : null}
+      </View>
     </View>
   );
-};
+}
 
 const Colors = ["black", "red", "blue", "green", "yellow", "white"];
 
-
-
-
 const strokes = [2, 4, 6, 8, 10, 12, 14, 16, 18, 20];
 
-const Toolbar = ({
-  color,
-  strokeWidth,
-  setColor,
-  setStrokeWidth,
-}) => {
+const Toolbar = ({ color, strokeWidth, setColor, setStrokeWidth }) => {
   const [showStrokes, setShowStrokes] = useState(false);
 
   const handleStrokeWidthChange = (stroke) => {
@@ -176,7 +246,6 @@ const Toolbar = ({
   );
 };
 
-
 const ColorButton = ({ color, onPress, isSelected }) => {
   return (
     <Pressable
@@ -196,7 +265,7 @@ const ColorButton = ({ color, onPress, isSelected }) => {
 const style = StyleSheet.create({
   container: {
     flex: 1,
-    width: "100%"
+    width: "100%",
   },
   strokeOption: {
     fontSize: 18,

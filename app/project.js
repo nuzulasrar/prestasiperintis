@@ -6,11 +6,11 @@ import {
   TouchableOpacity,
   FlatList,
   Button,
-  Image,
+  Image as RNImage,
   Modal,
   useWindowDimensions,
 } from "react-native";
-import React, { useState, useEffect } from "react";
+import React, { useCallback, useState, useEffect } from "react";
 
 import Collapsible from "react-native-collapsible";
 
@@ -26,6 +26,19 @@ import { API_URL } from "../configurations";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 
 import { getBridgeList } from "../fetches/getBridgeList";
+
+import {
+  Canvas,
+  Path,
+  SkPath,
+  Skia,
+  TouchInfo,
+  Image,
+  useImage,
+  useTouchHandler,
+  useCanvasRef,
+  ImageFormat,
+} from "@shopify/react-native-skia";
 
 export default function Page() {
   const { width, height } = useWindowDimensions();
@@ -697,13 +710,13 @@ export default function Page() {
         Form List
       </Text>
       <View className="bg-white w-[95%] self-center rounded-md p-3">
-        {formList.length < 1 ? (
+        {/* {formList.bridgelist.length < 1 ? (
           <Text className="text-black font-semibold text-[20px]">
             No Form Created Yet!
           </Text>
         ) : (
           <Text className="text-black font-semibold text-[20px]"></Text>
-        )}
+        )} */}
       </View>
 
       <TouchableOpacity
@@ -771,8 +784,9 @@ export default function Page() {
                 {thisdata.project_type === "Bridge" ? (
                   <View className="mb-2">
                     <Text className="text-black text-[18px] font-semibold">
-                      SPAN No: {String(activeIndex)}{" "}
-                      {String(formList.bridgelist.length)}
+                      SPAN No:
+                      {/* {String(activeIndex)}{" "} */}
+                      {/* {String(formList.bridgelist.length)} */}
                     </Text>
                     <TextInput
                       value={formInfo?.span_no}
@@ -824,7 +838,7 @@ export default function Page() {
               }}
               extraData={activeIndex}
             />
-            {activeIndex !== formList.bridgelist.length ? <View></View> : null}}
+            {activeIndex == 11 ? <View></View> : null}
             {/* <Button
               title="Pick an image from camera-roll"
               onPress={pickImage}
@@ -853,7 +867,7 @@ export default function Page() {
                   Previous
                 </Text>
               </TouchableOpacity>
-              {activeIndex !== formList.bridgelist.length ? (
+              {activeIndex !== formList?.bridgelist?.length ? (
                 <TouchableOpacity
                   onPress={() => plusActiveIndex(activeIndex)}
                   className="bg-blue-600 self-center flex-row justify-center items-center w-4/12 mb-4 py-2 mx-2 rounded-full"
