@@ -1,0 +1,2044 @@
+export const damage1 = [
+  {
+    level: "LIGHT",
+    details:
+      "Loose rust formation and pitting in the paint surface. No noticeable section loss.",
+  },
+  {
+    level: "MEDIUM",
+    details:
+      "Loose rust formation with scales/falde. Definite areas of rust up to 10% section loss.",
+  },
+  {
+    level: "SEVERE",
+    details:
+      "Stratified rust with pilting of metal surface. 10% to 20% section loss.",
+  },
+  {
+    level: "V.SEVERE",
+    details:
+      "Extensive rusting with local perforation/rusting through. >20% section loss.",
+  },
+];
+
+export const damage2 = [
+  {
+    level: "LIGHT",
+    details: "If detected, rating shall be 4",
+  },
+  {
+    level: "MEDIUM",
+    details: "If detected, rating shall be 4",
+  },
+  {
+    level: "SEVERE",
+    details: "If detected, rating shall be 4",
+  },
+  {
+    level: "V.SEVERE",
+    details: "If detected, rating shall be 4",
+  },
+];
+
+export const damage3 = [
+  {
+    level: "LIGHT",
+    details: "Up to 10% of fasteners loose or missing",
+    details_2: "Up to 20% of fasteners loose or missing",
+  },
+  {
+    level: "MEDIUM",
+    details: "Up to 20% of fasteners loose or missing",
+    details_2: "20 to 40% of fasteners loose or missing",
+  },
+  {
+    level: "SEVERE",
+    details: "20 to 30% of fasteners loose or missing",
+    details_2: "40 to 60% of fasteners loose or missing",
+  },
+  {
+    level: "V.SEVERE",
+    details: "> 30% of fasteners loose or missing",
+    details_2: "> 60% of fasteners loose or missing",
+  },
+];
+
+export const damage4 = [
+  {
+    level: "LIGHT",
+    details: "Up to 10% of fasteners loose or missing",
+  },
+  {
+    level: "MEDIUM",
+    details: "Up to 20% of fasteners loose or missing",
+  },
+  {
+    level: "SEVERE",
+    details: "20 to 30% of fasteners loose or missing",
+  },
+  {
+    level: "V.SEVERE",
+    details: "> 30% of fasteners loose or missing",
+  },
+];
+
+export const damage5 = [
+  {
+    level: "LIGHT",
+    details: "Up to 10% of surface area affected",
+  },
+  {
+    level: "MEDIUM",
+    details: "Up to 20% of surface area affected",
+  },
+  {
+    level: "SEVERE",
+    details: "20 to 30% of surface area affected",
+  },
+  {
+    level: "V.SEVERE",
+    details: "> 30% of surface area affected",
+  },
+];
+
+export const damage6 = [
+  {
+    level: "LIGHT",
+    details: "If cracks are Hairline i.e. < 0.1mm wide, rating shall be 1",
+    details_2: "",
+  },
+  {
+    level: "MEDIUM",
+    details:
+      "If cracks are Narrow i.e. - 0.1mm to 0.3mm wide, rating shall be 2",
+    details_2:
+      "If cracks are Narrow i.e. - > 0.2mm & crack spacing between 500mm & 1000mm, rating shall be 2",
+  },
+  {
+    level: "SEVERE",
+    details:
+      "If cracks are Medium size i.e. - 0.3mm to 1.0mm wide, rating shall be 3",
+    details_2:
+      "If cracks are Medium size i.e. - > 0.3mm & crack spacing < 500mm, rating shall be 2",
+  },
+  {
+    level: "V.SEVERE",
+    details: "If cracks are Wide size i.e. - > 1.0mm wide, rating shall be 4",
+    details_2: "If cracks are Wide size i.e. - > 1.0mm wide, rating shall be 4",
+  },
+];
+
+export const damage7 = [
+  {
+    level: "LIGHT",
+    details:
+      "Spalled area measuring < 150mm in any direction or < 25mm in depth",
+    details_2:
+      "Spalled area measuring < 25mm in any direction or < 25mm in depth",
+  },
+  {
+    level: "MEDIUM",
+    details:
+      "Area measuring 150mm - 300mm in any direction or 25mm - 50mm in depth",
+    details_2:
+      "Area measuring 25mm - 50mm in any direction or 25mm - 50mm in depth",
+  },
+  {
+    level: "SEVERE",
+    details:
+      "Area measuring 300mm - 600mm in any direction or 50mm - 100mm in depth",
+    details_2:
+      "Area measuring 50mm - 100mm in any direction or 50mm - 100mm in depth",
+  },
+  {
+    level: "V.SEVERE",
+    details:
+      "Spalled area measuring > 600mm in any direction or > 100mm in depth",
+    details_2:
+      "Spalled area measuring > 100mm in any direction or > 100mm in depth",
+  },
+];
+
+export const damage8 = [
+  {
+    level: "LIGHT",
+    details: "Light rust stain on the concrete surface",
+  },
+  {
+    level: "MEDIUM",
+    details:
+      "Exposed rebar with uniform light rust. Loss of reinforcing steel section <10%",
+  },
+  {
+    level: "SEVERE",
+    details:
+      "Exposed rebar with heavy rusting and localized pitting. Loss of section 10% - 20%",
+  },
+  {
+    level: "V.SEVERE",
+    details:
+      "Exposed rebar with very heavy rusting pitting. Loss of section > 20%",
+  },
+];
+export const damage9 = [
+  {
+    level: "LIGHT",
+    details:
+      "Section loss up to 25mm in depth with some loss of coarse aggregate",
+  },
+  {
+    level: "MEDIUM",
+    details:
+      "Section loss up 25mm - 50mm deep, loss of coarse aggregate & exposure or rebar",
+  },
+  {
+    level: "SEVERE",
+    details:
+      "Section loss 50mm - 100mm deep, loss of aggregate & rebar exposure large area",
+  },
+  {
+    level: "V.SEVERE",
+    details: "Section loss > 100mm deep & extending over large area",
+  },
+];
+export const damage10 = [
+  {
+    level: "LIGHT",
+    details:
+      "Section loss up to 25mm in depth with some loss of coarse aggregate",
+    details_2:
+      "Mortar lost from the joints in a few places, to a depth of 20mm",
+  },
+  {
+    level: "MEDIUM",
+    details:
+      "Section loss up 25mm - 50mm deep, loss of coarse aggregate & exposure or rebar",
+    details_2:
+      "Mortar lost from the jointsover an extended area, to a depth between 20 and 50 mm",
+  },
+  {
+    level: "SEVERE",
+    details:
+      "Section loss 50mm - 100mm deep, loss of aggregate & rebar exposure large area",
+    details_2: "Extensive loss of mortar resulting in the loss of a dew stones",
+  },
+  {
+    level: "V.SEVERE",
+    details: "Section loss > 100mm deep & extending over large area",
+    details_2:
+      "Extensive loss of stones endangering the stability of the structure",
+  },
+];
+
+export const damage11 = [
+  {
+    level: "LIGHT",
+    details: "Honeycomb are measuring < 150mm in any direction",
+  },
+  {
+    level: "MEDIUM",
+    details: "Honeycomb are measuring 150mm - 300mm in any direction",
+  },
+  {
+    level: "SEVERE",
+    details: "Honeycomb are measuring 300mm - 600mm in any direction",
+  },
+  {
+    level: "V.SEVERE",
+    details: "Honeycomb are measuring > 600mm in any direction",
+  },
+];
+
+export const damage12 = [
+  {
+    level: "LIGHT",
+    details: "Delaminated area are measuring < 150mm in any direction",
+  },
+  {
+    level: "MEDIUM",
+    details: "Delaminated area are measuring 150mm - 300mm in any direction",
+  },
+  {
+    level: "SEVERE",
+    details: "Delaminated area are measuring 300mm - 600mm in any direction",
+  },
+  {
+    level: "V.SEVERE",
+    details: "Delaminated area are measuring > 600mm in any direction",
+  },
+];
+
+export const damage13 = [
+  {
+    level: "LIGHT",
+    details: "If detected, rating shall be 4",
+  },
+  {
+    level: "MEDIUM",
+    details: "If detected, rating shall be 4",
+  },
+  {
+    level: "SEVERE",
+    details: "If detected, rating shall be 4",
+  },
+  {
+    level: "V.SEVERE",
+    details: "If detected, rating shall be 4",
+  },
+];
+
+export const damage14 = [
+  {
+    level: "LIGHT",
+    details: "If detected area measure < 2%, rating shall be 1",
+    details_2: "- *Area is measured along the abutment/pier",
+  },
+  {
+    level: "MEDIUM",
+    details: "If detected, rating shall be 4",
+    details_2:
+      "If detected area measure up to 25%, rating shall be 2 face and 1 meter below the bearing shelf",
+  },
+  {
+    level: "SEVERE",
+    details: "If detected, rating shall be 4",
+    details_2: "If detected area measure 25% - 50%, rating shall be 3",
+  },
+  {
+    level: "V.SEVERE",
+    details: "If detected, rating shall be 4",
+    details_2: "If detected area > 50%, rating shall be 4",
+  },
+];
+
+export const damage15 = [
+  {
+    level: "LIGHT",
+    details: "If detected, rating shall be 4",
+  },
+  {
+    level: "MEDIUM",
+    details: "If detected, rating shall be 4",
+  },
+  {
+    level: "SEVERE",
+    details: "If detected, rating shall be 4",
+  },
+  {
+    level: "V.SEVERE",
+    details: "If detected, rating shall be 4",
+  },
+];
+export const damage16 = [
+  {
+    level: "LIGHT",
+    details: "If detected, rating shall be 4",
+  },
+  {
+    level: "MEDIUM",
+    details: "If detected, rating shall be 4",
+  },
+  {
+    level: "SEVERE",
+    details: "If detected, rating shall be 4",
+  },
+  {
+    level: "V.SEVERE",
+    details: "If detected, rating shall be 4",
+  },
+];
+export const damage17 = [
+  {
+    level: "LIGHT",
+    details:
+      "If undermining and loss of support up to 5% of foundation, rating shall be 1",
+    details_2: "-",
+    details_3: "Minor scour at inlet/outlet of culvert, scour depth < 200mm",
+  },
+  {
+    level: "MEDIUM",
+    details:
+      "If undermining and loss of support between 5 to 15% of foundation, rating shall be 2",
+    details_2:
+      "Scour area measuring 10% - 20% in any direction, rating shall be 2",
+    details_3:
+      "Significant scour at inlet/outlet of culvert, scour depth between 200mm - 300mm",
+  },
+  {
+    level: "SEVERE",
+    details:
+      "If undermining and loss of support between 15% to 20% of foundation, rating shall be 3",
+    details_2:
+      "Scour area measuring 20% - 30% in any direction, rating shall be 3",
+    details_3:
+      "Severe scour at inlet/outlet of culvert, scour depth between 300mm - 500mm",
+  },
+  {
+    level: "V.SEVERE",
+    details:
+      "If undermining and loss of support between of > 20% of foundation, rating shall be 4",
+    details_2: "Scour area measuring > 30% in any direction, rating shall be 4",
+    details_3:
+      "Extensive washout around inlet/outlet with loss of embankment fill, scour depth > 500mm",
+  },
+];
+export const damage18 = [
+  {
+    level: "LIGHT",
+    details: "If detected, rating shall be 3",
+  },
+  {
+    level: "MEDIUM",
+    details: "If detected, rating shall be 3",
+  },
+  {
+    level: "SEVERE",
+    details: "If detected, rating shall be 3",
+  },
+  {
+    level: "V.SEVERE",
+    details: "If detected, rating shall be 3",
+  },
+];
+export const damage19 = [
+  {
+    level: "LIGHT",
+    details: "-",
+  },
+  {
+    level: "MEDIUM",
+    details: "If only debris detected, rating shall be 3",
+  },
+  {
+    level: "SEVERE",
+    details: "If debris with vegetation detected, rating shall be 4",
+  },
+  {
+    level: "V.SEVERE",
+    details: "-",
+  },
+];
+export const damage20 = [
+  {
+    level: "LIGHT",
+    details: "Blockage of pipe up to 25%",
+  },
+  {
+    level: "MEDIUM",
+    details: "Blockage of pipe 25% - 50%",
+  },
+  {
+    level: "SEVERE",
+    details: "Blockage of pipe 50% - 75%",
+  },
+  {
+    level: "V.SEVERE",
+    details: "Blockage of pipe > 75%",
+  },
+];
+export const damage21 = [
+  {
+    level: "LIGHT",
+    details: "No water mark observed",
+  },
+  {
+    level: "MEDIUM",
+    details: "Slight water mark observed",
+  },
+  {
+    level: "SEVERE",
+    details: "Water spilled directly on facade",
+  },
+  {
+    level: "V.SEVERE",
+    details: "Very wet surface",
+  },
+];
+export const damage22 = [
+  {
+    level: "LIGHT",
+    details: "Parapet/Body intact",
+  },
+  {
+    level: "MEDIUM",
+    details: "Minor indentation to parapet/body",
+  },
+  {
+    level: "SEVERE",
+    details: "Severely damaged parapet/body",
+  },
+  {
+    level: "V.SEVERE",
+    details: "Parapet totally shifted out of position",
+  },
+];
+export const damage23 = [
+  {
+    level: "LIGHT",
+    details: "Holes measuring < 150mm in any direction or 25mm in depth",
+  },
+  {
+    level: "MEDIUM",
+    details:
+      "Holes measuring 150mm - 300mm in any direction or between 25mm - 50mm in depth",
+  },
+  {
+    level: "SEVERE",
+    details:
+      "Holes measuring 300mm - 600mm in any direction or between 50mm - 100mm in depth",
+  },
+  {
+    level: "V.SEVERE",
+    details: "Holes measuring > 600mm in any direction or > 100mm deep",
+  },
+];
+export const damage24 = [
+  {
+    level: "LIGHT",
+    details: "Less than 10mm deep",
+  },
+  {
+    level: "MEDIUM",
+    details: "From 10mm - 20mm deep",
+  },
+  {
+    level: "SEVERE",
+    details: "From 20mm - 40mm deep",
+  },
+  {
+    level: "V.SEVERE",
+    details: "> 40mm deep",
+  },
+];
+export const damage25 = [
+  {
+    level: "LIGHT",
+    details: "Delaminated area measuring < 150mm in any direction",
+  },
+  {
+    level: "MEDIUM",
+    details: "Delaminated area measuring 150mm - 300mm in any direction",
+  },
+  {
+    level: "SEVERE",
+    details: "Delaminated area measuring 300mm - 600mm in any direction",
+  },
+  {
+    level: "V.SEVERE",
+    details: "Delaminated area measuring > 600mm in any direction",
+  },
+];
+export const damage26 = [
+  {
+    level: "LIGHT",
+    details: "Few noticeable bumps",
+  },
+  {
+    level: "MEDIUM",
+    details: "Several bumps producing a rough ride",
+  },
+  {
+    level: "SEVERE",
+    details:
+      "Numerous bumps producing a very rough ride with possible loss of vehicle control",
+  },
+  {
+    level: "V.SEVERE",
+    details:
+      "Numerous bumps producing a very rough ride with imminent danger of loss of vehicle control",
+  },
+];
+export const damage27 = [
+  {
+    level: "LIGHT",
+    details:
+      "If alligator cracks cover an area of less than 10% within the same span rating shall be 1",
+  },
+  {
+    level: "MEDIUM",
+    details:
+      "If alligator cracks cover an area of 10% to 15% within the same span rating shall be 2",
+  },
+  {
+    level: "SEVERE",
+    details:
+      "If alligator cracks cover an area of 15% to 20% within the same span rating shall be 3",
+  },
+  {
+    level: "V.SEVERE",
+    details:
+      "If alligator cracks cover an area of more than 20% within the same span rating shall be 4",
+  },
+];
+export const damage28 = [
+  {
+    level: "LIGHT",
+    details: "less than 5mm wide single or multiple cracks",
+  },
+  {
+    level: "MEDIUM",
+    details: "5mm-10mm wide single or multiple cracks",
+  },
+  {
+    level: "SEVERE",
+    details: "10mm-15mm wide single or multiple cracks",
+  },
+  {
+    level: "V.SEVERE",
+    details: "> 15mm wide single or multiple cracks",
+  },
+];
+export const damage29 = [
+  {
+    level: "LIGHT",
+    details: "If detected rating shall be 4",
+  },
+  {
+    level: "MEDIUM",
+    details: "If detected rating shall be 4",
+  },
+  {
+    level: "SEVERE",
+    details: "If detected rating shall be 4",
+  },
+  {
+    level: "V.SEVERE",
+    details: "If detected rating shall be 4",
+  },
+];
+export const damage30 = [
+  {
+    level: "LIGHT",
+    details: "Difference in level < 10mm at expansion gap/bridge approach",
+  },
+  {
+    level: "MEDIUM",
+    details:
+      "Difference in level between 10mm - 20mm at expansion gap/bridge approach",
+  },
+  {
+    level: "SEVERE",
+    details:
+      "Difference in level between 20mm - 30mm at expansion gap/bridge approach",
+  },
+  {
+    level: "V.SEVERE",
+    details: "Difference in level > 30mm at expansion gap/bridge approach",
+  },
+];
+
+export const damage31 = [
+  {
+    level: "LIGHT",
+    details: "If detected rating shall be 4",
+  },
+  {
+    level: "MEDIUM",
+    details: "If detected rating shall be 4",
+  },
+  {
+    level: "SEVERE",
+    details: "If detected rating shall be 4",
+  },
+  {
+    level: "V.SEVERE",
+    details: "If detected rating shall be 4",
+  },
+];
+export const damage32 = [
+  {
+    level: "LIGHT",
+    details: "Fine or hair line crack detected on rubber seal",
+  },
+  {
+    level: "MEDIUM",
+    details: "Medium crack detected on rubber seal",
+  },
+  {
+    level: "SEVERE",
+    details: "Wide or large crack detected on rubber seal",
+  },
+  {
+    level: "V.SEVERE",
+    details: "Rubber seal dislodge or peel off from location",
+  },
+];
+export const damage33 = [
+  {
+    level: "LIGHT",
+    details: "Severe crack, abnormal buldge, worn out and aged, rating = 4",
+  },
+  {
+    level: "MEDIUM",
+    details: "Severe crack, abnormal buldge, worn out and aged, rating = 4",
+  },
+  {
+    level: "SEVERE",
+    details: "Severe crack, abnormal buldge, worn out and aged, rating = 4",
+  },
+  {
+    level: "V.SEVERE",
+    details: "Severe crack, abnormal buldge, worn out and aged, rating = 4",
+  },
+];
+export const damage34 = [
+  {
+    level: "LIGHT",
+    details: "-",
+  },
+  {
+    level: "MEDIUM",
+    details:
+      "If bearing has been displaced by less than 10%, rating shall be 2",
+  },
+  {
+    level: "SEVERE",
+    details:
+      "If bearing has been displaced by between 10% - 20%, rating shall be 3",
+  },
+  {
+    level: "V.SEVERE",
+    details:
+      "If bearing has been displaced by more than 20%, rating shall be 4",
+  },
+];
+export const damage35 = [
+  {
+    level: "LIGHT",
+    details:
+      "Less than 5% loss of materials at embankments directly supporting foundation, rating shall be 1",
+    details_2:
+      "Less than 10% loss of materials at embankments, rating shall be 1",
+  },
+  {
+    level: "MEDIUM",
+    details:
+      "5% to 15% loss of materials at embankments directly supporting foundation, rating shall be 2",
+    details_2: "10% to 30% loss of materials at embankments, rating shall be 2",
+  },
+  {
+    level: "SEVERE",
+    details:
+      "15% to 20% loss of materials at embankments directly supporting foundation, rating shall be 3",
+    details_2: "30% to 40% loss of materials at embankments, rating shall be 3",
+  },
+  {
+    level: "V.SEVERE",
+    details:
+      "More than 20% loss of materials at embankments directly supporting foundation, rating shall be 4",
+    details_2:
+      "More than 40% loss of materials at embankments, rating shall be 1",
+  },
+];
+export const damage36 = [
+  {
+    level: "LIGHT",
+    details: "Hairline cracks and minor loss of stones to a depth of 50mm deep",
+  },
+  {
+    level: "MEDIUM",
+    details: "Narrow cracks and loss of stones between 50mm and 100mm deep",
+  },
+  {
+    level: "SEVERE",
+    details:
+      "Spalling and disintegration of stones with section loss between 100mm to 150mm",
+  },
+  {
+    level: "V.SEVERE",
+    details:
+      "Extensive loss of stones and disintegration endangering the stability of the structure",
+  },
+];
+export const damage37 = [
+  {
+    level: "LIGHT",
+    details: "Silting covered < 20% of culvert height",
+  },
+  {
+    level: "MEDIUM",
+    details: "Silting covered from 20% - 30% of culvert height",
+  },
+  {
+    level: "SEVERE",
+    details: "Silting covered from 30% - 50% of culvert height",
+  },
+  {
+    level: "V.SEVERE",
+    details: "Silting covered from > 50% of culvert height",
+  },
+];
+export const damage38 = [
+  {
+    level: "LIGHT",
+    details:
+      "1:1 Ratio of abutment spacing/culvert size to the size of rivers/streams, rating shall be 1",
+  },
+  {
+    level: "MEDIUM",
+    details:
+      "1:1.5 Ratio of abutment spacing/culvert size to the size of rivers/streams, rating shall be 2",
+  },
+  {
+    level: "SEVERE",
+    details:
+      "1:2 Ratio of abutment spacing/culvert size to the size of rivers/streams, rating shall be 3",
+  },
+  {
+    level: "V.SEVERE",
+    details:
+      "> 1:2 Ratio of abutment spacing/culvert size to the size of rivers/streams, rating shall be 4",
+  },
+];
+export const damage39 = [
+  {
+    level: "LIGHT",
+    details:
+      "Damage area or missing panel number is less than 5% of ceiling or roof area",
+  },
+  {
+    level: "MEDIUM",
+    details:
+      "Damage area or missing panel number is 5% to 10% of ceiling or roof area",
+  },
+  {
+    level: "SEVERE",
+    details:
+      "Damage area or missing panel number is 10% to 15% of ceiling or roof area",
+  },
+  {
+    level: "V.SEVERE",
+    details:
+      "Damage area or missing panel number more than 15% of ceiling or roof area",
+  },
+];
+export const damage40 = [
+  {
+    level: "LIGHT",
+    details: "-",
+  },
+  {
+    level: "MEDIUM",
+    details: "-",
+  },
+  {
+    level: "SEVERE",
+    details: "If only loose detected, rating shall be 3",
+  },
+  {
+    level: "V.SEVERE",
+    details: "If missing material detected, rating shall be 4",
+  },
+];
+
+
+----------------------------------------------------------------------------
+
+export const typeOfDamage1 = ["CORROSION (Steel)"];
+export const typeOfDamage2 = ["FRACTURE AT STEEL (Steel)"];
+export const typeOfDamage3 = [
+  "LOOSE CONNECTIONS Primary (Steel)",
+  "LOOSE CONNECTIONS Secondary",
+];
+export const typeOfDamage4 = ["PERMANENT DEFORMATIONS (Secondary)"];
+export const typeOfDamage5 = ["PAINT DETERIORATIONS (Steel & Rubber)"];
+export const typeOfDamage6 = [
+  "CRACK (Reinforced Concrete)",
+  "CRACK (Prestressed Concrete)",
+];
+export const typeOfDamage7 = [
+  "SPALLING (Reinforced Concrete)",
+  "SPALLING (Prestressed Concrete)",
+];
+export const typeOfDamage8 = ["CORROSION OF REINFORCEMENET (Concrete)"];
+export const typeOfDamage9 = ["WEAR/ABRASION (Concrete)"];
+export const typeOfDamage10 = [
+  "MATERIAL DETERIORATION (Concrete)",
+  "MATERIAL DETERIORATION (Masonry)",
+];
+export const typeOfDamage11 = ["SURFACE DEFECTS (Concrete)"];
+export const typeOfDamage12 = ["DELAMINATION (Concrete)"];
+export const typeOfDamage13 = ["ABNORMAL VIBRATION/DEFLECTION (At Beam)"];
+export const typeOfDamage14 = [
+  "WATER LEAK (At Deck/Culvert) (Concrete)",
+  "WATER LEAK (At Expansion Joint)",
+];
+export const typeOfDamage15 = ["TILT/SETTLEMENT (At Abutment/pier)"];
+export const typeOfDamage16 = ["ABNORMAL MOVEMENT"];
+export const typeOfDamage17 = [
+  "SCOURING (At Abutment/pier)",
+  "SCOURING (At Slope Protection)",
+  "SCOURING (At Culvert)",
+];
+export const typeOfDamage18 = ["PONDING WATER (At Bearing)"];
+export const typeOfDamage19 = ["DEBRIS/VEGETATION (At Bearing)"];
+export const typeOfDamage20 = ["DRAINAGE BLOCKED (At Drainpipe)"];
+export const typeOfDamage21 = [
+  "NO PIPE / INADEQUATE PIPE LENGTH (At Drainpipe)",
+];
+export const typeOfDamage22 = ["IMPACT DAMAGE (At Parapet)"];
+export const typeOfDamage23 = ["POT-HOLE (At Pavement)"];
+export const typeOfDamage24 = ["RUTTING (At Pavement)"];
+export const typeOfDamage25 = ["LOSS OF BOND & DELAMINATION (At Pavement)"];
+export const typeOfDamage26 = ["RIPPLING (At Pavement)"];
+export const typeOfDamage27 = ["PAVEMENT CRACK"];
+export const typeOfDamage28 = ["CRACKS AT EXPANSION JOINT"];
+export const typeOfDamage29 = ["ABNORMAL SPACING (At Expansion Joint)"];
+export const typeOfDamage30 = ["DIFFERENCE IN LEVEL (At Expansion Joint)"];
+export const typeOfDamage31 = ["ABNORMAL NOISE (At Expansion Joint)"];
+export const typeOfDamage32 = ["RUPTURE (At Expansion Joint)"];
+export const typeOfDamage33 = ["BULDGING (At Bearing)"];
+export const typeOfDamage34 = ["ABNORMAL DISPLACEMENT (Bearing)"];
+export const typeOfDamage35 = [
+  "EROSION (At Slope Protection)",
+  "EROSION DISPLACEMENT (At River Bank)",
+];
+export const typeOfDamage36 = [
+  "MATERIAL LOSS/DISINTEGRATION (At Slope Protection)",
+];
+export const typeOfDamage37 = ["SILTING (At Culvert)"];
+export const typeOfDamage38 = ["INADEQUATE SIZE"];
+export const typeOfDamage39 = [
+  "DAMAGE / MISSING PANEL (For Roof Tiles & Ceiling)",
+];
+
+----------------------------------------------------------------------------
+
+const Bridge_Component_1 = JSON.stringify({
+      component: {
+        component_details: { name: "BEAM/GIRDER (Primary)", tick: 0 },
+        material: [
+          {
+            rating_of_member: 0,
+            material_details: [
+              {
+                name: "Steel",
+                tick: 0,
+              },
+            ],
+            type_of_damages: [
+              {
+                tick: 0,
+                active_details: 0,
+                name: "Corrosion of Steel",
+                code: 1,
+                severity_of_damage: 0,
+                percentage_affected: "",
+                remarks: "",
+                severity_of_damage_list: damage1,
+                type_of_damages_array: typeOfDamage1,
+              },
+              {
+                tick: 0,
+                active_details: 0,
+                name: "Fracture of Steel",
+                code: 2,
+                severity_of_damage: 0,
+                percentage_affected: "",
+                remarks: "If detected, rating = 4",
+                severity_of_damage_list: damage2,
+                type_of_damages_array: typeOfDamage2,
+              },
+              {
+                tick: 0,
+                active_details: 0,
+                name: "Loose Connections",
+                code: 3,
+                severity_of_damage: 0,
+                percentage_affected: "",
+                remarks: "",
+                severity_of_damage_list: damage3,
+                type_of_damages_array: typeOfDamage3,
+              },
+              {
+                tick: 0,
+                active_details: 0,
+                name: "Permanent Deformations",
+                code: 4,
+                severity_of_damage: 0,
+                percentage_affected: "",
+                remarks: "If detected, rating = 4",
+                severity_of_damage_list: damage4,
+                type_of_damages_array: typeOfDamage4,
+              },
+              {
+                tick: 0,
+                active_details: 0,
+                name: "Paint Deterioration",
+                code: 5,
+                severity_of_damage: 0,
+                percentage_affected: "",
+                remarks: "",
+                severity_of_damage_list: damage5,
+                type_of_damages_array: typeOfDamage5,
+              },
+              {
+                tick: 0,
+                active_details: 0,
+                name: "Abnormal Vibration/Deflection",
+                code: 13,
+                severity_of_damage: 0,
+                percentage_affected: "",
+                remarks: "If detected, rating = 4",
+                severity_of_damage_list: damage13,
+                type_of_damages_array: typeOfDamage13,
+              },
+              {
+                tick: 0,
+                active_details: 0,
+                name: "Abnormal Noise",
+                code: 31,
+                severity_of_damage: 0,
+                percentage_affected: "",
+                remarks: "If detected, rating = 4",
+                severity_of_damage_list: damage31,
+                type_of_damages_array: typeOfDamage31,
+              },
+            ],
+          },
+          {
+            rating_of_member: 0,
+            material_details: [
+              {
+                name: "P. Concrete",
+                tick: 0,
+              },
+              {
+                name: "R. Concrete",
+                tick: 0,
+              },
+            ],
+            type_of_damages: [
+              {
+                tick: 0,
+                active_details: 0,
+                name: "Surface Defect",
+                code: 11,
+                severity_of_damage: 0,
+                percentage_affected: "",
+                remarks: "",
+                severity_of_damage_list: damage11,
+                type_of_damages_array: typeOfDamage11,
+              },
+              {
+                tick: 0,
+                active_details: 0,
+                name: "Cracks at Concrete",
+                code: 6,
+                severity_of_damage: 0,
+                percentage_affected: "",
+                remarks: "If detected, rating = 4",
+                severity_of_damage_list: damage6,
+                type_of_damages_array: typeOfDamage6,
+              },
+              {
+                tick: 0,
+                active_details: 0,
+                name: "Delamination",
+                code: 12,
+                severity_of_damage: 0,
+                percentage_affected: "",
+                remarks: "",
+                severity_of_damage_list: damage12,
+                type_of_damages_array: typeOfDamage12,
+              },
+              {
+                tick: 0,
+                active_details: 0,
+                name: "Spalling",
+                code: 7,
+                severity_of_damage: 0,
+                percentage_affected: "",
+                remarks: "",
+                severity_of_damage_list: damage7,
+                type_of_damages_array: typeOfDamage7,
+              },
+              {
+                tick: 0,
+                active_details: 0,
+                name: "Corrosion of Reinforcement",
+                code: 8,
+                severity_of_damage: 0,
+                percentage_affected: "",
+                remarks: "",
+                severity_of_damage_list: damage8,
+                type_of_damages_array: typeOfDamage8,
+              },
+              {
+                tick: 0,
+                active_details: 0,
+                name: "Abnormal Vibration/Deflection",
+                code: 13,
+                severity_of_damage: 0,
+                percentage_affected: "",
+                remarks: "If detected, rating = 4",
+                severity_of_damage_list: damage13,
+                type_of_damages_array: typeOfDamage13,
+              },
+              {
+                tick: 0,
+                active_details: 0,
+                name: "Abnormal Movement",
+                code: 16,
+                severity_of_damage: 0,
+                percentage_affected: "",
+                remarks: "If detected, rating = 4",
+                severity_of_damage_list: damage16,
+                type_of_damages_array: typeOfDamage16,
+              },
+            ],
+          },
+        ],
+      },
+    });
+
+    const Bridge_Component_2 = JSON.stringify({
+      component: {
+        component_details: { name: "DECK SLAB (Primary)", tick: 0 },
+        material: [
+          {
+            rating_of_member: 0,
+            material_details: [
+              {
+                name: "Steel",
+                tick: 0,
+              },
+            ],
+            type_of_damages: [
+              {
+                tick: 0,
+                active_details: 0,
+                name: "Corrosion of Steel",
+                code: 1,
+                severity_of_damage: 0,
+                percentage_affected: "",
+                remarks: "",
+                severity_of_damage_list: damage1,
+                type_of_damages_array: typeOfDamage1,
+              },
+              {
+                tick: 0,
+                active_details: 0,
+                name: "Fracture of Steel",
+                code: 2,
+                severity_of_damage: 0,
+                percentage_affected: "",
+                remarks: "If detected, rating = 4",
+                severity_of_damage_list: damage2,
+                type_of_damages_array: typeOfDamage2,
+              },
+              {
+                tick: 0,
+                active_details: 0,
+                name: "Loose Connections",
+                code: 3,
+                severity_of_damage: 0,
+                percentage_affected: "",
+                remarks: "",
+                severity_of_damage_list: damage3,
+                type_of_damages_array: typeOfDamage3,
+              },
+              {
+                tick: 0,
+                active_details: 0,
+                name: "Permanent Deformations",
+                code: 4,
+                severity_of_damage: 0,
+                percentage_affected: "",
+                remarks: "If detected, rating = 4",
+                severity_of_damage_list: damage4,
+                type_of_damages_array: typeOfDamage4,
+              },
+              {
+                tick: 0,
+                active_details: 0,
+                name: "Water Leak",
+                code: 14,
+                severity_of_damage: 0,
+                percentage_affected: "",
+                remarks: "",
+                severity_of_damage_list: damage14,
+                type_of_damages_array: typeOfDamage14,
+              },
+              {
+                tick: 0,
+                active_details: 0,
+                name: "Abnormal Movement",
+                code: 16,
+                severity_of_damage: 0,
+                percentage_affected: "",
+                remarks: "If detected, rating = 4",
+                severity_of_damage_list: damage16,
+                type_of_damages_array: typeOfDamage16,
+              },
+              {
+                tick: 0,
+                active_details: 0,
+                name: "Abnormal Noise",
+                code: 31,
+                severity_of_damage: 0,
+                percentage_affected: "",
+                remarks: "If detected, rating = 4",
+                severity_of_damage_list: damage31,
+                type_of_damages_array: typeOfDamage31,
+              },
+            ],
+          },
+          {
+            rating_of_member: 0,
+            material_details: [
+              {
+                name: "Concrete",
+                tick: 0,
+              },
+            ],
+            type_of_damages: [
+              {
+                tick: 0,
+                active_details: 0,
+                name: "Surface Defect",
+                code: 11,
+                severity_of_damage: 0,
+                percentage_affected: "",
+                remarks: "",
+                severity_of_damage_list: damage11,
+                type_of_damages_array: typeOfDamage11,
+              },
+              {
+                tick: 0,
+                active_details: 0,
+                name: "Cracks at Concrete",
+                code: 6,
+                severity_of_damage: 0,
+                percentage_affected: "",
+                remarks: "",
+                severity_of_damage_list: damage6,
+                type_of_damages_array: typeOfDamage6,
+              },
+              {
+                tick: 0,
+                active_details: 0,
+                name: "Delamination",
+                code: 12,
+                severity_of_damage: 0,
+                percentage_affected: "",
+                remarks: "",
+                severity_of_damage_list: damage12,
+                type_of_damages_array: typeOfDamage12,
+              },
+              {
+                tick: 0,
+                active_details: 0,
+                name: "Spalling",
+                code: 7,
+                severity_of_damage: 0,
+                percentage_affected: "",
+                remarks: "",
+                severity_of_damage_list: damage7,
+                type_of_damages_array: typeOfDamage7,
+              },
+              {
+                tick: 0,
+                active_details: 0,
+                name: "Corrosion of Reinforcement",
+                code: 8,
+                severity_of_damage: 0,
+                percentage_affected: "",
+                remarks: "",
+                severity_of_damage_list: damage8,
+                type_of_damages_array: typeOfDamage8,
+              },
+              {
+                tick: 0,
+                active_details: 0,
+                name: "Water Leak/Free Lime",
+                code: 14,
+                severity_of_damage: 0,
+                percentage_affected: "",
+                remarks: "",
+                severity_of_damage_list: damage14,
+                type_of_damages_array: typeOfDamage14,
+              },
+            ],
+          },
+        ],
+      },
+    });
+
+    const Bridge_Component_3 = JSON.stringify({
+      component: {
+        component_details: { name: "ABUTMENT (Primary)", tick: 0 },
+        material: [
+          {
+            rating_of_member: 0,
+            material_details: [
+              {
+                name: "Concrete",
+                tick: 0,
+              },
+              {
+                name: "Masonry",
+                tick: 0,
+              },
+            ],
+            type_of_damages: [
+              {
+                tick: 0,
+                active_details: 0,
+                name: "Surface Defect",
+                code: 11,
+                severity_of_damage: 0,
+                percentage_affected: "",
+                remarks: "",
+                severity_of_damage_list: damage11,
+                type_of_damages_array: typeOfDamage11,
+              },
+              {
+                tick: 0,
+                active_details: 0,
+                name: "Cracks at Concrete",
+                code: 6,
+                severity_of_damage: 0,
+                percentage_affected: "",
+                remarks: "",
+                severity_of_damage_list: damage6,
+                type_of_damages_array: typeOfDamage6,
+              },
+              {
+                tick: 0,
+                active_details: 0,
+                name: "Delamination",
+                code: 12,
+                severity_of_damage: 0,
+                percentage_affected: "",
+                remarks: "",
+                severity_of_damage_list: damage12,
+                type_of_damages_array: typeOfDamage12,
+              },
+              {
+                tick: 0,
+                active_details: 0,
+                name: "Spalling",
+                code: 7,
+                severity_of_damage: 0,
+                percentage_affected: "",
+                remarks: "",
+                severity_of_damage_list: damage7,
+                type_of_damages_array: typeOfDamage7,
+              },
+              {
+                tick: 0,
+                active_details: 0,
+                name: "Corrosion of Reinforcement",
+                code: 8,
+                severity_of_damage: 0,
+                percentage_affected: "",
+                remarks: "",
+                severity_of_damage_list: damage8,
+                type_of_damages_array: typeOfDamage8,
+              },
+              {
+                tick: 0,
+                active_details: 0,
+                name: "Wear/Abrasion",
+                code: 9,
+                severity_of_damage: 0,
+                percentage_affected: "",
+                remarks: "",
+                severity_of_damage_list: damage9,
+                type_of_damages_array: typeOfDamage9,
+              },
+              {
+                tick: 0,
+                active_details: 0,
+                name: "Material Deterioration",
+                code: 10,
+                severity_of_damage: 0,
+                percentage_affected: "",
+                remarks: "",
+                severity_of_damage_list: damage10,
+                type_of_damages_array: typeOfDamage10,
+              },
+              {
+                tick: 0,
+                active_details: 0,
+                name: "Tilt/Settlement",
+                code: 15,
+                severity_of_damage: 0,
+                percentage_affected: "",
+                remarks: "If detected, rating = 4",
+                severity_of_damage_list: damage15,
+                type_of_damages_array: typeOfDamage15,
+              },
+              {
+                tick: 0,
+                active_details: 0,
+                name: "Scouring",
+                code: 17,
+                severity_of_damage: 0,
+                percentage_affected: "",
+                remarks: "",
+                severity_of_damage_list: damage17,
+                type_of_damages_array: typeOfDamage17,
+              },
+            ],
+          },
+        ],
+      },
+    });
+
+    const Bridge_Component_4 = JSON.stringify({
+      component: {
+        component_details: { name: "PIER NO. (Primary)", tick: 0 },
+        material: [
+          {
+            rating_of_member: 0,
+            pier_no: "",
+            material_details: [
+              {
+                name: "Concrete",
+                tick: 0,
+              },
+              {
+                name: "Masonry",
+                tick: 0,
+              },
+            ],
+            type_of_damages: [
+              {
+                tick: 0,
+                active_details: 0,
+                name: "Surface Defect",
+                code: 11,
+                severity_of_damage: 0,
+                percentage_affected: "",
+                remarks: "",
+                severity_of_damage_list: damage11,
+                type_of_damages_array: typeOfDamage11,
+              },
+              {
+                tick: 0,
+                active_details: 0,
+                name: "Cracks at Concrete",
+                code: 6,
+                severity_of_damage: 0,
+                percentage_affected: "",
+                remarks: "",
+                severity_of_damage_list: damage6,
+                type_of_damages_array: typeOfDamage6,
+              },
+              {
+                tick: 0,
+                active_details: 0,
+                name: "Delamination",
+                code: 12,
+                severity_of_damage: 0,
+                percentage_affected: "",
+                remarks: "",
+                severity_of_damage_list: damage12,
+                type_of_damages_array: typeOfDamage12,
+              },
+              {
+                tick: 0,
+                active_details: 0,
+                name: "Spalling",
+                code: 7,
+                severity_of_damage: 0,
+                percentage_affected: "",
+                remarks: "",
+                severity_of_damage_list: damage7,
+                type_of_damages_array: typeOfDamage7,
+              },
+              {
+                tick: 0,
+                active_details: 0,
+                name: "Corrosion of Reinforcement",
+                code: 8,
+                severity_of_damage: 0,
+                percentage_affected: "",
+                remarks: "",
+                severity_of_damage_list: damage8,
+                type_of_damages_array: typeOfDamage8,
+              },
+              {
+                tick: 0,
+                active_details: 0,
+                name: "Wear/Abrasion",
+                code: 9,
+                severity_of_damage: 0,
+                percentage_affected: "",
+                remarks: "",
+                severity_of_damage_list: damage9,
+                type_of_damages_array: typeOfDamage9,
+              },
+              {
+                tick: 0,
+                active_details: 0,
+                name: "Material Deterioration",
+                code: 10,
+                severity_of_damage: 0,
+                percentage_affected: "",
+                remarks: "",
+                severity_of_damage_list: damage10,
+                type_of_damages_array: typeOfDamage10,
+              },
+              {
+                tick: 0,
+                active_details: 0,
+                name: "Tilt/Settlement",
+                code: 15,
+                severity_of_damage: 0,
+                percentage_affected: "",
+                remarks: "If detected, rating = 4",
+                severity_of_damage_list: damage15,
+                type_of_damages_array: typeOfDamage15,
+              },
+              {
+                tick: 0,
+                active_details: 0,
+                name: "Scouring",
+                code: 17,
+                severity_of_damage: 0,
+                percentage_affected: "",
+                remarks: "",
+                severity_of_damage_list: damage17,
+                type_of_damages_array: typeOfDamage17,
+              },
+            ],
+          },
+        ],
+      },
+    });
+
+    const Bridge_Component_5 = JSON.stringify({
+      component: {
+        component_details: { name: "BEARING (Primary)", tick: 0 },
+        material: [
+          {
+            rating_of_member: 0,
+            material_details: [
+              {
+                name: "Steel",
+                tick: 0,
+              },
+              {
+                name: "Rubber",
+                tick: 0,
+              },
+              {
+                name: "Others",
+                tick: 0,
+              },
+            ],
+            type_of_damages: [
+              {
+                tick: 0,
+                active_details: 0,
+                name: "Corrosion of Steel",
+                code: 1,
+                severity_of_damage: 0,
+                percentage_affected: "",
+                remarks: "",
+                severity_of_damage_list: damage1,
+                type_of_damages_array: typeOfDamage1,
+              },
+              {
+                tick: 0,
+                active_details: 0,
+                name: "Loose Connections",
+                code: 3,
+                severity_of_damage: 0,
+                percentage_affected: "",
+                remarks: "",
+                severity_of_damage_list: damage3,
+                type_of_damages_array: typeOfDamage3,
+              },
+              {
+                tick: 0,
+                active_details: 0,
+                name: "Pending Water",
+                code: 18,
+                severity_of_damage: 0,
+                percentage_affected: "",
+                remarks: "If detected, rating = 3",
+                severity_of_damage_list: damage18,
+                type_of_damages_array: typeOfDamage18,
+              },
+              {
+                tick: 0,
+                active_details: 0,
+                name: "Debris/Vegetation",
+                code: 19,
+                severity_of_damage: 0,
+                percentage_affected: "",
+                remarks: "",
+                severity_of_damage_list: damage19,
+                type_of_damages_array: typeOfDamage19,
+              },
+              {
+                tick: 0,
+                active_details: 0,
+                name: "Abnormal Bulging",
+                code: 33,
+                severity_of_damage: 0,
+                percentage_affected: "",
+                remarks: "",
+                severity_of_damage_list: damage33,
+                type_of_damages_array: typeOfDamage33,
+              },
+              {
+                tick: 0,
+                active_details: 0,
+                name: "Abnormal Displacement",
+                code: 34,
+                severity_of_damage: 0,
+                percentage_affected: "",
+                remarks: "",
+                severity_of_damage_list: damage34,
+                type_of_damages_array: typeOfDamage34,
+              },
+            ],
+          },
+        ],
+      },
+    });
+
+    const Bridge_Component_6 = JSON.stringify({
+      component: {
+        component_details: { name: "PARAPET (Secondary)", tick: 0 },
+        material: [
+          {
+            rating_of_member: 0,
+            material_details: [
+              {
+                name: "Steel",
+                tick: 0,
+              },
+              {
+                name: "Concrete",
+                tick: 0,
+              },
+              {
+                name: "Others",
+                tick: 0,
+              },
+            ],
+            type_of_damages: [
+              {
+                tick: 0,
+                active_details: 0,
+                name: "Corrosion of Steel",
+                code: 1,
+                severity_of_damage: 0,
+                percentage_affected: "",
+                remarks: "",
+                severity_of_damage_list: damage1,
+                type_of_damages_array: typeOfDamage1,
+              },
+              {
+                tick: 0,
+                active_details: 0,
+                name: "Cracks at Concrete",
+                code: 6,
+                severity_of_damage: 0,
+                percentage_affected: "",
+                remarks: "",
+                severity_of_damage_list: damage6,
+                type_of_damages_array: typeOfDamage6,
+              },
+              {
+                tick: 0,
+                active_details: 0,
+                name: "Spalling",
+                code: 7,
+                severity_of_damage: 0,
+                percentage_affected: "",
+                remarks: "",
+                severity_of_damage_list: damage7,
+                type_of_damages_array: typeOfDamage7,
+              },
+              {
+                tick: 0,
+                active_details: 0,
+                name: "Impact Damage",
+                code: 2,
+                severity_of_damage: 0,
+                percentage_affected: "",
+                remarks: "",
+                severity_of_damage_list: damage2,
+                type_of_damages_array: typeOfDamage2,
+              },
+              {
+                tick: 0,
+                active_details: 0,
+                name: "Loose Connections",
+                code: 3,
+                severity_of_damage: 0,
+                percentage_affected: "",
+                remarks: "",
+                severity_of_damage_list: damage3,
+                type_of_damages_array: typeOfDamage3,
+              },
+            ],
+          },
+        ],
+      },
+    });
+    const Bridge_Component_7 = JSON.stringify({
+      component: {
+        component_details: { name: "SURFACING (Secondary)", tick: 0 },
+        material: [
+          {
+            rating_of_member: 0,
+            material_details: [
+              {
+                name: "Asphalt",
+                tick: 0,
+              },
+              {
+                name: "Concrete",
+                tick: 0,
+              },
+            ],
+            type_of_damages: [
+              {
+                tick: 0,
+                active_details: 0,
+                name: "Pot-holes",
+                code: 23,
+                severity_of_damage: 0,
+                percentage_affected: "",
+                remarks: "",
+                severity_of_damage_list: damage23,
+                type_of_damages_array: typeOfDamage23,
+              },
+              {
+                tick: 0,
+                active_details: 0,
+                name: "Wheel Track Rutting",
+                code: 24,
+                severity_of_damage: 0,
+                percentage_affected: "",
+                remarks: "",
+                severity_of_damage_list: damage24,
+                type_of_damages_array: typeOfDamage24,
+              },
+              {
+                tick: 0,
+                active_details: 0,
+                name: "Loss of Bond & Delamination",
+                code: 25,
+                severity_of_damage: 0,
+                percentage_affected: "",
+                remarks: "",
+                severity_of_damage_list: damage25,
+                type_of_damages_array: typeOfDamage25,
+              },
+              {
+                tick: 0,
+                active_details: 0,
+                name: "Rppling",
+                code: 26,
+                severity_of_damage: 0,
+                percentage_affected: "",
+                remarks: "",
+                severity_of_damage_list: damage26,
+                type_of_damages_array: typeOfDamage26,
+              },
+              {
+                tick: 0,
+                active_details: 0,
+                name: "Pavement Crack",
+                code: 27,
+                severity_of_damage: 0,
+                percentage_affected: "",
+                remarks: "",
+                severity_of_damage_list: damage27,
+                type_of_damages_array: typeOfDamage27,
+              },
+            ],
+          },
+        ],
+      },
+    });
+    const Bridge_Component_8 = JSON.stringify({
+      component: {
+        component_details: { name: "EXPANSION JOINT (Secondary)", tick: 0 },
+        material: [
+          {
+            rating_of_member: 0,
+            material_details: [
+              {
+                name: "Asp. Plug",
+                tick: 0,
+              },
+              {
+                name: "Elastometric",
+                tick: 0,
+              },
+              {
+                name: "Comp. Seal",
+                tick: 0,
+              },
+              {
+                name: "Buried",
+                tick: 0,
+              },
+              {
+                name: "Others",
+                tick: 0,
+              },
+            ],
+            type_of_damages: [
+              {
+                tick: 0,
+                active_details: 0,
+                name: "Abnormal Spacing",
+                code: 29,
+                severity_of_damage: 0,
+                percentage_affected: "",
+                remarks: "if detected, rating = 4",
+                severity_of_damage_list: damage29,
+                type_of_damages_array: typeOfDamage29,
+              },
+              {
+                tick: 0,
+                active_details: 0,
+                name: "Difference in Level",
+                code: 30,
+                severity_of_damage: 0,
+                percentage_affected: "",
+                remarks: "",
+                severity_of_damage_list: damage30,
+                type_of_damages_array: typeOfDamage30,
+              },
+              {
+                tick: 0,
+                active_details: 0,
+                name: "Water Leak",
+                code: 14,
+                severity_of_damage: 0,
+                percentage_affected: "",
+                remarks: "",
+                severity_of_damage_list: damage14,
+                type_of_damages_array: typeOfDamage14,
+              },
+              {
+                tick: 0,
+                active_details: 0,
+                name: "Cracking at Exp. Joint",
+                code: 28,
+                severity_of_damage: 0,
+                percentage_affected: "",
+                remarks: "",
+                severity_of_damage_list: damage28,
+                type_of_damages_array: typeOfDamage28,
+              },
+              {
+                tick: 0,
+                active_details: 0,
+                name: "Rupture",
+                code: 32,
+                severity_of_damage: 0,
+                percentage_affected: "",
+                remarks: "",
+                severity_of_damage_list: damage32,
+                type_of_damages_array: typeOfDamage32,
+              },
+            ],
+          },
+        ],
+      },
+    });
+    const Bridge_Component_9 = JSON.stringify({
+      component: {
+        component_details: { name: "DRAINPIPES (Secondary)", tick: 0 },
+        material: [
+          {
+            rating_of_member: 0,
+            material_details: [
+              {
+                name: "Steel",
+                tick: 0,
+              },
+              {
+                name: "PVC",
+                tick: 0,
+              },
+            ],
+            type_of_damages: [
+              {
+                tick: 0,
+                active_details: 0,
+                name: "Corrosion of Steel",
+                code: 1,
+                severity_of_damage: 0,
+                percentage_affected: "",
+                remarks: "",
+                severity_of_damage_list: damage1,
+                type_of_damages_array: typeOfDamage1,
+              },
+              {
+                tick: 0,
+                active_details: 0,
+                name: "Blocked Drainage",
+                code: 20,
+                severity_of_damage: 0,
+                percentage_affected: "",
+                remarks: "",
+                severity_of_damage_list: damage20,
+                type_of_damages_array: typeOfDamage20,
+              },
+              {
+                tick: 0,
+                active_details: 0,
+                name: "Water Leak",
+                code: 14,
+                severity_of_damage: 0,
+                percentage_affected: "",
+                remarks: "",
+                severity_of_damage_list: damage14,
+                type_of_damages_array: typeOfDamage14,
+              },
+              {
+                tick: 0,
+                active_details: 0,
+                name: "No/Inadequate Pipe Length",
+                code: 21,
+                severity_of_damage: 0,
+                percentage_affected: "",
+                remarks: "",
+                severity_of_damage_list: damage21,
+                type_of_damages_array: typeOfDamage21,
+              },
+            ],
+          },
+        ],
+      },
+    });
+    const Bridge_Component_10 = JSON.stringify({
+      component: {
+        component_details: {
+          name: "Slope Protection / River Bank (Secondary)",
+          tick: 0,
+        },
+        material: [
+          {
+            rating_of_member: 0,
+            material_details: [
+              {
+                name: "Rble. Pitching",
+                tick: 0,
+              },
+              {
+                name: "Gablons",
+                tick: 0,
+              },
+              {
+                name: "Others",
+                tick: 0,
+              },
+            ],
+            type_of_damages: [
+              {
+                tick: 0,
+                active_details: 0,
+                name: "Scouring",
+                code: 17,
+                severity_of_damage: 0,
+                percentage_affected: "",
+                remarks: "",
+                severity_of_damage_list: damage17,
+                type_of_damages_array: typeOfDamage17,
+              },
+              {
+                tick: 0,
+                active_details: 0,
+                name: "Erosion",
+                code: 35,
+                severity_of_damage: 0,
+                percentage_affected: "",
+                remarks: "",
+                severity_of_damage_list: damage35,
+                type_of_damages_array: typeOfDamage35,
+              },
+              {
+                tick: 0,
+                active_details: 0,
+                name: "Material Loss / Disintegration",
+                code: 36,
+                severity_of_damage: 0,
+                percentage_affected: "",
+                remarks: "",
+                severity_of_damage_list: damage36,
+                type_of_damages_array: typeOfDamage36,
+              },
+            ],
+          },
+        ],
+      },
+    });
+    const Bridge_Component_11 = JSON.stringify({
+      component: {
+        component_details: {
+          name: "HYDRAULIC CAPACITY",
+          tick: 0,
+        },
+        material: [
+          {
+            rating_of_member: 0,
+            type_of_damages: [
+              {
+                tick: 0,
+                active_details: 0,
+                name: "Inadequate Opening",
+                code: 38,
+                severity_of_damage: 0,
+                percentage_affected: "",
+                remarks: "",
+                severity_of_damage_list: damage38,
+                type_of_damages_array: typeOfDamage38,
+              },
+            ],
+          },
+        ],
+      },
+    });
+
+    const createBrideList = await prisma.bridge_list.createMany({
+      data: [
+        {
+          structure: Bridge_Component_1,
+        },
+        {
+          structure: Bridge_Component_2,
+        },
+        {
+          structure: Bridge_Component_3,
+        },
+        {
+          structure: Bridge_Component_4,
+        },
+        {
+          structure: Bridge_Component_5,
+        },
+        {
+          structure: Bridge_Component_6,
+        },
+        {
+          structure: Bridge_Component_7,
+        },
+        {
+          structure: Bridge_Component_8,
+        },
+        {
+          structure: Bridge_Component_9,
+        },
+        {
+          structure: Bridge_Component_10,
+        },
+        {
+          structure: Bridge_Component_11,
+        },
+      ],
+    });
