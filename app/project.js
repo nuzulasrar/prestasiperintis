@@ -10,7 +10,7 @@ import {
   Modal,
   useWindowDimensions,
 } from "react-native";
-import React, { useCallback, useState, useEffect } from "react";
+import React, { useCallback, useState, useEffect, useRef } from "react";
 
 import Collapsible from "react-native-collapsible";
 
@@ -39,8 +39,10 @@ import {
   useCanvasRef,
   ImageFormat,
 } from "@shopify/react-native-skia";
+import { getSubMiitedFormList } from "../fetches/getSubmittedFormList";
 
 export default function Page() {
+
   const { width, height } = useWindowDimensions();
 
   const [image, setImage] = useState(null);
@@ -54,9 +56,30 @@ export default function Page() {
   const [isCollapsed, setIsCollapsed] = useState(false);
 
   const [formInfo, setFormInfo] = useState({});
+
   const [debounceTimer, setDebounceTimer] = useState(null);
+  
+  //data of the form
   const [formList, setFormList] = useState([]);
-  const [activeIndex, setActiveIndex] = useState(0);
+
+  //data of the submitted form previously
+  const [viewFormList, setViewFormList] = useState([]);
+
+  //guna utk change component
+  const [activeIndex, setActiveIndex] = useState(-1);
+
+  const flatListRef = useRef(null);
+
+  const scrollToTop = () => {
+    if (flatListRef.current) {
+      flatListRef.current.scrollToIndex({ index: 0, animated: true });
+    }
+  };
+
+  useEffect(() => {
+    scrollToTop();
+  }, [activeIndex]);
+
 
   const thisApiCall = async () => {
     let returnApiCall;
@@ -66,11 +89,13 @@ export default function Page() {
     } else if (thisdata.project_type === "Bridge") {
       returnApiCall = await getBridgeList();
     }
-
-    console.log("api", returnApiCall.bridgelist);
-
-    // setFormList([returnApiCall.bridgelist[0]]);
+    // console.log("api", returnApiCall.bridgelist)
     setFormList(returnApiCall);
+
+    let  returnViewFormData = await getSubMiitedFormList();
+
+    // console.log("api", returnApiCall.bridgelist)
+    setViewFormList(returnViewFormData);
   };
 
   useEffect(() => {
@@ -78,7 +103,7 @@ export default function Page() {
   }, []);
 
   const minusActiveIndex = (index) => {
-    if (index !== 0) {
+    if (index !== -1) {
       setActiveIndex(activeIndex - 1);
     }
   };
@@ -671,6 +696,44 @@ export default function Page() {
       .catch((error) => console.log(error.message));
   };
 
+  const submitForm = () => {
+
+    console.log("form: ", formList.bridgelist);
+    // var fd = new FormData();
+
+    // fd.append("name", JSON.stringify(formList.bridgelist));
+    // fetch(API_URL + "/api/submitform", {
+    //   method: "POST",
+    //   body: fd,
+    //   // headers: {
+    //   //   "Content-Type": "multipart/form-data; ",
+    //   // },
+    // })
+    //   .then((res) => res.json())
+    //   .then((json) => {
+        
+    //     console.log("json", json);
+        
+    //     if(json.success){
+    //       setModalVisible(false)
+    //     }
+        
+    //   })
+    //   .catch((error) => console.log("ERROR", error));
+  };
+
+  const ViewFormRender = ({item, index})=>{
+    let eachform = JSON.parse(item.formdata)
+    let eachform2 = JSON.parse(eachform)
+    // let eachform3 = JSON.parse(eachform2[1].structure)
+    return (
+      <TouchableOpacity className="w-full bg-gray-200 mb-2 rounded-md p-2">
+      <Text selectable className="text-black">{JSON.stringify(eachform2)}</Text>
+      <View className="h-[20px]" />
+      </TouchableOpacity>
+    )
+  }
+
   return (
     <View className="flex-1 justify-start bg-gray-200">
       <View className="h-[50px]" />
@@ -717,7 +780,13 @@ export default function Page() {
         ) : (
           <Text className="text-black font-semibold text-[20px]"></Text>
         )} */}
-      </View>
+        {/* <Text className="text-black">{JSON.stringify(viewFormList)}</Text> */}
+        <FlatList 
+          data={viewFormList}
+          ListEmptyComponent={()=><Text className="text-black">No Submmited Form Yet</Text>}
+          renderItem={({item,index})=><ViewFormRender item={item} index={index} />}
+        />
+      </View> 
 
       <TouchableOpacity
         onPress={() => {
@@ -742,7 +811,7 @@ export default function Page() {
           className="h-full flex-1 justify-center items-center"
           style={{
             backgroundColor: "rgba(0,0,0,0.4)",
-            paddingVertical: !isCollapsed ? 250 : 150,
+            paddingVertical: !isCollapsed ? height / 9 : height/ 9,
           }}
         >
           <View
@@ -779,19 +848,20 @@ export default function Page() {
                 <FontAwesomeIcon icon="xmark" color="white" size={30} />
               </TouchableOpacity>
             </View>
-            <Collapsible collapsed={isCollapsed}>
+            {activeIndex === -1? <Collapsible collapsed={isCollapsed}>
+            <Text>{JSON.stringify(formInfo)}</Text>
               <View className="w-full p-3">
                 {thisdata.project_type === "Bridge" ? (
                   <View className="mb-2">
                     <Text className="text-black text-[18px] font-semibold">
                       SPAN No:
-                      {/* {String(activeIndex)}{" "} */}
-                      {/* {String(formList.bridgelist.length)} */}
+                      {/* {String(activeIndex)}{" "} 
+                       {String(formList.bridgelist.length)} */}
                     </Text>
                     <TextInput
                       value={formInfo?.span_no}
                       onChangeText={(e) => captureFormInfo("span_no", e)}
-                      className="bg-gray-200 h-[40px] w-full rounded-md"
+                      className="bg-gray-200 h-[40px] w-full rounded-md pl-2"
                     />
                   </View>
                 ) : null}
@@ -803,12 +873,52 @@ export default function Page() {
                   <TextInput
                     value={formInfo?.route_no}
                     onChangeText={(e) => captureFormInfo("route_no", e)}
-                    className="bg-gray-200 h-[40px] w-full rounded-md"
+                    className="bg-gray-200 h-[40px] w-full rounded-md pl-2"
+                  />
+                </View>
+                <View className="mb-2">
+                  <Text className="text-black text-[18px] font-semibold">
+                    Struct No:
+                  </Text>
+                  <TextInput
+                    value={formInfo?.struct_no}
+                    onChangeText={(e) => captureFormInfo("struct_no", e)}
+                    className="bg-gray-200 h-[40px] w-full rounded-md pl-2"
+                  />
+                </View>
+                <View className="mb-2">
+                  <Text className="text-black text-[18px] font-semibold">
+                    Bridge Name:
+                  </Text>
+                  <TextInput
+                    value={formInfo?.bridge_name}
+                    onChangeText={(e) => captureFormInfo("bridge_name", e)}
+                    className="bg-gray-200 h-[40px] w-full rounded-md pl-2"
+                  />
+                </View>
+                <View className="mb-2">
+                  <Text className="text-black text-[18px] font-semibold">
+                    Name of Inspector:
+                  </Text>
+                  <TextInput
+                    value={formInfo?.name_of_inspector}
+                    onChangeText={(e) => captureFormInfo("name_of_inspector", e)}
+                    className="bg-gray-200 h-[40px] w-full rounded-md pl-2"
+                  />
+                </View>
+                <View className="mb-2">
+                  <Text className="text-black text-[18px] font-semibold">
+                    Date:
+                  </Text>
+                  <TextInput
+                    value={formInfo?.date}
+                    onChangeText={(e) => captureFormInfo("date", e)}
+                    className="bg-gray-200 h-[40px] w-full rounded-md pl-2"
                   />
                 </View>
               </View>
-            </Collapsible>
-            <TouchableOpacity
+            </Collapsible> : null}
+            {/* <TouchableOpacity
               onPress={() => {
                 setIsCollapsed(!isCollapsed);
               }}
@@ -822,10 +932,11 @@ export default function Page() {
                 color="black"
                 size={16}
               />
-            </TouchableOpacity>
-            <Text>{JSON.stringify(formInfo)}</Text>
+            </TouchableOpacity> */}
+            
             {/* main flatlist */}
             <FlatList
+              ref={flatListRef}
               data={formList.bridgelist}
               renderItem={({ item, index }) => (
                 <FormItems item={item} index={index} />
@@ -839,25 +950,29 @@ export default function Page() {
               extraData={activeIndex}
             />
             {activeIndex == 11 ? <View></View> : null}
-            {/* <Button
-              title="Pick an image from camera-roll"
-              onPress={pickImage}
-              style={{ marginVertical: 30 }}
-            />
-            {image ? (
-              <Image
-                source={{
-                  uri: image,
-                }}
-                style={{
-                  width: 200,
-                  height: 150,
-                  marginVertical: 30,
-                }}
+            
+            {/* 
+              <Button
+                title="Pick an image from camera-roll"
+                onPress={pickImage}
+                style={{ marginVertical: 30 }}
               />
-            ) : null}
+              {image ? (
+                <Image
+                  source={{
+                    uri: image,
+                  }}
+                  style={{
+                    width: 200,
+                    height: 150,
+                    marginVertical: 30,
+                  }}
+                />
+              ) : null}
 
-            <Button title="Upload" onPress={uploadImage} /> */}
+              <Button title="Upload" onPress={uploadImage} /> 
+            */}
+
             <View className="h-[80px] w-full bg-white border-t-2 pt-4 border-t-black rounded-b-md flex-row justify-around items-center">
               <TouchableOpacity
                 onPress={() => minusActiveIndex(activeIndex)}
@@ -877,7 +992,12 @@ export default function Page() {
                   </Text>
                 </TouchableOpacity>
               ) : (
-                <TouchableOpacity className="bg-green-600 self-center flex-row justify-center items-center w-4/12 mb-4 py-2 mx-2 rounded-full">
+                <TouchableOpacity
+                  onPress={() => {
+                    submitForm();
+                  }}
+                  className="bg-green-600 self-center flex-row justify-center items-center w-4/12 mb-4 py-2 mx-2 rounded-full"
+                >
                   <Text className="text-white text-[18px] font-semibold">
                     Submit Form
                   </Text>
