@@ -10,7 +10,7 @@ import {
   useCanvasRef,
   ImageFormat,
 } from "@shopify/react-native-skia";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useState, useRef } from "react";
 import {
   Pressable,
   StyleSheet,
@@ -18,14 +18,24 @@ import {
   View,
   Image as RNImage,
   ScrollView,
+  PanResponder,
+  TouchableOpacity,
+  useWindowDimensions,
 } from "react-native";
-import { TouchableOpacity } from "react-native-gesture-handler";
 
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import { FlatList } from "react-native-gesture-handler";
 
-export default function Page() {
+export default function Draw() {
+  const { width, height } = useWindowDimensions();
+
   const [paths, setPaths] = useState([]);
   const [color, setColor] = useState(Colors[0]);
+
+  const [imageHeightWidth, setImageHeightWidth] = useState(500);
+  const [canvasScale, setCanvasScale] = useState(1);
+  const [canvasX, setCanvasX] = useState(0);
+  const [canvasY, setCanvasY] = useState(0);
 
   const [strokeWidth, setStrokeWidth] = useState(strokes[0]);
 
@@ -69,11 +79,60 @@ export default function Page() {
     [onDrawingActive, onDrawingStart]
   );
 
+  const [editorMode, setEditorMode] = useState(1);
+  const [selectedImage, setSelectedImage] = useState(0);
+
+  const ATP2020 = [
+    require("../assets/ATP2020/ALOR_SETAR_SELATAN-1.png"),
+    require("../assets/ATP2020/ALOR_SETAR_UTARA-1.png"),
+    require("../assets/ATP2020/HUTAN_KAMPUNG-1.png"),
+    require("../assets/ATP2020/IPOH_UTARA-1.png"),
+    require("../assets/ATP2020/IPOH_UTARA-2.png"),
+    require("../assets/ATP2020/JURU-1.png"),
+    require("../assets/ATP2020/KLIA-1.png"),
+    require("../assets/ATP2020/KLIA-2.png"),
+    require("../assets/ATP2020/LEMBAH_BERINGIN-1.png"),
+    require("../assets/ATP2020/PEDAS_LINGGI-1.png"),
+    require("../assets/ATP2020/PENANG_BRIDGE-1.png"),
+    require("../assets/ATP2020/PENANG_BRIDGE-2.png"),
+    require("../assets/ATP2020/PENDANG-1.png"),
+    require("../assets/ATP2020/PERLING-1.png"),
+    require("../assets/ATP2020/PUTRA_MAHKOTA-1.png"),
+    require("../assets/ATP2020/SENAWANG-1.png"),
+    require("../assets/ATP2020/SG_BULOH-1.png"),
+    require("../assets/ATP2020/SG_DUA-1.png"),
+    require("../assets/ATP2020/SG_DUA-2.png"),
+    require("../assets/ATP2020/SKUDAI-1.png"),
+    require("../assets/ATP2020/SKUDAI-2.png"),
+    require("../assets/ATP2020/SUBANG-1.png"),
+    require("../assets/ATP2020/SUBANG-2.png"),
+    require("../assets/ATP2020/SUBANG-3.png"),
+    require("../assets/ATP2020/TANGKAK-1.png"),
+    require("../assets/ATP2020/TANJUNG_MALIM-1.png"),
+    require("../assets/ATP2020/YONG_PENG_UTARA-1.png"),
+  ];
+
+  function Gallery1({ item, index }) {
+    return (
+      <TouchableOpacity
+        onPress={() => {
+          setSelectedImage(index);
+          setEditorMode(3);
+        }}
+      >
+        <RNImage
+          source={item}
+          style={{ width: width / 2 - 20, height: width / 2 - 20, margin: 5 }}
+        />
+      </TouchableOpacity>
+    );
+  }
+
   const canvasRef = useCanvasRef();
 
-  const image = useImage(require("../assets/ATP2020/ALOR_SETAR_SELATAN-1.png"));
-
   const [capturedImage, setCapturedImage] = useState();
+
+  const image = useImage(ATP2020[selectedImage]);
 
   const images = [
     {
@@ -86,111 +145,161 @@ export default function Page() {
 
   return (
     <View style={style.container} className="bg-gray-400">
-      <View className="h-[50px]" />
-      <Toolbar
-        color={color}
-        strokeWidth={strokeWidth}
-        setColor={setColor}
-        setStrokeWidth={setStrokeWidth}
-      />
-      <TouchableOpacity
-        className="self-center flex-row justify-center items-center m-3 rounded-full bg-yellow-400 px-5 py-2"
-        onPress={() => {
-          setPaths([]);
-        }}
-      >
-        <FontAwesomeIcon icon="arrows-rotate" size={20} color="black" />
-        <Text className="text-black ml-2 text-[20px]">Reset Drawing</Text>
-      </TouchableOpacity>
+      <View className="h-[10px]" />
+      {editorMode === 1 ? (
+        <View className="flex-1 justify-center items-center">
+          <TouchableOpacity
+            onPress={() => {
+              setEditorMode(2);
+            }}
+            className="flex-row justify-center items-center
+          bg-blue-600 px-4 py-3 rounded-full
+          "
+          >
+            <FontAwesomeIcon
+              icon={"plus"}
+              color={"white"}
+              size={20}
+              style={{ marginRight: 8 }}
+            />
+            <Text className="text-white text-[20px]">Add Image</Text>
+          </TouchableOpacity>
+        </View>
+      ) : editorMode === 2 ? (
+        <View className="flex-1 justify-center items-center">
+          <FlatList
+            numColumns={2}
+            data={ATP2020}
+            renderItem={({ item, index }) => (
+              <Gallery1 item={item} index={index} />
+            )}
+          />
+        </View>
+      ) : (
+        <>
+          <View className="flex-row justify-center items-center">
+            <Toolbar
+              color={color}
+              strokeWidth={strokeWidth}
+              setColor={setColor}
+              setStrokeWidth={setStrokeWidth}
+            />
+            <TouchableOpacity
+              className="self-center flex-row justify-center items-center m-3 rounded-full bg-yellow-400 px-5 py-2"
+              onPress={() => {
+                setPaths([]);
+              }}
+            >
+              <FontAwesomeIcon icon="arrows-rotate" size={20} color="black" />
+              <Text className="text-black ml-2 text-[20px]">Reset Drawing</Text>
+            </TouchableOpacity>
+          </View>
 
-      <View className="bg-sky-200 flex-row justify-center items-center w-full">
-        <View>
-          <Text className="text-black font-semibold" style={{ width: 100 }}>
-            ALOR_SETAR_SELATAN-1.png
-          </Text>
-          <TouchableOpacity>
-            <RNImage
-              source={require("../assets/ATP2020/ALOR_SETAR_SELATAN-1.png")}
-              style={{ width: 100, height: 100 }}
-            />
-          </TouchableOpacity>
-        </View>
-        <View>
-          <Text className="text-black font-semibold" style={{ width: 100 }}>
-            HUTAN_KAMPUNG-1.png
-          </Text>
-          <TouchableOpacity>
-            <RNImage
-              source={require("../assets/ATP2020/HUTAN_KAMPUNG-1.png")}
-              style={{ width: 100, height: 100 }}
-            />
-          </TouchableOpacity>
-        </View>
-        <View>
-          <Text className="text-black font-semibold" style={{ width: 100 }}>
-            ALOR_SETAR_UTARA-1.png
-          </Text>
-          <TouchableOpacity>
-            <RNImage
-              source={require("../assets/ATP2020/ALOR_SETAR_UTARA-1.png")}
-              style={{ width: 100, height: 100 }}
-            />
-          </TouchableOpacity>
-        </View>
-        {/* <TouchableOpacity>
-          <Text className="text-black font-semibold">
-            ALOR_SETAR_UTARA-1.png
-          </Text>
-          <RNImage
-            source={require("../assets/ATP2020/ALOR_SETAR_UTARA-1.png")}
-            style={{ width: 100, height: 100 }}
-          />
-        </TouchableOpacity>
-        <TouchableOpacity>
-          <Text className="text-black font-semibold">HUTAN_KAMPUNG-1.png</Text>
-          <RNImage
-            source={require("../assets/ATP2020/HUTAN_KAMPUNG-1.png")}
-            style={{ width: 100, height: 100 }}
-          />
-        </TouchableOpacity> */}
-      </View>
-
-      <Canvas
-        ref={canvasRef}
-        onTouch={touchHandler}
-        style={{ height: "30%", width: "100%", backgroundColor: "white" }}
-      >
-        {image ? <Image image={image} width={500} height={400} /> : null}
-        {paths.map((path, index) => (
-          <Path
-            key={index}
-            path={path.path}
-            color={path.color}
-            style={"stroke"}
-            strokeWidth={path.strokeWidth}
-          />
-        ))}
-      </Canvas>
-      <TouchableOpacity
-        className="bg-green-400 w-[100px] rounded-full px-5 py-2 justify-center items-center self-center mt-4"
-        onPress={() => {
-          const skImg = canvasRef.current?.makeImageSnapshot();
-          if (skImg) {
-            const base64 = skImg.encodeToBase64(ImageFormat.PNG, 100);
-            setCapturedImage("data:image/png;base64," + base64);
-          }
-        }}
-      >
-        <Text>Save</Text>
-      </TouchableOpacity>
-      <View>
-        {capturedImage ? (
-          <RNImage
-            source={{ uri: capturedImage }}
-            style={{ width: 400, height: 300 }}
-          />
-        ) : null}
-      </View>
+          <Canvas
+            ref={canvasRef}
+            onTouch={touchHandler}
+            style={{
+              height: "50%",
+              width: "100%",
+              backgroundColor: "transparent",
+              transform: [{ scale: canvasScale }],
+              marginHorizontal: canvasX,
+              marginVertical: canvasY,
+            }}
+          >
+            {image ? (
+              <Image
+                image={image}
+                fit="contain"
+                x={10}
+                y={0}
+                width={imageHeightWidth}
+                height={imageHeightWidth}
+              />
+            ) : null}
+            {paths.map((path, index) => (
+              <Path
+                key={index}
+                path={path.path}
+                color={path.color}
+                style={"stroke"}
+                strokeWidth={path.strokeWidth}
+              />
+            ))}
+          </Canvas>
+          <View
+            className="bg-white mt-2 flex-row justify-around items-center py-2 rounded-lg absolute"
+            style={{
+              bottom: 40,
+              width: "100%",
+              left: 0,
+              right: 0,
+              alignSelf: "center",
+            }}
+          >
+            <TouchableOpacity
+              onPress={() => setCanvasScale((old) => old + 0.5)}
+            >
+              <FontAwesomeIcon icon={"magnifying-glass-plus"} size={25} />
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                if (canvasScale !== 1) setCanvasScale((old) => old - 0.5);
+              }}
+            >
+              <FontAwesomeIcon icon={"magnifying-glass-minus"} size={25} />
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                setCanvasX((old) => old - 25);
+              }}
+            >
+              <FontAwesomeIcon icon={"chevron-left"} size={25} />
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                setCanvasX((old) => old + 25);
+              }}
+            >
+              <FontAwesomeIcon icon={"chevron-right"} size={25} />
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                setCanvasY((old) => old + 25);
+              }}
+            >
+              <FontAwesomeIcon icon={"chevron-up"} size={25} />
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                setCanvasY((old) => old - 25);
+              }}
+            >
+              <FontAwesomeIcon icon={"chevron-down"} size={25} />
+            </TouchableOpacity>
+            <TouchableOpacity
+              className="bg-green-600 w-[100px] rounded-full border-none px-5 py-2 justify-center items-center self-center"
+              onPress={() => {
+                const skImg = canvasRef.current?.makeImageSnapshot();
+                if (skImg) {
+                  const base64 = skImg.encodeToBase64(ImageFormat.PNG, 100);
+                  setCapturedImage("data:image/png;base64," + base64);
+                }
+              }}
+            >
+              <Text className="text-white">SAVE</Text>
+            </TouchableOpacity>
+          </View>
+          <View>
+            {capturedImage ? (
+              <RNImage
+                source={{ uri: capturedImage }}
+                style={{ width: 400, height: 300 }}
+              />
+            ) : null}
+          </View>
+        </>
+      )}
     </View>
   );
 }

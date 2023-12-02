@@ -27,22 +27,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 
 import { getBridgeList } from "../fetches/getBridgeList";
 
-import {
-  Canvas,
-  Path,
-  SkPath,
-  Skia,
-  TouchInfo,
-  Image,
-  useImage,
-  useTouchHandler,
-  useCanvasRef,
-  ImageFormat,
-} from "@shopify/react-native-skia";
 import { getSubMiitedFormList } from "../fetches/getSubmittedFormList";
 
-export default function Page() {
+import Draw from "./draw";
 
+export default function Page() {
   const { width, height } = useWindowDimensions();
 
   const [image, setImage] = useState(null);
@@ -58,7 +47,7 @@ export default function Page() {
   const [formInfo, setFormInfo] = useState({});
 
   const [debounceTimer, setDebounceTimer] = useState(null);
-  
+
   //data of the form
   const [formList, setFormList] = useState([]);
 
@@ -80,7 +69,6 @@ export default function Page() {
     scrollToTop();
   }, [activeIndex]);
 
-
   const thisApiCall = async () => {
     let returnApiCall;
 
@@ -92,7 +80,7 @@ export default function Page() {
     // console.log("api", returnApiCall.bridgelist)
     setFormList(returnApiCall);
 
-    let  returnViewFormData = await getSubMiitedFormList();
+    let returnViewFormData = await getSubMiitedFormList();
 
     // console.log("api", returnApiCall.bridgelist)
     setViewFormList(returnViewFormData);
@@ -286,6 +274,41 @@ export default function Page() {
     setFormList(thisMaterial);
   };
 
+  const captureInput2 = (
+    componentIndex,
+    materialCategoryIndex,
+    materialIndex
+  ) => {
+    //ambik yg lama
+    const thisMaterial = { ...formList };
+
+    //parse structure
+    let thisStructure = JSON.parse(
+      thisMaterial.bridgelist[componentIndex].structure
+    );
+    // console.log(JSON.stringify(thisStructure["component"].material[materialCategoryIndex].material_details[
+    //   materialIndex
+    // ].tick))
+
+    if (
+      thisStructure["component"].material[materialCategoryIndex]
+        .material_details[materialIndex].tick === 0
+    ) {
+      thisStructure["component"].material[
+        materialCategoryIndex
+      ].material_details[materialIndex].tick = 1;
+    } else {
+      thisStructure["component"].material[
+        materialCategoryIndex
+      ].material_details[materialIndex].tick = 0;
+    }
+
+    thisMaterial.bridgelist[componentIndex].structure =
+      JSON.stringify(thisStructure);
+
+    setFormList(thisMaterial);
+  };
+
   const FormItems = ({ item, index }) => {
     if (index !== activeIndex) {
       return;
@@ -302,21 +325,37 @@ export default function Page() {
     if (thisstructure.component.material) {
       materials = thisstructure.component.material.map((item2, index2) => {
         if (item2.material_details) {
-          material_details = item2.material_details.map((item3) => {
+          material_details = item2.material_details.map((item3, index3) => {
             if (item3.name) {
               return (
                 <View className="w-full">
                   <TouchableOpacity
-                    style={{ elevation: 5 }}
+                    onPress={() => {
+                      captureInput2(index, index2, index3);
+                    }}
+                    style={{
+                      elevation: 5,
+                      backgroundColor:
+                        item3.tick === 0
+                          ? "rgb(229 231 235)"
+                          : "rgba(37, 99, 235, 1)",
+                    }}
                     className="bg-blue-600 mb-2 p-2 rounded-md flex-row justify-start items-center"
                   >
                     <FontAwesomeIcon
-                      icon="fa-regular fa-square"
-                      color="white"
+                      icon={
+                        item3.tick === 0
+                          ? `fa-regular fa-square`
+                          : `square-check`
+                      }
+                      color={item3.tick === 0 ? "black" : "white"}
                       size={18}
                       style={{ marginRight: 8 }}
                     />
-                    <Text className="text-[16px] text-white font-semibold">
+                    <Text
+                      className="text-[16px] font-semibold"
+                      style={{ color: item3.tick === 0 ? "black" : "white" }}
+                    >
                       {item3.name}
                     </Text>
                   </TouchableOpacity>
@@ -630,6 +669,8 @@ export default function Page() {
 
     return (
       <View className="mb-5 border-b-2">
+        {/* debug value */}
+        {/* <Text selectable>{JSON.stringify(JSON.parse(formList.bridgelist[activeIndex].structure).component)}</Text> */}
         <View className="bg-yellow-400 p-2 flex-row justify-start items-center mb-4">
           <FontAwesomeIcon
             icon="truck-loading"
@@ -697,7 +738,6 @@ export default function Page() {
   };
 
   const submitForm = () => {
-
     console.log("form: ", formList.bridgelist);
     // var fd = new FormData();
 
@@ -711,28 +751,30 @@ export default function Page() {
     // })
     //   .then((res) => res.json())
     //   .then((json) => {
-        
+
     //     console.log("json", json);
-        
+
     //     if(json.success){
     //       setModalVisible(false)
     //     }
-        
+
     //   })
     //   .catch((error) => console.log("ERROR", error));
   };
 
-  const ViewFormRender = ({item, index})=>{
-    let eachform = JSON.parse(item.formdata)
-    let eachform2 = JSON.parse(eachform)
+  const ViewFormRender = ({ item, index }) => {
+    let eachform = JSON.parse(item.formdata);
+    let eachform2 = JSON.parse(eachform);
     // let eachform3 = JSON.parse(eachform2[1].structure)
     return (
       <TouchableOpacity className="w-full bg-gray-200 mb-2 rounded-md p-2">
-      <Text selectable className="text-black">{JSON.stringify(eachform2)}</Text>
-      <View className="h-[20px]" />
+        <Text selectable className="text-black">
+          {JSON.stringify(eachform2)}
+        </Text>
+        <View className="h-[20px]" />
       </TouchableOpacity>
-    )
-  }
+    );
+  };
 
   return (
     <View className="flex-1 justify-start bg-gray-200">
@@ -781,12 +823,16 @@ export default function Page() {
           <Text className="text-black font-semibold text-[20px]"></Text>
         )} */}
         {/* <Text className="text-black">{JSON.stringify(viewFormList)}</Text> */}
-        <FlatList 
+        <FlatList
           data={viewFormList}
-          ListEmptyComponent={()=><Text className="text-black">No Submmited Form Yet</Text>}
-          renderItem={({item,index})=><ViewFormRender item={item} index={index} />}
+          ListEmptyComponent={() => (
+            <Text className="text-black">No Submmited Form Yet</Text>
+          )}
+          renderItem={({ item, index }) => (
+            <ViewFormRender item={item} index={index} />
+          )}
         />
-      </View> 
+      </View>
 
       <TouchableOpacity
         onPress={() => {
@@ -811,7 +857,7 @@ export default function Page() {
           className="h-full flex-1 justify-center items-center"
           style={{
             backgroundColor: "rgba(0,0,0,0.4)",
-            paddingVertical: !isCollapsed ? height / 9 : height/ 9,
+            paddingVertical: !isCollapsed ? height / 9 : height / 9,
           }}
         >
           <View
@@ -848,76 +894,86 @@ export default function Page() {
                 <FontAwesomeIcon icon="xmark" color="white" size={30} />
               </TouchableOpacity>
             </View>
-            {activeIndex === -1? <Collapsible collapsed={isCollapsed}>
-            <Text>{JSON.stringify(formInfo)}</Text>
-              <View className="w-full p-3">
-                {thisdata.project_type === "Bridge" ? (
+            {activeIndex === -1 ? (
+              <Collapsible collapsed={isCollapsed}>
+                <Text>{JSON.stringify(formInfo)}</Text>
+                <View className="w-full p-3">
+                  {thisdata.project_type === "Bridge" ? (
+                    <View className="mb-2">
+                      <Text className="text-black text-[18px] font-semibold">
+                        SPAN No:
+                        {/* {String(activeIndex)}{" "} 
+                       {String(formList.bridgelist.length)} */}
+                      </Text>
+                      <TextInput
+                        value={formInfo?.span_no}
+                        onChangeText={(e) => captureFormInfo("span_no", e)}
+                        className="bg-gray-200 h-[40px] w-full rounded-md pl-2"
+                      />
+                    </View>
+                  ) : null}
+
                   <View className="mb-2">
                     <Text className="text-black text-[18px] font-semibold">
-                      SPAN No:
-                      {/* {String(activeIndex)}{" "} 
-                       {String(formList.bridgelist.length)} */}
+                      Route No:
                     </Text>
                     <TextInput
-                      value={formInfo?.span_no}
-                      onChangeText={(e) => captureFormInfo("span_no", e)}
+                      value={formInfo?.route_no}
+                      onChangeText={(e) => captureFormInfo("route_no", e)}
                       className="bg-gray-200 h-[40px] w-full rounded-md pl-2"
                     />
                   </View>
-                ) : null}
-
-                <View className="mb-2">
-                  <Text className="text-black text-[18px] font-semibold">
-                    Route No:
-                  </Text>
-                  <TextInput
-                    value={formInfo?.route_no}
-                    onChangeText={(e) => captureFormInfo("route_no", e)}
-                    className="bg-gray-200 h-[40px] w-full rounded-md pl-2"
-                  />
+                  <View className="mb-2">
+                    <Text className="text-black text-[18px] font-semibold">
+                      Struct No:
+                    </Text>
+                    <TextInput
+                      value={formInfo?.struct_no}
+                      onChangeText={(e) => captureFormInfo("struct_no", e)}
+                      className="bg-gray-200 h-[40px] w-full rounded-md pl-2"
+                    />
+                  </View>
+                  <View className="mb-2">
+                    <Text className="text-black text-[18px] font-semibold">
+                      Bridge Name:
+                    </Text>
+                    <TextInput
+                      value={formInfo?.bridge_name}
+                      onChangeText={(e) => captureFormInfo("bridge_name", e)}
+                      className="bg-gray-200 h-[40px] w-full rounded-md pl-2"
+                    />
+                  </View>
+                  <View className="mb-2">
+                    <Text className="text-black text-[18px] font-semibold">
+                      Name of Inspector:
+                    </Text>
+                    <TextInput
+                      value={formInfo?.name_of_inspector}
+                      onChangeText={(e) =>
+                        captureFormInfo("name_of_inspector", e)
+                      }
+                      className="bg-gray-200 h-[40px] w-full rounded-md pl-2"
+                    />
+                  </View>
+                  <View className="mb-2">
+                    <Text className="text-black text-[18px] font-semibold">
+                      Date:
+                    </Text>
+                    <TextInput
+                      value={formInfo?.date}
+                      onChangeText={(e) => captureFormInfo("date", e)}
+                      className="bg-gray-200 h-[40px] w-full rounded-md pl-2"
+                    />
+                  </View>
                 </View>
-                <View className="mb-2">
-                  <Text className="text-black text-[18px] font-semibold">
-                    Struct No:
-                  </Text>
-                  <TextInput
-                    value={formInfo?.struct_no}
-                    onChangeText={(e) => captureFormInfo("struct_no", e)}
-                    className="bg-gray-200 h-[40px] w-full rounded-md pl-2"
-                  />
-                </View>
-                <View className="mb-2">
-                  <Text className="text-black text-[18px] font-semibold">
-                    Bridge Name:
-                  </Text>
-                  <TextInput
-                    value={formInfo?.bridge_name}
-                    onChangeText={(e) => captureFormInfo("bridge_name", e)}
-                    className="bg-gray-200 h-[40px] w-full rounded-md pl-2"
-                  />
-                </View>
-                <View className="mb-2">
-                  <Text className="text-black text-[18px] font-semibold">
-                    Name of Inspector:
-                  </Text>
-                  <TextInput
-                    value={formInfo?.name_of_inspector}
-                    onChangeText={(e) => captureFormInfo("name_of_inspector", e)}
-                    className="bg-gray-200 h-[40px] w-full rounded-md pl-2"
-                  />
-                </View>
-                <View className="mb-2">
-                  <Text className="text-black text-[18px] font-semibold">
-                    Date:
-                  </Text>
-                  <TextInput
-                    value={formInfo?.date}
-                    onChangeText={(e) => captureFormInfo("date", e)}
-                    className="bg-gray-200 h-[40px] w-full rounded-md pl-2"
-                  />
-                </View>
+              </Collapsible>
+            ) : activeIndex === formList?.bridgelist?.length ? (
+              <View style={{ width: "100%", height: height * 0.75 }}>
+                <Draw />
               </View>
-            </Collapsible> : null}
+            ) : (
+              <Text>{activeIndex}</Text>
+            )}
             {/* <TouchableOpacity
               onPress={() => {
                 setIsCollapsed(!isCollapsed);
@@ -933,7 +989,7 @@ export default function Page() {
                 size={16}
               />
             </TouchableOpacity> */}
-            
+
             {/* main flatlist */}
             <FlatList
               ref={flatListRef}
@@ -950,7 +1006,7 @@ export default function Page() {
               extraData={activeIndex}
             />
             {activeIndex == 11 ? <View></View> : null}
-            
+
             {/* 
               <Button
                 title="Pick an image from camera-roll"

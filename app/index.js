@@ -9,6 +9,9 @@ import { faPlus } from "@fortawesome/free-solid-svg-icons/faPlus";
 import { faSquare } from "@fortawesome/free-regular-svg-icons/faSquare";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons/faArrowLeft";
 import { faChevronRight } from "@fortawesome/free-solid-svg-icons/faChevronRight";
+import { faChevronLeft } from "@fortawesome/free-solid-svg-icons/faChevronLeft";
+import { faChevronUp } from "@fortawesome/free-solid-svg-icons/faChevronUp";
+import { faChevronDown } from "@fortawesome/free-solid-svg-icons/faChevronDown";
 import { faRightToBracket } from "@fortawesome/free-solid-svg-icons/faRightToBracket";
 import { faXmark } from "@fortawesome/free-solid-svg-icons/faXmark";
 import { faArrowsRotate } from "@fortawesome/free-solid-svg-icons/faArrowsRotate";
@@ -20,6 +23,8 @@ import { faComment } from "@fortawesome/free-solid-svg-icons/faComment";
 import { faChartBar } from "@fortawesome/free-solid-svg-icons/faChartBar";
 import { faAngleUp } from "@fortawesome/free-solid-svg-icons/faAngleUp";
 import { faAngleDown } from "@fortawesome/free-solid-svg-icons/faAngleDown";
+import { faMagnifyingGlassPlus } from "@fortawesome/free-solid-svg-icons/faMagnifyingGlassPlus";
+import { faMagnifyingGlassMinus } from "@fortawesome/free-solid-svg-icons/faMagnifyingGlassMinus";
 
 import NetInfo from "@react-native-community/netinfo";
 
@@ -29,6 +34,9 @@ library.add(
   faSquare,
   faArrowLeft,
   faChevronRight,
+  faChevronLeft,
+  faChevronUp,
+  faChevronDown,
   faRightToBracket,
   faXmark,
   faArrowsRotate,
@@ -40,7 +48,9 @@ library.add(
   faComment,
   faChartBar,
   faAngleUp,
-  faAngleDown
+  faAngleDown,
+  faMagnifyingGlassPlus,
+  faMagnifyingGlassMinus
 );
 
 export default function Page() {
