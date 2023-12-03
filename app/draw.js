@@ -162,7 +162,9 @@ export default function Draw() {
               size={20}
               style={{ marginRight: 8 }}
             />
-            <Text className="text-white text-[20px]">Add Image</Text>
+            <Text className="text-white text-[20px]">
+              Add new drawing on a sample image
+            </Text>
           </TouchableOpacity>
         </View>
       ) : editorMode === 2 ? (
@@ -199,7 +201,7 @@ export default function Draw() {
             ref={canvasRef}
             onTouch={touchHandler}
             style={{
-              height: "50%",
+              height: "70%",
               width: "100%",
               backgroundColor: "transparent",
               transform: [{ scale: canvasScale }],

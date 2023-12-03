@@ -57,6 +57,9 @@ export default function Page() {
   //guna utk change component
   const [activeIndex, setActiveIndex] = useState(-1);
 
+  //disable button state
+  const [disableButton, setDisableButton] = useState(false);
+
   const flatListRef = useRef(null);
 
   const scrollToTop = () => {
@@ -67,6 +70,7 @@ export default function Page() {
 
   useEffect(() => {
     scrollToTop();
+    setDisableButton(false);
   }, [activeIndex]);
 
   const thisApiCall = async () => {
@@ -92,10 +96,12 @@ export default function Page() {
 
   const minusActiveIndex = (index) => {
     if (index !== -1) {
+      setDisableButton(true);
       setActiveIndex(activeIndex - 1);
     }
   };
   const plusActiveIndex = (index) => {
+    setDisableButton(true);
     setActiveIndex(activeIndex + 1);
   };
 
@@ -857,7 +863,7 @@ export default function Page() {
           className="h-full flex-1 justify-center items-center"
           style={{
             backgroundColor: "rgba(0,0,0,0.4)",
-            paddingVertical: !isCollapsed ? height / 9 : height / 9,
+            paddingVertical: !isCollapsed ? height / 10 : height / 10,
           }}
         >
           <View
@@ -967,12 +973,12 @@ export default function Page() {
                   </View>
                 </View>
               </Collapsible>
-            ) : activeIndex === formList?.bridgelist?.length ? (
+            ) : activeIndex === formList?.bridgelist?.length - 1 ? (
               <View style={{ width: "100%", height: height * 0.75 }}>
                 <Draw />
               </View>
             ) : (
-              <Text>{activeIndex}</Text>
+              <Text>hihi</Text>
             )}
             {/* <TouchableOpacity
               onPress={() => {
@@ -1033,6 +1039,7 @@ export default function Page() {
               <TouchableOpacity
                 onPress={() => minusActiveIndex(activeIndex)}
                 className="bg-blue-600 self-center flex-row justify-center items-center w-4/12 mb-4 py-2 mx-2 rounded-full"
+                disabled={disableButton}
               >
                 <Text className="text-white text-[18px] font-semibold">
                   Previous
@@ -1042,6 +1049,7 @@ export default function Page() {
                 <TouchableOpacity
                   onPress={() => plusActiveIndex(activeIndex)}
                   className="bg-blue-600 self-center flex-row justify-center items-center w-4/12 mb-4 py-2 mx-2 rounded-full"
+                  disabled={disableButton}
                 >
                   <Text className="text-white text-[18px] font-semibold">
                     Next
