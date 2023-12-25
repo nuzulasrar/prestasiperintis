@@ -42,6 +42,8 @@ export default function Page() {
 
   const [modalVisible, setModalVisible] = useState(false);
 
+  const [zoomModalVisible, setZoomModalVisible] = useState(false);
+
   const [isCollapsed, setIsCollapsed] = useState(false);
 
   const [formInfo, setFormInfo] = useState({});
@@ -59,6 +61,21 @@ export default function Page() {
 
   //disable button state
   const [disableButton, setDisableButton] = useState(false);
+
+  //sample images array
+  const [arraySampleImages, setArraySampleImages] = useState([]);
+
+  //image zoom
+  const [canvasScale, setCanvasScale] = useState(1);
+  const [canvasX, setCanvasX] = useState(0);
+  const [canvasY, setCanvasY] = useState(0);
+
+  const receivedImage = (image) => {
+    let thisarray = [...arraySampleImages];
+    thisarray.push(image);
+    setArraySampleImages(thisarray);
+    plusActiveIndex(activeIndex);
+  };
 
   const flatListRef = useRef(null);
 
@@ -96,12 +113,12 @@ export default function Page() {
 
   const minusActiveIndex = (index) => {
     if (index !== -1) {
-      setDisableButton(true);
+      // setDisableButton(true);
       setActiveIndex(activeIndex - 1);
     }
   };
   const plusActiveIndex = (index) => {
-    setDisableButton(true);
+    // setDisableButton(true);
     setActiveIndex(activeIndex + 1);
   };
 
@@ -782,6 +799,43 @@ export default function Page() {
     );
   };
 
+  const [zoomIndex, setZoomIndex] = useState(-1);
+
+  const RenderArraySampleImages = ({ item, index }) => {
+    return (
+      <View className="justify-center items-center">
+        <TouchableOpacity
+          onPress={() => {
+            setZoomIndex(index);
+            setZoomModalVisible(true);
+            setModalVisible(false);
+          }}
+        >
+          <RNImage
+            source={{ uri: item }}
+            style={{
+              width: width * 0.3,
+              height: width * 0.3,
+              marginBottom: 10,
+            }}
+          />
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => {
+            let thisArray = [...arraySampleImages];
+
+            thisArray.splice(index, 1);
+
+            setArraySampleImages(thisArray);
+          }}
+          className="bg-red-700 rounded-lg border-none"
+        >
+          <Text className="text-white px-8 py-2">Delete</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  };
+
   return (
     <View className="flex-1 justify-start bg-gray-200">
       <View className="h-[50px]" />
@@ -975,11 +1029,26 @@ export default function Page() {
               </Collapsible>
             ) : activeIndex === formList?.bridgelist?.length - 1 ? (
               <View style={{ width: "100%", height: height * 0.75 }}>
-                <Draw />
+                <Draw saveimage={receivedImage} />
               </View>
-            ) : (
-              <Text>hihi</Text>
-            )}
+            ) : activeIndex === formList?.bridgelist?.length ? (
+              <View>
+                <Text className="text-black">
+                  <FlatList
+                    data={arraySampleImages}
+                    renderItem={({ item, index }) => (
+                      <RenderArraySampleImages item={item} index={index} />
+                    )}
+                    numColumns={3}
+                    ListEmptyComponent={() => (
+                      <Text className="text-black text-[16px] m-2">
+                        You have not uploaded any drawing.
+                      </Text>
+                    )}
+                  />
+                </Text>
+              </View>
+            ) : null}
             {/* <TouchableOpacity
               onPress={() => {
                 setIsCollapsed(!isCollapsed);
@@ -1011,6 +1080,7 @@ export default function Page() {
               }}
               extraData={activeIndex}
             />
+
             {activeIndex == 11 ? <View></View> : null}
 
             {/* 
@@ -1067,6 +1137,113 @@ export default function Page() {
                   </Text>
                 </TouchableOpacity>
               )}
+            </View>
+          </View>
+        </View>
+      </Modal>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={zoomModalVisible}
+        onRequestClose={() => {
+          alert("Modal has been closed.");
+          setZoomModalVisible(!modalVisible);
+        }}
+      >
+        <View
+          className="justify-center items-center"
+          style={{ flex: 1, backgroundColor: "rgba(0,0,0,1)" }}
+        >
+          <View
+            className="justify-center items-center"
+            style={{
+              width: "100%",
+              height: height,
+            }}
+          >
+            <View
+              className="bg-blue-300 justify-around rounded-md mb-4 px-3 absolute"
+              style={{
+                width: "90%",
+                height: 40,
+                top: 50,
+                zIndex: 50,
+              }}
+            >
+              <TouchableOpacity
+                onPress={() => {
+                  setZoomModalVisible(false);
+                  setModalVisible(true);
+                }}
+                className="flex-row justify-start items-center h-full"
+              >
+                <FontAwesomeIcon icon="chevron-left" size={20} />
+                <Text className="text-[20px]">Back</Text>
+              </TouchableOpacity>
+            </View>
+            <View style={{ height: height, width: width }}>
+              <View style={{ height: height * 0.13 }} />
+              <RNImage
+                source={{ uri: arraySampleImages[zoomIndex] }}
+                style={{
+                  height: "70%",
+                  width: "100%",
+                  marginBottom: 10,
+                  transform: [{ scale: canvasScale }],
+                  marginHorizontal: canvasX,
+                  marginVertical: canvasY,
+                }}
+              />
+            </View>
+            <View
+              className="bg-blue-300 mt-2 flex-row justify-around items-center py-2 rounded-lg absolute"
+              style={{
+                width: "90%",
+                alignSelf: "center",
+                bottom: 50,
+                elevation: 5,
+              }}
+            >
+              <TouchableOpacity
+                onPress={() => setCanvasScale((old) => old + 0.5)}
+              >
+                <FontAwesomeIcon icon={"magnifying-glass-plus"} size={25} />
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => {
+                  if (canvasScale !== 1) setCanvasScale((old) => old - 0.5);
+                }}
+              >
+                <FontAwesomeIcon icon={"magnifying-glass-minus"} size={25} />
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => {
+                  setCanvasX((old) => old - 25);
+                }}
+              >
+                <FontAwesomeIcon icon={"chevron-left"} size={25} />
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => {
+                  setCanvasX((old) => old + 25);
+                }}
+              >
+                <FontAwesomeIcon icon={"chevron-right"} size={25} />
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => {
+                  setCanvasY((old) => old + 25);
+                }}
+              >
+                <FontAwesomeIcon icon={"chevron-up"} size={25} />
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => {
+                  setCanvasY((old) => old - 25);
+                }}
+              >
+                <FontAwesomeIcon icon={"chevron-down"} size={25} />
+              </TouchableOpacity>
             </View>
           </View>
         </View>

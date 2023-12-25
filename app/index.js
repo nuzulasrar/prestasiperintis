@@ -25,6 +25,7 @@ import { faAngleUp } from "@fortawesome/free-solid-svg-icons/faAngleUp";
 import { faAngleDown } from "@fortawesome/free-solid-svg-icons/faAngleDown";
 import { faMagnifyingGlassPlus } from "@fortawesome/free-solid-svg-icons/faMagnifyingGlassPlus";
 import { faMagnifyingGlassMinus } from "@fortawesome/free-solid-svg-icons/faMagnifyingGlassMinus";
+import { faCamera } from "@fortawesome/free-solid-svg-icons/faCamera";
 
 import NetInfo from "@react-native-community/netinfo";
 
@@ -50,7 +51,8 @@ library.add(
   faAngleUp,
   faAngleDown,
   faMagnifyingGlassPlus,
-  faMagnifyingGlassMinus
+  faMagnifyingGlassMinus,
+  faCamera
 );
 
 export default function Page() {

@@ -10,7 +10,7 @@ import {
   useCanvasRef,
   ImageFormat,
 } from "@shopify/react-native-skia";
-import React, { useCallback, useState, useRef } from "react";
+import React, { useCallback, useState, useEffect } from "react";
 import {
   Pressable,
   StyleSheet,
@@ -26,7 +26,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { FlatList } from "react-native-gesture-handler";
 
-export default function Draw() {
+export default function Draw({ saveimage }) {
   const { width, height } = useWindowDimensions();
 
   const [paths, setPaths] = useState([]);
@@ -134,17 +134,14 @@ export default function Draw() {
 
   const image = useImage(ATP2020[selectedImage]);
 
-  const images = [
-    {
-      name: "ALOR_SETAR_SELATAN-1.png",
-    },
-    {
-      name: "ALOR_SETAR_UTARA-1.png",
-    },
-  ];
+  useEffect(() => {
+    if (capturedImage) {
+      saveimage(capturedImage);
+    }
+  }, [capturedImage]);
 
   return (
-    <View style={style.container} className="bg-gray-400">
+    <View style={style.container} className="bg-gray-300">
       <View className="h-[10px]" />
       {editorMode === 1 ? (
         <View className="flex-1 justify-center items-center">
@@ -153,7 +150,7 @@ export default function Draw() {
               setEditorMode(2);
             }}
             className="flex-row justify-center items-center
-          bg-blue-600 px-4 py-3 rounded-full
+          bg-blue-600 px-4 py-3 rounded-full mb-3
           "
           >
             <FontAwesomeIcon
@@ -166,9 +163,39 @@ export default function Draw() {
               Add new drawing on a sample image
             </Text>
           </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              setEditorMode(4);
+            }}
+            className="flex-row justify-center items-center
+          bg-blue-600 px-4 py-3 rounded-full mb-3
+          "
+          >
+            <FontAwesomeIcon
+              icon={"plus"}
+              color={"white"}
+              size={20}
+              style={{ marginRight: 8 }}
+            />
+            <Text className="text-white text-[20px]">
+              Pick a photo from Gallery
+            </Text>
+          </TouchableOpacity>
         </View>
       ) : editorMode === 2 ? (
         <View className="flex-1 justify-center items-center">
+          <View className="w-full flex-row justify-around items-center mb-2">
+            <Text className="text-black text-[20px]">
+              Pick one template image
+            </Text>
+            <TouchableOpacity
+              onPress={() => setEditorMode(1)}
+              className="bg-red-900 rounded-full px-5 py-2 flex-row justify-center items-center"
+            >
+              <FontAwesomeIcon icon="xmark" color="white" />
+              <Text className="text-white text-[20px] ml-2">Cancel</Text>
+            </TouchableOpacity>
+          </View>
           <FlatList
             numColumns={2}
             data={ATP2020}
@@ -177,26 +204,43 @@ export default function Draw() {
             )}
           />
         </View>
-      ) : (
+      ) : editorMode === 4 ? (
+        <View className="flex-1 justify-center items-center">
+          <View>
+            <Text>hello</Text>
+          </View>
+        </View>
+      ) : editorMode === 3 ? (
         <>
-          <View className="flex-row justify-center items-center">
+          <View className="flex-row justify-around items-center z-50">
             <Toolbar
               color={color}
               strokeWidth={strokeWidth}
               setColor={setColor}
               setStrokeWidth={setStrokeWidth}
             />
-            <TouchableOpacity
-              className="self-center flex-row justify-center items-center m-3 rounded-full bg-yellow-400 px-5 py-2"
-              onPress={() => {
-                setPaths([]);
-              }}
-            >
-              <FontAwesomeIcon icon="arrows-rotate" size={20} color="black" />
-              <Text className="text-black ml-2 text-[20px]">Reset Drawing</Text>
-            </TouchableOpacity>
+            <View className="flex-row">
+              <TouchableOpacity
+                className="self-center flex-row justify-center items-center rounded-l-lg bg-yellow-400 px-2 py-2"
+                onPress={() => {
+                  setPaths([]);
+                }}
+              >
+                <FontAwesomeIcon icon="arrows-rotate" size={14} color="black" />
+                <Text className="text-black ml-2 text-[14px]">
+                  Reset Drawing
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => setEditorMode(1)}
+                className="bg-red-900  rounded-r-lg px-5 py-2 flex-row justify-center items-center"
+              >
+                <FontAwesomeIcon icon="xmark" color="white" />
+                <Text className="text-white text-[14px] ml-2">Cancel</Text>
+              </TouchableOpacity>
+            </View>
           </View>
-
+          <View className="h-[10px]" />
           <Canvas
             ref={canvasRef}
             onTouch={touchHandler}
@@ -292,16 +336,16 @@ export default function Draw() {
               <Text className="text-white">SAVE</Text>
             </TouchableOpacity>
           </View>
-          <View>
+          {/* <View>
             {capturedImage ? (
               <RNImage
                 source={{ uri: capturedImage }}
                 style={{ width: 400, height: 300 }}
               />
             ) : null}
-          </View>
+          </View> */}
         </>
-      )}
+      ) : null}
     </View>
   );
 }
@@ -384,8 +428,8 @@ const style = StyleSheet.create({
   },
   toolbar: {
     backgroundColor: "#ffffff",
-    height: 50,
-    width: 300,
+    height: 45,
+    width: 275,
     borderRadius: 100,
     borderColor: "#f0f0f0",
     borderWidth: 1,
@@ -412,8 +456,8 @@ const style = StyleSheet.create({
     zIndex: 100,
   },
   colorButton: {
-    width: 30,
-    height: 30,
+    width: 25,
+    height: 25,
     borderRadius: 100,
     marginHorizontal: 5,
   },
