@@ -26,8 +26,42 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { FlatList } from "react-native-gesture-handler";
 
+import { Camera, CameraType, CameraReadyListener } from "expo-camera";
+import { faCamera } from "@fortawesome/free-solid-svg-icons";
+
 export default function Draw({ saveimage }) {
   const { width, height } = useWindowDimensions();
+
+  const [camera, setCamera] = useState(null);
+  const [type, setType] = useState(CameraType.back);
+  const [permission, requestPermission] = Camera.useCameraPermissions();
+
+  useEffect(() => {
+    console.log(permission);
+    if (!permission?.granted) {
+      Camera.requestCameraPermissionsAsync().then((e) => console.log(e));
+    }
+  }, [permission]);
+
+  const takePicture = async () => {
+    if (camera) {
+      try {
+        const options = { quality: 1, base64: true }; // Adjust options as needed
+        const result = await camera.takePictureAsync(options);
+        const uri = result.uri;
+        console.log("Picture saved to cache:", uri);
+        // You can now access the image data using the uri
+      } catch (error) {
+        console.error("Error taking picture:", error);
+      }
+    }
+  };
+
+  function toggleCameraType() {
+    setType((current) =>
+      current === CameraType.back ? CameraType.front : CameraType.back
+    );
+  }
 
   const [paths, setPaths] = useState([]);
   const [color, setColor] = useState(Colors[0]);
@@ -205,10 +239,27 @@ export default function Draw({ saveimage }) {
           />
         </View>
       ) : editorMode === 4 ? (
-        <View className="flex-1 justify-center items-center">
-          <View>
-            <Text>hello</Text>
-          </View>
+        <View style={{ flex: 1 }}>
+          <Camera style={{ flex: 1 }} type={type} ref={(ref) => setCamera(ref)}>
+            <View style={{ justifyContent: "center", alignContent: "center" }}>
+              <TouchableOpacity
+                style={{
+                  backgroundColor: "white",
+                  width: 50,
+                  height: 50,
+                  alignSelf: "center",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  borderRadius: 50,
+                  marginTop: 450,
+                }}
+                // onPress={toggleCameraType}
+                onPress={takePicture}
+              >
+                <FontAwesomeIcon icon={faCamera} color="black" size={25} />
+              </TouchableOpacity>
+            </View>
+          </Camera>
         </View>
       ) : editorMode === 3 ? (
         <>
