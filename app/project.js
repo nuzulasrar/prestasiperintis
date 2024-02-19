@@ -27,6 +27,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 
 import { getBridgeList } from "../fetches/getBridgeList";
 
+import { getTollList } from "../fetches/getTollList";
+
 import { getSubMiitedFormList } from "../fetches/getSubmittedFormList";
 
 import Draw from "./draw";
@@ -93,11 +95,12 @@ export default function Page() {
   const thisApiCall = async () => {
     let returnApiCall;
 
-    if (thisdata.project_type === "Toll Plaza") {
-      returnApiCall = await getBridgeList();
+    if (thisdata.project_type === "Toll") {
+      returnApiCall = await getTollList();
     } else if (thisdata.project_type === "Bridge") {
       returnApiCall = await getBridgeList();
     }
+
     // console.log("api", returnApiCall.bridgelist)
     setFormList(returnApiCall);
 
@@ -117,6 +120,7 @@ export default function Page() {
       setActiveIndex(activeIndex - 1);
     }
   };
+
   const plusActiveIndex = (index) => {
     // setDisableButton(true);
     setActiveIndex(activeIndex + 1);
@@ -761,28 +765,29 @@ export default function Page() {
   };
 
   const submitForm = () => {
-    console.log("form: ", formList.bridgelist);
-    // var fd = new FormData();
+    // console.log("form: ", formList.bridgelist);
+    var fd = new FormData();
 
-    // fd.append("name", JSON.stringify(formList.bridgelist));
-    // fetch(API_URL + "/api/submitform", {
-    //   method: "POST",
-    //   body: fd,
-    //   // headers: {
-    //   //   "Content-Type": "multipart/form-data; ",
-    //   // },
-    // })
-    //   .then((res) => res.json())
-    //   .then((json) => {
+    fd.append("name", JSON.stringify(formList.bridgelist));
 
-    //     console.log("json", json);
+    fd.append("project_type", thisdata.project_type);
 
-    //     if(json.success){
-    //       setModalVisible(false)
-    //     }
+    fetch(API_URL + "/api/submitform", {
+      method: "POST",
+      body: fd,
+      // headers: {
+      //   "Content-Type": "multipart/form-data; ",
+      // },
+    })
+      .then((res) => res.json())
+      .then((json) => {
+        console.log("json", json);
 
-    //   })
-    //   .catch((error) => console.log("ERROR", error));
+        if (json.success) {
+          setModalVisible(false);
+        }
+      })
+      .catch((error) => console.log("ERROR", error));
   };
 
   const ViewFormRender = ({ item, index }) => {
