@@ -1,8 +1,8 @@
 import { API_URL } from "../configurations";
 
-export const getSubMiitedFormList = async () => {
+export const getSubMiitedFormList = async (id) => {
   try {
-    const response = await fetch(API_URL + "/api/viewform");
+    const response = await fetch(API_URL + `/api/viewform/${id}`);
 
     const viewformlist = response.json();
 

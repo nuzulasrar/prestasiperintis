@@ -101,17 +101,14 @@ export default function Page() {
       returnApiCall = await getBridgeList();
     }
 
-    // console.log("api", returnApiCall.bridgelist)
     setFormList(returnApiCall);
-
-    let returnViewFormData = await getSubMiitedFormList();
-
-    // console.log("api", returnApiCall.bridgelist)
+    let returnViewFormData = await getSubMiitedFormList(thisdata.id);
     setViewFormList(returnViewFormData);
   };
 
   useEffect(() => {
     thisApiCall();
+    console.log("thisdata", thisdata);
   }, []);
 
   const minusActiveIndex = (index) => {
@@ -125,6 +122,10 @@ export default function Page() {
     // setDisableButton(true);
     setActiveIndex(activeIndex + 1);
   };
+
+  useEffect(() => {
+    console.log("activeIndex : ", activeIndex);
+  }, [activeIndex]);
 
   const captureFormInfo = (name, value) => {
     if (debounceTimer) {
@@ -769,7 +770,9 @@ export default function Page() {
     var fd = new FormData();
 
     fd.append("name", JSON.stringify(formList.bridgelist));
+    fd.append("details", JSON.stringify(formInfo));
 
+    fd.append("project_id", thisdata.id);
     fd.append("project_type", thisdata.project_type);
 
     fetch(API_URL + "/api/submitform", {
@@ -791,16 +794,30 @@ export default function Page() {
   };
 
   const ViewFormRender = ({ item, index }) => {
+    let eachcomponent = JSON.parse(item.formdata);
     let eachform = JSON.parse(item.formdata);
-    let eachform2 = JSON.parse(eachform);
+    // let eachform2 = JSON.parse(eachform);
     // let eachform3 = JSON.parse(eachform2[1].structure)
     return (
-      <TouchableOpacity className="w-full bg-gray-200 mb-2 rounded-md p-2">
-        <Text selectable className="text-black">
-          {JSON.stringify(eachform2)}
-        </Text>
+      <View className="w-full bg-gray-200 mb-2 rounded-md p-2">
+        {/* <Text selectable className="text-black"> */}
+        {/* {JSON.stringify(eachform2)} */}
+        {/* {eachcomponent.map((item2, index2) => {
+          return (
+            <View className="mb-4">
+              <Text className="mb-6" selectable>
+                {item2.structure}
+              </Text>
+            </View>
+          );
+        })} */}
+        {/* </Text> */}
+        <Text>{item.id}</Text>
+        <Text>{item.project_type}</Text>
+        <Text>{item.createdAt}</Text>
+        <Text>{item.updatedAt}</Text>
         <View className="h-[20px]" />
-      </TouchableOpacity>
+      </View>
     );
   };
 
@@ -964,79 +981,197 @@ export default function Page() {
                 <Text>{JSON.stringify(formInfo)}</Text>
                 <View className="w-full p-3">
                   {thisdata.project_type === "Bridge" ? (
-                    <View className="mb-2">
-                      <Text className="text-black text-[18px] font-semibold">
-                        SPAN No:
-                        {/* {String(activeIndex)}{" "} 
+                    <>
+                      <View className="mb-2">
+                        <Text className="text-black text-[18px] font-semibold">
+                          SPAN No:
+                          {/* {String(activeIndex)}{" "} 
                        {String(formList.bridgelist.length)} */}
-                      </Text>
-                      <TextInput
-                        value={formInfo?.span_no}
-                        onChangeText={(e) => captureFormInfo("span_no", e)}
-                        className="bg-gray-200 h-[40px] w-full rounded-md pl-2"
-                      />
-                    </View>
-                  ) : null}
-
-                  <View className="mb-2">
-                    <Text className="text-black text-[18px] font-semibold">
-                      Route No:
-                    </Text>
-                    <TextInput
-                      value={formInfo?.route_no}
-                      onChangeText={(e) => captureFormInfo("route_no", e)}
-                      className="bg-gray-200 h-[40px] w-full rounded-md pl-2"
-                    />
-                  </View>
-                  <View className="mb-2">
-                    <Text className="text-black text-[18px] font-semibold">
-                      Struct No:
-                    </Text>
-                    <TextInput
-                      value={formInfo?.struct_no}
-                      onChangeText={(e) => captureFormInfo("struct_no", e)}
-                      className="bg-gray-200 h-[40px] w-full rounded-md pl-2"
-                    />
-                  </View>
-                  <View className="mb-2">
-                    <Text className="text-black text-[18px] font-semibold">
-                      Bridge Name:
-                    </Text>
-                    <TextInput
-                      value={formInfo?.bridge_name}
-                      onChangeText={(e) => captureFormInfo("bridge_name", e)}
-                      className="bg-gray-200 h-[40px] w-full rounded-md pl-2"
-                    />
-                  </View>
-                  <View className="mb-2">
-                    <Text className="text-black text-[18px] font-semibold">
-                      Name of Inspector:
-                    </Text>
-                    <TextInput
-                      value={formInfo?.name_of_inspector}
-                      onChangeText={(e) =>
-                        captureFormInfo("name_of_inspector", e)
-                      }
-                      className="bg-gray-200 h-[40px] w-full rounded-md pl-2"
-                    />
-                  </View>
-                  <View className="mb-2">
-                    <Text className="text-black text-[18px] font-semibold">
-                      Date:
-                    </Text>
-                    <TextInput
-                      value={formInfo?.date}
-                      onChangeText={(e) => captureFormInfo("date", e)}
-                      className="bg-gray-200 h-[40px] w-full rounded-md pl-2"
-                    />
-                  </View>
+                        </Text>
+                        <TextInput
+                          value={formInfo?.span_no}
+                          onChangeText={(e) => captureFormInfo("span_no", e)}
+                          className="bg-gray-200 h-[40px] w-full rounded-md pl-2"
+                        />
+                      </View>
+                      <View className="mb-2">
+                        <Text className="text-black text-[18px] font-semibold">
+                          Route No:
+                        </Text>
+                        <TextInput
+                          value={formInfo?.route_no}
+                          onChangeText={(e) => captureFormInfo("route_no", e)}
+                          className="bg-gray-200 h-[40px] w-full rounded-md pl-2"
+                        />
+                      </View>
+                      <View className="mb-2">
+                        <Text className="text-black text-[18px] font-semibold">
+                          Struct No:
+                        </Text>
+                        <TextInput
+                          value={formInfo?.struct_no}
+                          onChangeText={(e) => captureFormInfo("struct_no", e)}
+                          className="bg-gray-200 h-[40px] w-full rounded-md pl-2"
+                        />
+                      </View>
+                      <View className="mb-2">
+                        <Text className="text-black text-[18px] font-semibold">
+                          Bridge Name:
+                        </Text>
+                        <TextInput
+                          value={formInfo?.bridge_name}
+                          onChangeText={(e) =>
+                            captureFormInfo("bridge_name", e)
+                          }
+                          className="bg-gray-200 h-[40px] w-full rounded-md pl-2"
+                        />
+                      </View>
+                      <View className="mb-2">
+                        <Text className="text-black text-[18px] font-semibold">
+                          Name of Inspector:
+                        </Text>
+                        <TextInput
+                          value={formInfo?.name_of_inspector}
+                          onChangeText={(e) =>
+                            captureFormInfo("name_of_inspector", e)
+                          }
+                          className="bg-gray-200 h-[40px] w-full rounded-md pl-2"
+                        />
+                      </View>
+                      <View className="mb-2">
+                        <Text className="text-black text-[18px] font-semibold">
+                          Date:
+                        </Text>
+                        <TextInput
+                          value={formInfo?.date}
+                          onChangeText={(e) => captureFormInfo("date", e)}
+                          className="bg-gray-200 h-[40px] w-full rounded-md pl-2"
+                        />
+                      </View>
+                    </>
+                  ) : (
+                    <ScrollView style={{ height: 500 }}>
+                      <View className="mb-2">
+                        <Text className="text-black text-[18px] font-semibold">
+                          Plaza Toll Name:
+                          {/* {String(activeIndex)}{" "} 
+                   {String(formList.bridgelist.length)} */}
+                        </Text>
+                        <TextInput
+                          value={formInfo?.plaza_toll_name}
+                          onChangeText={(e) =>
+                            captureFormInfo("plaza_toll_name", e)
+                          }
+                          className="bg-gray-200 h-[40px] w-full rounded-md pl-2"
+                        />
+                      </View>
+                      <View className="mb-2">
+                        <Text className="text-black text-[18px] font-semibold">
+                          No of Toll Lanes:
+                        </Text>
+                        <TextInput
+                          value={formInfo?.no_of_toll_lanes}
+                          onChangeText={(e) =>
+                            captureFormInfo("no_of_toll_lanes", e)
+                          }
+                          className="bg-gray-200 h-[40px] w-full rounded-md pl-2"
+                        />
+                      </View>
+                      <View className="mb-2">
+                        <Text className="text-black text-[18px] font-semibold">
+                          Report For Year:
+                        </Text>
+                        <TextInput
+                          value={formInfo?.report_for_year}
+                          onChangeText={(e) =>
+                            captureFormInfo("report_for_year", e)
+                          }
+                          className="bg-gray-200 h-[40px] w-full rounded-md pl-2"
+                        />
+                      </View>
+                      <View className="mb-2">
+                        <Text className="text-black text-[18px] font-semibold">
+                          Highway Code:
+                        </Text>
+                        <TextInput
+                          value={formInfo?.highway_code}
+                          onChangeText={(e) =>
+                            captureFormInfo("highway_code", e)
+                          }
+                          className="bg-gray-200 h-[40px] w-full rounded-md pl-2"
+                        />
+                      </View>
+                      <View className="mb-2">
+                        <Text className="text-black text-[18px] font-semibold">
+                          Highway Name:
+                        </Text>
+                        <TextInput
+                          value={formInfo?.highway_name}
+                          onChangeText={(e) =>
+                            captureFormInfo("highway_name", e)
+                          }
+                          className="bg-gray-200 h-[40px] w-full rounded-md pl-2"
+                        />
+                      </View>
+                      <View className="mb-2">
+                        <Text className="text-black text-[18px] font-semibold">
+                          Section:
+                        </Text>
+                        <TextInput
+                          value={formInfo?.section}
+                          onChangeText={(e) => captureFormInfo("section", e)}
+                          className="bg-gray-200 h-[40px] w-full rounded-md pl-2"
+                        />
+                      </View>
+                      <View className="mb-2">
+                        <Text className="text-black text-[18px] font-semibold">
+                          GPS Latitude:
+                        </Text>
+                        <TextInput
+                          value={formInfo?.latitude}
+                          onChangeText={(e) => captureFormInfo("latitude", e)}
+                          className="bg-gray-200 h-[40px] w-full rounded-md pl-2"
+                        />
+                      </View>
+                      <View className="mb-2">
+                        <Text className="text-black text-[18px] font-semibold">
+                          GPS Longitude:
+                        </Text>
+                        <TextInput
+                          value={formInfo?.longitude}
+                          onChangeText={(e) => captureFormInfo("longitude", e)}
+                          className="bg-gray-200 h-[40px] w-full rounded-md pl-2"
+                        />
+                      </View>
+                      <View className="mb-2">
+                        <Text className="text-black text-[18px] font-semibold">
+                          Date:
+                        </Text>
+                        <TextInput
+                          value={formInfo?.date}
+                          onChangeText={(e) => captureFormInfo("date", e)}
+                          className="bg-gray-200 h-[40px] w-full rounded-md pl-2"
+                        />
+                      </View>
+                      <View className="mb-2">
+                        <Text className="text-black text-[18px] font-semibold">
+                          Weather: FINE / INTERMITTENT RAIN / HEAVY RAIN
+                        </Text>
+                        <TextInput
+                          value={formInfo?.weather}
+                          onChangeText={(e) => captureFormInfo("weather", e)}
+                          className="bg-gray-200 h-[40px] w-full rounded-md pl-2"
+                        />
+                      </View>
+                    </ScrollView>
+                  )}
                 </View>
               </Collapsible>
-            ) : activeIndex === formList?.bridgelist?.length - 1 ? (
+            ) : activeIndex === formList?.bridgelist?.length ? (
               <View style={{ width: "100%", height: height * 0.75 }}>
                 <Draw saveimage={receivedImage} />
               </View>
-            ) : activeIndex === formList?.bridgelist?.length ? (
+            ) : activeIndex === formList?.bridgelist?.length + 1 ? (
               <View>
                 <Text className="text-black">
                   <FlatList
@@ -1120,7 +1255,7 @@ export default function Page() {
                   Previous
                 </Text>
               </TouchableOpacity>
-              {activeIndex !== formList?.bridgelist?.length ? (
+              {activeIndex !== formList?.bridgelist?.length + 1 ? (
                 <TouchableOpacity
                   onPress={() => plusActiveIndex(activeIndex)}
                   className="bg-blue-600 self-center flex-row justify-center items-center w-4/12 mb-4 py-2 mx-2 rounded-full"
