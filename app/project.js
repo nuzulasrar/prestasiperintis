@@ -59,13 +59,15 @@ export default function Page() {
   const [viewFormList, setViewFormList] = useState([]);
 
   //guna utk change component
-  const [activeIndex, setActiveIndex] = useState(-1);
+  // const [activeIndex, setActiveIndex] = useState(-1);
+  const [activeIndex, setActiveIndex] = useState(9);
 
   //disable button state
   const [disableButton, setDisableButton] = useState(false);
 
   //sample images array
   const [arraySampleImages, setArraySampleImages] = useState([]);
+  const [arraySampleImages2, setArraySampleImages2] = useState([]);
 
   //image zoom
   const [canvasScale, setCanvasScale] = useState(1);
@@ -76,6 +78,12 @@ export default function Page() {
     let thisarray = [...arraySampleImages];
     thisarray.push(image);
     setArraySampleImages(thisarray);
+    plusActiveIndex(activeIndex);
+  };
+  const receivedImage2 = (image) => {
+    let thisarray = [...arraySampleImages2];
+    thisarray.push(image);
+    setArraySampleImages2(thisarray);
     plusActiveIndex(activeIndex);
   };
 
@@ -730,7 +738,7 @@ export default function Page() {
     // No permissions request is necessary for launching the image library
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
-      allowsEditing: true,
+      allowsMultipleSelection: true,
       aspect: [4, 3],
       quality: 1,
     });
@@ -738,17 +746,20 @@ export default function Page() {
     console.log(result);
 
     if (!result.canceled) {
-      setImage(result.assets[0].uri);
+      setImage(result.assets);
+      // console.log(JSON.stringify(result));
     }
   };
 
   const uploadImage = async () => {
     var fd = new FormData();
 
-    fd.append("files", {
-      uri: image,
-      name: "image.jpg",
-      type: "image/jpeg",
+    image.forEach((item, index) => {
+      fd.append(`files${index}`, {
+        uri: item.uri,
+        name: `${index}image.jpg`,
+        type: "image/jpeg",
+      });
     });
 
     fetch(API_URL + "/api/upload", {
@@ -849,6 +860,41 @@ export default function Page() {
             thisArray.splice(index, 1);
 
             setArraySampleImages(thisArray);
+          }}
+          className="bg-red-700 rounded-lg border-none"
+        >
+          <Text className="text-white px-8 py-2">Delete</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  };
+
+  const RenderArraySampleImages2 = ({ item, index }) => {
+    return (
+      <View className="justify-center items-center">
+        <TouchableOpacity
+          onPress={() => {
+            setZoomIndex(index);
+            setZoomModalVisible(true);
+            setModalVisible(false);
+          }}
+        >
+          <RNImage
+            source={{ uri: item }}
+            style={{
+              width: width * 0.3,
+              height: width * 0.3,
+              marginBottom: 10,
+            }}
+          />
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => {
+            let thisArray = [...arraySampleImages2];
+
+            thisArray.splice(index, 1);
+
+            setArraySampleImages2(thisArray);
           }}
           className="bg-red-700 rounded-lg border-none"
         >
@@ -1169,24 +1215,44 @@ export default function Page() {
               </Collapsible>
             ) : activeIndex === formList?.bridgelist?.length ? (
               <View style={{ width: "100%", height: height * 0.75 }}>
-                <Draw saveimage={receivedImage} />
+                <Draw
+                  saveimage={receivedImage}
+                  // takeImage={(e) => console.log("takeimage fn : ", e)}
+                  takeImage={receivedImage2}
+                />
               </View>
             ) : activeIndex === formList?.bridgelist?.length + 1 ? (
               <View>
-                <Text className="text-black">
-                  <FlatList
-                    data={arraySampleImages}
-                    renderItem={({ item, index }) => (
-                      <RenderArraySampleImages item={item} index={index} />
-                    )}
-                    numColumns={3}
-                    ListEmptyComponent={() => (
-                      <Text className="text-black text-[16px] m-2">
-                        You have not uploaded any drawing.
-                      </Text>
-                    )}
-                  />
+                <Text className="text-black font-bold text-[20px] mt-2 mb-2">
+                  Template Drawing ({arraySampleImages.length})
                 </Text>
+                <FlatList
+                  data={arraySampleImages}
+                  renderItem={({ item, index }) => (
+                    <RenderArraySampleImages item={item} index={index} />
+                  )}
+                  numColumns={3}
+                  ListEmptyComponent={() => (
+                    <Text className="text-black text-[16px] m-2">
+                      You have not make any drawing yet.
+                    </Text>
+                  )}
+                />
+                <Text className="text-black font-bold text-[20px] my-2">
+                  Captured Images ({arraySampleImages2.length})
+                </Text>
+                <FlatList
+                  data={arraySampleImages2}
+                  renderItem={({ item, index }) => (
+                    <RenderArraySampleImages2 item={item} index={index} />
+                  )}
+                  numColumns={3}
+                  ListEmptyComponent={() => (
+                    <Text className="text-black text-[16px] m-2">
+                      You have not take any picture using camera.
+                    </Text>
+                  )}
+                />
               </View>
             ) : null}
             {/* <TouchableOpacity

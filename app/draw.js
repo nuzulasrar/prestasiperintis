@@ -29,12 +29,13 @@ import { FlatList } from "react-native-gesture-handler";
 import { Camera, CameraType, CameraReadyListener } from "expo-camera";
 import { faCamera } from "@fortawesome/free-solid-svg-icons";
 
-export default function Draw({ saveimage }) {
+export default function Draw({ saveimage, takeImage }) {
   const { width, height } = useWindowDimensions();
 
   const [camera, setCamera] = useState(null);
   const [type, setType] = useState(CameraType.back);
   const [permission, requestPermission] = Camera.useCameraPermissions();
+  const [capturedByCamera, setCapturedByCamera] = useState([]);
 
   useEffect(() => {
     console.log(permission);
@@ -51,6 +52,8 @@ export default function Draw({ saveimage }) {
         const uri = result.uri;
         console.log("Picture saved to cache:", uri);
         // You can now access the image data using the uri
+        takeImage && takeImage(uri);
+        // setEditorMode(5);
       } catch (error) {
         console.error("Error taking picture:", error);
       }
@@ -170,7 +173,7 @@ export default function Draw({ saveimage }) {
 
   useEffect(() => {
     if (capturedImage) {
-      saveimage(capturedImage);
+      saveimage && saveimage(capturedImage);
     }
   }, [capturedImage]);
 
@@ -396,6 +399,23 @@ export default function Draw({ saveimage }) {
             ) : null}
           </View> */}
         </>
+      ) : editorMode === 5 ? (
+        <View className="flex-1">
+          <Text className="mb-4">Captured Image here</Text>
+          <FlatList
+            data={capturedByCamera}
+            renderItem={({ item, index }) => {
+              return (
+                <TouchableOpacity>
+                  <RNImage
+                    source={{ uri: item }}
+                    style={{ width: 100, height: 100 }}
+                  />
+                </TouchableOpacity>
+              );
+            }}
+          />
+        </View>
       ) : null}
     </View>
   );
