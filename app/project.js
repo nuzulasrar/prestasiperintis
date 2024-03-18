@@ -88,10 +88,14 @@ export default function Page() {
   };
 
   const flatListRef = useRef(null);
+  const scrollViewRef = useRef(null);
 
   const scrollToTop = () => {
     if (flatListRef.current) {
       flatListRef.current.scrollToIndex({ index: 0, animated: true });
+    }
+    if (scrollViewRef.current) {
+      scrollViewRef.current.scrollTo({ y: 0, animated: true });
     }
   };
 
@@ -836,7 +840,10 @@ export default function Page() {
 
   const RenderArraySampleImages = ({ item, index }) => {
     return (
-      <View className="justify-center items-center">
+      <View
+        className="justify-center items-center mr-2"
+        style={{ maxWidth: width * 0.5 }}
+      >
         <TouchableOpacity
           onPress={() => {
             setZoomIndex(index);
@@ -847,8 +854,8 @@ export default function Page() {
           <RNImage
             source={{ uri: item }}
             style={{
-              width: width * 0.3,
-              height: width * 0.3,
+              width: width * 0.5,
+              height: width * 0.5,
               marginBottom: 10,
             }}
           />
@@ -861,17 +868,39 @@ export default function Page() {
 
             setArraySampleImages(thisArray);
           }}
-          className="bg-red-700 rounded-lg border-none"
+          className="bg-red-700 rounded-lg border-none mb-4"
         >
-          <Text className="text-white px-8 py-2">Delete</Text>
+          <Text className="text-white text-center px-8 py-2">Delete</Text>
         </TouchableOpacity>
+        <View className="w-full px-1 mb-2">
+          <Text className="text-black font-semibold mb-1">Location</Text>
+          <TextInput className="bg-gray-100 rounded-xl h-[45px] pl-2 w-full" />
+        </View>
+        <View className="w-full px-1 mb-2">
+          <Text className="text-black font-semibold mb-1">Description</Text>
+          <TextInput className="bg-gray-100 rounded-xl h-[45px] pl-2 w-full" />
+        </View>
+        <View className="w-full px-1 mb-2">
+          <Text className="text-black font-semibold mb-1">Mapping Tag No</Text>
+          <TextInput className="bg-gray-100 rounded-xl h-[45px] pl-2 w-full" />
+        </View>
+        <View className="w-full px-1 mb-2">
+          <Text className="text-black font-semibold mb-1">Remarks</Text>
+          <TextInput className="bg-gray-100 rounded-xl h-[45px] pl-2 w-full" />
+        </View>
       </View>
     );
   };
 
   const RenderArraySampleImages2 = ({ item, index }) => {
     return (
-      <View className="justify-center items-center">
+      <View
+        className="justify-center items-center mr-2"
+        style={{
+          width: width * 0.5,
+          height: width * 0.5,
+        }}
+      >
         <TouchableOpacity
           onPress={() => {
             setZoomIndex(index);
@@ -882,8 +911,8 @@ export default function Page() {
           <RNImage
             source={{ uri: item }}
             style={{
-              width: width * 0.3,
-              height: width * 0.3,
+              width: width * 0.5,
+              height: width * 0.5,
               marginBottom: 10,
             }}
           />
@@ -900,6 +929,22 @@ export default function Page() {
         >
           <Text className="text-white px-8 py-2">Delete</Text>
         </TouchableOpacity>
+        <View className="w-full px-1 mb-2">
+          <Text className="text-black font-semibold mb-1">Location</Text>
+          <TextInput className="bg-gray-100 rounded-xl h-[45px] pl-2 w-full" />
+        </View>
+        <View className="w-full px-1 mb-2">
+          <Text className="text-black font-semibold mb-1">Description</Text>
+          <TextInput className="bg-gray-100 rounded-xl h-[45px] pl-2 w-full" />
+        </View>
+        <View className="w-full px-1 mb-2">
+          <Text className="text-black font-semibold mb-1">Mapping Tag No</Text>
+          <TextInput className="bg-gray-100 rounded-xl h-[45px] pl-2 w-full" />
+        </View>
+        <View className="w-full px-1 mb-2">
+          <Text className="text-black font-semibold mb-1">Remarks</Text>
+          <TextInput className="bg-gray-100 rounded-xl h-[45px] pl-2 w-full" />
+        </View>
       </View>
     );
   };
@@ -985,43 +1030,44 @@ export default function Page() {
           className="h-full flex-1 justify-center items-center"
           style={{
             backgroundColor: "rgba(0,0,0,0.4)",
-            paddingVertical: !isCollapsed ? height / 10 : height / 10,
+            paddingVertical: !isCollapsed ? 5 : 5,
           }}
         >
           <View
-            className="bg-white w-11/12 rounded-lg"
+            className="bg-blue-600 rounded-t-md w-[98%] justify-center"
+            style={{ height: width * 0.15 }}
+          >
+            <Text
+              className="text-white text-[15px] text-left font-bold ml-3"
+              style={{ width: "83%" }}
+            >
+              {thisdata.project_type === "Bridge"
+                ? "ROUTINE CONDITION INSPECTION - STRUCTURAL CONDITION CHECKLIST (BRIDGE)"
+                : "TOLL PLAZA CANOPY - INSPECTION CHECKLIST"}
+            </Text>
+            {/* <Text>{JSON.stringify(formList)}</Text> */}
+            <TouchableOpacity
+              onPress={() => {
+                setModalVisible(!modalVisible);
+              }}
+              style={{
+                position: "absolute",
+                right: 0,
+                top: 0,
+                height: width * 0.15,
+                width: width * 0.15,
+              }}
+              className="flex justify-center items-center rounded-tr-md p-4 bg-red-600"
+            >
+              <FontAwesomeIcon icon="xmark" color="white" size={30} />
+            </TouchableOpacity>
+          </View>
+          <ScrollView
+            className="bg-red-100 w-[98%]"
             style={{}}
             activeOpacity={1}
+            ref={scrollViewRef}
           >
-            <View
-              className="bg-blue-600 rounded-t-md w-full justify-center"
-              style={{ height: width * 0.15 }}
-            >
-              <Text
-                className="text-white text-[15px] text-left font-bold ml-3"
-                style={{ width: "83%" }}
-              >
-                {thisdata.project_type === "Bridge"
-                  ? "ROUTINE CONDITION INSPECTION - STRUCTURAL CONDITION CHECKLIST (BRIDGE)"
-                  : "TOLL PLAZA CANOPY - INSPECTION CHECKLIST"}
-              </Text>
-              {/* <Text>{JSON.stringify(formList)}</Text> */}
-              <TouchableOpacity
-                onPress={() => {
-                  setModalVisible(!modalVisible);
-                }}
-                style={{
-                  position: "absolute",
-                  right: 0,
-                  top: 0,
-                  height: width * 0.15,
-                  width: width * 0.15,
-                }}
-                className="flex justify-center items-center rounded-tr-md p-4 bg-red-600"
-              >
-                <FontAwesomeIcon icon="xmark" color="white" size={30} />
-              </TouchableOpacity>
-            </View>
             {activeIndex === -1 ? (
               <Collapsible collapsed={isCollapsed}>
                 <Text>{JSON.stringify(formInfo)}</Text>
@@ -1222,36 +1268,43 @@ export default function Page() {
                 />
               </View>
             ) : activeIndex === formList?.bridgelist?.length + 1 ? (
-              <View>
-                <Text className="text-black font-bold text-[20px] mt-2 mb-2">
-                  Template Drawing ({arraySampleImages.length})
-                </Text>
+              <View className="px-2">
+                <View className="w-full bg-blue-600 rounded-md px-2 mt-2">
+                  <Text className="text-white text-center font-bold text-[20px] mt-2 mb-2">
+                    Template Drawing ({arraySampleImages.length})
+                  </Text>
+                </View>
                 <FlatList
                   data={arraySampleImages}
                   renderItem={({ item, index }) => (
                     <RenderArraySampleImages item={item} index={index} />
                   )}
-                  numColumns={3}
+                  // numColumns={3}
+                  horizontal
                   ListEmptyComponent={() => (
                     <Text className="text-black text-[16px] m-2">
                       You have not make any drawing yet.
                     </Text>
                   )}
                 />
-                <Text className="text-black font-bold text-[20px] my-2">
-                  Captured Images ({arraySampleImages2.length})
-                </Text>
+                <View className="w-full bg-blue-600 rounded-md px-2 my-2">
+                  <Text className="text-white text-center font-bold text-[20px] my-2">
+                    Captured Images ({arraySampleImages2.length})
+                  </Text>
+                </View>
                 <FlatList
                   data={arraySampleImages2}
                   renderItem={({ item, index }) => (
                     <RenderArraySampleImages2 item={item} index={index} />
                   )}
-                  numColumns={3}
+                  // numColumns={3}
+                  horizontal
                   ListEmptyComponent={() => (
                     <Text className="text-black text-[16px] m-2">
                       You have not take any picture using camera.
                     </Text>
                   )}
+                  style={{ height: height * 0.7 }}
                 />
               </View>
             ) : null}
@@ -1310,40 +1363,39 @@ export default function Page() {
 
               <Button title="Upload" onPress={uploadImage} /> 
             */}
-
-            <View className="h-[80px] w-full bg-white border-t-2 pt-4 border-t-black rounded-b-md flex-row justify-around items-center">
+          </ScrollView>
+          <View className="h-[80px] w-[98%] bg-white border-t-2 pt-4 border-t-black rounded-b-md flex-row justify-around items-center">
+            <TouchableOpacity
+              onPress={() => minusActiveIndex(activeIndex)}
+              className="bg-blue-600 self-center flex-row justify-center items-center w-4/12 mb-4 py-2 mx-2 rounded-full"
+              disabled={disableButton}
+            >
+              <Text className="text-white text-[18px] font-semibold">
+                Previous
+              </Text>
+            </TouchableOpacity>
+            {activeIndex !== formList?.bridgelist?.length + 1 ? (
               <TouchableOpacity
-                onPress={() => minusActiveIndex(activeIndex)}
+                onPress={() => plusActiveIndex(activeIndex)}
                 className="bg-blue-600 self-center flex-row justify-center items-center w-4/12 mb-4 py-2 mx-2 rounded-full"
                 disabled={disableButton}
               >
                 <Text className="text-white text-[18px] font-semibold">
-                  Previous
+                  Next
                 </Text>
               </TouchableOpacity>
-              {activeIndex !== formList?.bridgelist?.length + 1 ? (
-                <TouchableOpacity
-                  onPress={() => plusActiveIndex(activeIndex)}
-                  className="bg-blue-600 self-center flex-row justify-center items-center w-4/12 mb-4 py-2 mx-2 rounded-full"
-                  disabled={disableButton}
-                >
-                  <Text className="text-white text-[18px] font-semibold">
-                    Next
-                  </Text>
-                </TouchableOpacity>
-              ) : (
-                <TouchableOpacity
-                  onPress={() => {
-                    submitForm();
-                  }}
-                  className="bg-green-600 self-center flex-row justify-center items-center w-4/12 mb-4 py-2 mx-2 rounded-full"
-                >
-                  <Text className="text-white text-[18px] font-semibold">
-                    Submit Form
-                  </Text>
-                </TouchableOpacity>
-              )}
-            </View>
+            ) : (
+              <TouchableOpacity
+                onPress={() => {
+                  submitForm();
+                }}
+                className="bg-green-600 self-center flex-row justify-center items-center w-4/12 mb-4 py-2 mx-2 rounded-full"
+              >
+                <Text className="text-white text-[18px] font-semibold">
+                  Submit Form
+                </Text>
+              </TouchableOpacity>
+            )}
           </View>
         </View>
       </Modal>

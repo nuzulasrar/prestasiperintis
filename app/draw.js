@@ -160,6 +160,7 @@ export default function Draw({ saveimage, takeImage }) {
         <RNImage
           source={item}
           style={{ width: width / 2 - 20, height: width / 2 - 20, margin: 5 }}
+          resizeMode="contain"
         />
       </TouchableOpacity>
     );
