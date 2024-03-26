@@ -26,6 +26,8 @@ import { faAngleDown } from "@fortawesome/free-solid-svg-icons/faAngleDown";
 import { faMagnifyingGlassPlus } from "@fortawesome/free-solid-svg-icons/faMagnifyingGlassPlus";
 import { faMagnifyingGlassMinus } from "@fortawesome/free-solid-svg-icons/faMagnifyingGlassMinus";
 import { faCamera } from "@fortawesome/free-solid-svg-icons/faCamera";
+import { faImages } from "@fortawesome/free-solid-svg-icons/faImages";
+import { faPaintbrush } from "@fortawesome/free-solid-svg-icons/faPaintbrush";
 
 import NetInfo from "@react-native-community/netinfo";
 
@@ -52,7 +54,9 @@ library.add(
   faAngleDown,
   faMagnifyingGlassPlus,
   faMagnifyingGlassMinus,
-  faCamera
+  faCamera,
+  faImages,
+  faPaintbrush
 );
 
 export default function Page() {
@@ -122,7 +126,7 @@ export default function Page() {
           Draw
         </Text>
       </TouchableOpacity> */}
-      <TouchableOpacity
+      {/* <TouchableOpacity
         onPress={() =>
           router.push({
             pathname: "/form",
@@ -133,7 +137,7 @@ export default function Page() {
         <Text className="text-white font-semibold text-[24px] text-center">
           Upload
         </Text>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
       {/* <TouchableOpacity onPress={() => router.push({
                 pathname: "/about",
                 params: { id: 'bacon', name: "Ahmad" }

@@ -9,6 +9,7 @@ import {
   Image as RNImage,
   Modal,
   useWindowDimensions,
+  Keyboard,
 } from "react-native";
 import React, { useCallback, useState, useEffect, useRef } from "react";
 
@@ -34,6 +35,7 @@ import { getSubMiitedFormList } from "../fetches/getSubmittedFormList";
 import Draw from "./draw";
 
 export default function Page() {
+  console.log("render");
   const { width, height } = useWindowDimensions();
 
   const [image, setImage] = useState(null);
@@ -68,6 +70,24 @@ export default function Page() {
   //sample images array
   const [arraySampleImages, setArraySampleImages] = useState([]);
   const [arraySampleImages2, setArraySampleImages2] = useState([]);
+  const [arraySampleImages3, setArraySampleImages3] = useState([]);
+
+  //form data for the image
+  const [arrayData, setArrayData] = useState([]);
+  const [arrayData2, setArrayData2] = useState([]);
+  const [arrayData3, setArrayData3] = useState([]);
+
+  //template drawing refs
+  const templateFlatlistRef = useRef(null);
+  const templateScrollviewRef = useRef(null);
+
+  //camptured images refs
+  const templateFlatlistRef2 = useRef(null);
+  const templateScrollviewRef2 = useRef(null);
+
+  //uploaded images refs
+  const templateFlatlistRef3 = useRef(null);
+  const templateScrollviewRef3 = useRef(null);
 
   //image zoom
   const [canvasScale, setCanvasScale] = useState(1);
@@ -76,16 +96,54 @@ export default function Page() {
 
   const receivedImage = (image) => {
     let thisarray = [...arraySampleImages];
+    let thisarraydata = [...arrayData];
     thisarray.push(image);
+    thisarraydata.push({
+      location: "",
+      description: "",
+      mapping_no: "",
+      remarks: "",
+    });
     setArraySampleImages(thisarray);
+    setArrayData(thisarraydata);
     plusActiveIndex(activeIndex);
   };
   const receivedImage2 = (image) => {
     let thisarray = [...arraySampleImages2];
     thisarray.push(image);
+
+    let thisarraydata = [...arrayData2];
+    thisarraydata.push({
+      location: "",
+      description: "",
+      mapping_no: "",
+      remarks: "",
+    });
+    setArrayData2(thisarraydata);
+
     setArraySampleImages2(thisarray);
     plusActiveIndex(activeIndex);
   };
+  const receivedImage3 = (image) => {
+    setArraySampleImages3(image);
+    plusActiveIndex(activeIndex);
+  };
+
+  useEffect(() => {
+    let thisarray = [...arraySampleImages3];
+    let thisarraydata = [];
+
+    thisarray.forEach((element) => {
+      thisarraydata.push({
+        location: "",
+        description: "",
+        mapping_no: "",
+        remarks: "",
+      });
+    });
+
+    setArrayData3(thisarraydata);
+  }, [arraySampleImages3]);
 
   const flatListRef = useRef(null);
   const scrollViewRef = useRef(null);
@@ -139,16 +197,16 @@ export default function Page() {
     console.log("activeIndex : ", activeIndex);
   }, [activeIndex]);
 
-  const captureFormInfo = (name, value) => {
-    if (debounceTimer) {
-      clearTimeout(debounceTimer);
-    }
-    setDebounceTimer(
-      setTimeout(() => {
-        setFormInfo({ ...formInfo, [name]: value });
-      }, 500) // Adjust the delay as needed
-    );
-  };
+  const captureFormInfo = useCallback((name, value) => {
+    // if (debounceTimer) {
+    //   clearTimeout(debounceTimer);
+    // }
+    // setDebounceTimer(
+    //   setTimeout(() => {
+    setFormInfo({ ...formInfo, [name]: value });
+    //   }, 500) // Adjust the delay as needed
+    // );
+  }, []);
 
   useEffect(() => {
     // Clean up any existing debounce timer when the component unmounts
@@ -838,12 +896,37 @@ export default function Page() {
 
   const [zoomIndex, setZoomIndex] = useState(-1);
 
+  useEffect(() => {
+    console.log("arrayData", arrayData);
+  }, [arrayData]);
+
+  const handleFormInput = (index, property, text) => {
+    let thisArray = [...arrayData];
+    thisArray[index][property] = text;
+    // console.log(thisArray);
+    setArrayData(thisArray);
+    // setArrayData({ ...arrayData, arrayData[index][property]: text });
+  };
+
+  const handleFormInput2 = (index, property, text) => {
+    let thisArray = [...arrayData2];
+    thisArray[index][property] = text;
+    // console.log(thisArray);
+    setArrayData2(thisArray);
+  };
+  const handleFormInput3 = (index, property, text) => {
+    let thisArray = [...arrayData3];
+    thisArray[index][property] = text;
+    setArrayData3(thisArray);
+  };
+
   const RenderArraySampleImages = ({ item, index }) => {
     return (
       <View
         className="justify-center items-center mr-2"
         style={{ maxWidth: width * 0.5 }}
       >
+        {/* <Text className="mb-2">{JSON.stringify(item)}</Text> */}
         <TouchableOpacity
           onPress={() => {
             setZoomIndex(index);
@@ -863,31 +946,18 @@ export default function Page() {
         <TouchableOpacity
           onPress={() => {
             let thisArray = [...arraySampleImages];
+            let thisArrayData = [...arrayData];
 
             thisArray.splice(index, 1);
+            thisArrayData.splice(index, 1);
 
             setArraySampleImages(thisArray);
+            setArrayData(thisArrayData);
           }}
           className="bg-red-700 rounded-lg border-none mb-4"
         >
           <Text className="text-white text-center px-8 py-2">Delete</Text>
         </TouchableOpacity>
-        <View className="w-full px-1 mb-2">
-          <Text className="text-black font-semibold mb-1">Location</Text>
-          <TextInput className="bg-gray-100 rounded-xl h-[45px] pl-2 w-full" />
-        </View>
-        <View className="w-full px-1 mb-2">
-          <Text className="text-black font-semibold mb-1">Description</Text>
-          <TextInput className="bg-gray-100 rounded-xl h-[45px] pl-2 w-full" />
-        </View>
-        <View className="w-full px-1 mb-2">
-          <Text className="text-black font-semibold mb-1">Mapping Tag No</Text>
-          <TextInput className="bg-gray-100 rounded-xl h-[45px] pl-2 w-full" />
-        </View>
-        <View className="w-full px-1 mb-2">
-          <Text className="text-black font-semibold mb-1">Remarks</Text>
-          <TextInput className="bg-gray-100 rounded-xl h-[45px] pl-2 w-full" />
-        </View>
       </View>
     );
   };
@@ -898,7 +968,7 @@ export default function Page() {
         className="justify-center items-center mr-2"
         style={{
           width: width * 0.5,
-          height: width * 0.5,
+          // height: width * 0.5,
         }}
       >
         <TouchableOpacity
@@ -920,33 +990,98 @@ export default function Page() {
         <TouchableOpacity
           onPress={() => {
             let thisArray = [...arraySampleImages2];
+            let thisArrayData = [...arrayData2];
 
             thisArray.splice(index, 1);
+            thisArrayData.splice(index, 1);
 
             setArraySampleImages2(thisArray);
+            setArrayData2(thisArrayData);
           }}
           className="bg-red-700 rounded-lg border-none"
         >
           <Text className="text-white px-8 py-2">Delete</Text>
         </TouchableOpacity>
-        <View className="w-full px-1 mb-2">
-          <Text className="text-black font-semibold mb-1">Location</Text>
-          <TextInput className="bg-gray-100 rounded-xl h-[45px] pl-2 w-full" />
-        </View>
-        <View className="w-full px-1 mb-2">
-          <Text className="text-black font-semibold mb-1">Description</Text>
-          <TextInput className="bg-gray-100 rounded-xl h-[45px] pl-2 w-full" />
-        </View>
-        <View className="w-full px-1 mb-2">
-          <Text className="text-black font-semibold mb-1">Mapping Tag No</Text>
-          <TextInput className="bg-gray-100 rounded-xl h-[45px] pl-2 w-full" />
-        </View>
-        <View className="w-full px-1 mb-2">
-          <Text className="text-black font-semibold mb-1">Remarks</Text>
-          <TextInput className="bg-gray-100 rounded-xl h-[45px] pl-2 w-full" />
-        </View>
       </View>
     );
+  };
+
+  const RenderArraySampleImages3 = ({ item, index }) => {
+    return (
+      <View
+        className="justify-center items-center mr-2"
+        style={{
+          width: width * 0.5,
+          // height: width,
+        }}
+      >
+        <TouchableOpacity
+          onPress={() => {
+            setZoomIndex(index);
+            setZoomModalVisible(true);
+            setModalVisible(false);
+          }}
+        >
+          <RNImage
+            source={{ uri: item.uri }}
+            style={{
+              width: width * 0.5,
+              height: width * 0.5,
+              marginBottom: 10,
+            }}
+          />
+        </TouchableOpacity>
+        {/* <Text>{JSON.stringify(item)}</Text> */}
+        <TouchableOpacity
+          onPress={() => {
+            let thisArray = [...arraySampleImages3];
+            let thisArrayData = [...arrayData3];
+
+            thisArray.splice(index, 1);
+            thisArrayData.splice(index, 1);
+
+            setArraySampleImages3(thisArray);
+            setArrayData3(thisArrayData);
+          }}
+          className="bg-red-700 rounded-lg border-none"
+        >
+          <Text className="text-white px-8 py-2">Delete</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  };
+
+  // // Function to handle the scroll event of ScrollView
+  // const handleTemplateScrollviewRef = (event) => {
+  //   const offsetX = event.nativeEvent.contentOffset.x;
+  //   if (templateFlatlistRef.current) {
+  //     templateFlatlistRef.current.scrollToOffset({
+  //       offset: offsetX,
+  //       animated: false,
+  //     });
+  //   }
+  // };
+
+  // Function to handle the scroll event of FlatList
+  const handleTemplateFlatlistRef = (event) => {
+    const offsetX = event.nativeEvent.contentOffset.x;
+    if (templateScrollviewRef.current) {
+      templateScrollviewRef.current.scrollTo({ x: offsetX, animated: false });
+    }
+  };
+  // Function to handle the scroll event of FlatList
+  const handleTemplateFlatlistRef2 = (event) => {
+    const offsetX = event.nativeEvent.contentOffset.x;
+    if (templateScrollviewRef2.current) {
+      templateScrollviewRef2.current.scrollTo({ x: offsetX, animated: false });
+    }
+  };
+  // Function to handle the scroll event of FlatList
+  const handleTemplateFlatlistRef3 = (event) => {
+    const offsetX = event.nativeEvent.contentOffset.x;
+    if (templateScrollviewRef3.current) {
+      templateScrollviewRef3.current.scrollTo({ x: offsetX, animated: false });
+    }
   };
 
   return (
@@ -1063,7 +1198,7 @@ export default function Page() {
             </TouchableOpacity>
           </View>
           <ScrollView
-            className="bg-red-100 w-[98%]"
+            className="bg-white w-[98%]"
             style={{}}
             activeOpacity={1}
             ref={scrollViewRef}
@@ -1265,6 +1400,7 @@ export default function Page() {
                   saveimage={receivedImage}
                   // takeImage={(e) => console.log("takeimage fn : ", e)}
                   takeImage={receivedImage2}
+                  galleryImage={receivedImage3}
                 />
               </View>
             ) : activeIndex === formList?.bridgelist?.length + 1 ? (
@@ -1274,8 +1410,16 @@ export default function Page() {
                     Template Drawing ({arraySampleImages.length})
                   </Text>
                 </View>
+                {/* <Text className="text-red" selectable>
+                  {JSON.stringify(arraySampleImages)}
+                </Text> */}
+
                 <FlatList
+                  ref={templateFlatlistRef}
+                  onScroll={handleTemplateFlatlistRef}
+                  scrollEventThrottle={16}
                   data={arraySampleImages}
+                  keyExtractor={(item, index) => index}
                   renderItem={({ item, index }) => (
                     <RenderArraySampleImages item={item} index={index} />
                   )}
@@ -1286,13 +1430,86 @@ export default function Page() {
                       You have not make any drawing yet.
                     </Text>
                   )}
+                  style={{ height: width * 0.65 }}
                 />
+                <ScrollView
+                  ref={templateScrollviewRef}
+                  // onScroll={handleTemplateScrollviewRef}
+                  scrollEventThrottle={16}
+                  horizontal
+                  className="flex-row"
+                  contentContainerStyle={{
+                    justifyContent: "flex-start",
+                    alignItems: "center",
+                  }}
+                >
+                  {arrayData.map((item, index) => {
+                    return (
+                      <View className="mr-2" style={{ width: width * 0.5 }}>
+                        <Text className="mb-2">
+                          {JSON.stringify(arrayData[index])}
+                        </Text>
+                        <View className="w-full px-1 mb-2">
+                          <Text className="text-black font-semibold mb-1">
+                            Location
+                          </Text>
+                          <TextInput
+                            className="bg-gray-100 rounded-xl h-[45px] pl-2 w-full"
+                            value={arrayData[index]?.location}
+                            onChangeText={(e) =>
+                              handleFormInput(index, "location", e)
+                            }
+                          />
+                        </View>
+                        <View className="w-full px-1 mb-2">
+                          <Text className="text-black font-semibold mb-1">
+                            Description
+                          </Text>
+                          <TextInput
+                            className="bg-gray-100 rounded-xl h-[45px] pl-2 w-full"
+                            value={arrayData[index]?.description}
+                            onChangeText={(e) =>
+                              handleFormInput(index, "description", e)
+                            }
+                          />
+                        </View>
+                        <View className="w-full px-1 mb-2">
+                          <Text className="text-black font-semibold mb-1">
+                            Mapping Tag No
+                          </Text>
+                          <TextInput
+                            className="bg-gray-100 rounded-xl h-[45px] pl-2 w-full"
+                            value={arrayData[index]?.mapping_no}
+                            onChangeText={(e) =>
+                              handleFormInput(index, "mapping_no", e)
+                            }
+                          />
+                        </View>
+                        <View className="w-full px-1 mb-2">
+                          <Text className="text-black font-semibold mb-1">
+                            Remarks
+                          </Text>
+                          <TextInput
+                            className="bg-gray-100 rounded-xl h-[45px] pl-2 w-full"
+                            value={arrayData[index]?.remarks}
+                            onChangeText={(e) =>
+                              handleFormInput(index, "remarks", e)
+                            }
+                          />
+                        </View>
+                      </View>
+                    );
+                  })}
+                </ScrollView>
                 <View className="w-full bg-blue-600 rounded-md px-2 my-2">
                   <Text className="text-white text-center font-bold text-[20px] my-2">
                     Captured Images ({arraySampleImages2.length})
                   </Text>
                 </View>
                 <FlatList
+                  ref={templateFlatlistRef2}
+                  onScroll={handleTemplateFlatlistRef2}
+                  scrollEventThrottle={16}
                   data={arraySampleImages2}
                   renderItem={({ item, index }) => (
                     <RenderArraySampleImages2 item={item} index={index} />
@@ -1304,8 +1521,168 @@ export default function Page() {
                       You have not take any picture using camera.
                     </Text>
                   )}
-                  style={{ height: height * 0.7 }}
+                  style={{ height: width * 0.65 }}
                 />
+                <ScrollView
+                  ref={templateScrollviewRef2}
+                  // onScroll={handleTemplateScrollviewRef2}
+                  scrollEventThrottle={16}
+                  horizontal
+                  className="flex-row"
+                  contentContainerStyle={{
+                    justifyContent: "flex-start",
+                    alignItems: "center",
+                  }}
+                >
+                  {arrayData2.map((item, index) => {
+                    return (
+                      <View className="mr-2" style={{ width: width * 0.5 }}>
+                        <Text className="mb-2">
+                          {JSON.stringify(arrayData2[index])}
+                        </Text>
+                        <View className="w-full px-1 mb-2">
+                          <Text className="text-black font-semibold mb-1">
+                            Location
+                          </Text>
+                          <TextInput
+                            className="bg-gray-100 rounded-xl h-[45px] pl-2 w-full"
+                            value={arrayData2[index]?.location}
+                            onChangeText={(e) =>
+                              handleFormInput2(index, "location", e)
+                            }
+                          />
+                        </View>
+                        <View className="w-full px-1 mb-2">
+                          <Text className="text-black font-semibold mb-1">
+                            Description
+                          </Text>
+                          <TextInput
+                            className="bg-gray-100 rounded-xl h-[45px] pl-2 w-full"
+                            value={arrayData2[index]?.description}
+                            onChangeText={(e) =>
+                              handleFormInput2(index, "description", e)
+                            }
+                          />
+                        </View>
+                        <View className="w-full px-1 mb-2">
+                          <Text className="text-black font-semibold mb-1">
+                            Mapping Tag No
+                          </Text>
+                          <TextInput
+                            className="bg-gray-100 rounded-xl h-[45px] pl-2 w-full"
+                            value={arrayData2[index]?.mapping_no}
+                            onChangeText={(e) =>
+                              handleFormInput2(index, "mapping_no", e)
+                            }
+                          />
+                        </View>
+                        <View className="w-full px-1 mb-2">
+                          <Text className="text-black font-semibold mb-1">
+                            Remarks
+                          </Text>
+                          <TextInput
+                            className="bg-gray-100 rounded-xl h-[45px] pl-2 w-full"
+                            value={arrayData2[index]?.remarks}
+                            onChangeText={(e) =>
+                              handleFormInput2(index, "remarks", e)
+                            }
+                          />
+                        </View>
+                      </View>
+                    );
+                  })}
+                </ScrollView>
+                <View className="w-full bg-blue-600 rounded-md px-2 my-2">
+                  <Text className="text-white text-center font-bold text-[20px] my-2">
+                    Uploaded Images ({arraySampleImages3.length})
+                  </Text>
+                </View>
+                <FlatList
+                  ref={templateFlatlistRef3}
+                  onScroll={handleTemplateFlatlistRef3}
+                  scrollEventThrottle={16}
+                  data={arraySampleImages3}
+                  renderItem={({ item, index }) => (
+                    <RenderArraySampleImages3 item={item} index={index} />
+                  )}
+                  // numColumns={3}
+                  horizontal
+                  ListEmptyComponent={() => (
+                    <Text className="text-black text-[16px] m-2">
+                      You have not upload any picture from gallery.
+                    </Text>
+                  )}
+                  style={{ height: width * 0.65 }}
+                />
+                <ScrollView
+                  ref={templateScrollviewRef3}
+                  // onScroll={handleTemplateScrollviewRef2}
+                  scrollEventThrottle={16}
+                  horizontal
+                  className="flex-row"
+                  contentContainerStyle={{
+                    justifyContent: "flex-start",
+                    alignItems: "center",
+                  }}
+                >
+                  {arrayData3.map((item, index) => {
+                    return (
+                      <View className="mr-2" style={{ width: width * 0.5 }}>
+                        <Text className="mb-2">
+                          {JSON.stringify(arrayData3[index])}
+                        </Text>
+                        <View className="w-full px-1 mb-2">
+                          <Text className="text-black font-semibold mb-1">
+                            Location
+                          </Text>
+                          <TextInput
+                            className="bg-gray-100 rounded-xl h-[45px] pl-2 w-full"
+                            value={arrayData3[index]?.location}
+                            onChangeText={(e) =>
+                              handleFormInput3(index, "location", e)
+                            }
+                          />
+                        </View>
+                        <View className="w-full px-1 mb-2">
+                          <Text className="text-black font-semibold mb-1">
+                            Description
+                          </Text>
+                          <TextInput
+                            className="bg-gray-100 rounded-xl h-[45px] pl-2 w-full"
+                            value={arrayData3[index]?.description}
+                            onChangeText={(e) =>
+                              handleFormInput3(index, "description", e)
+                            }
+                          />
+                        </View>
+                        <View className="w-full px-1 mb-2">
+                          <Text className="text-black font-semibold mb-1">
+                            Mapping Tag No
+                          </Text>
+                          <TextInput
+                            className="bg-gray-100 rounded-xl h-[45px] pl-2 w-full"
+                            value={arrayData3[index]?.mapping_no}
+                            onChangeText={(e) =>
+                              handleFormInput3(index, "mapping_no", e)
+                            }
+                          />
+                        </View>
+                        <View className="w-full px-1 mb-2">
+                          <Text className="text-black font-semibold mb-1">
+                            Remarks
+                          </Text>
+                          <TextInput
+                            className="bg-gray-100 rounded-xl h-[45px] pl-2 w-full"
+                            value={arrayData3[index]?.remarks}
+                            onChangeText={(e) =>
+                              handleFormInput3(index, "remarks", e)
+                            }
+                          />
+                        </View>
+                      </View>
+                    );
+                  })}
+                </ScrollView>
               </View>
             ) : null}
             {/* <TouchableOpacity

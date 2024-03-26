@@ -27,9 +27,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { FlatList } from "react-native-gesture-handler";
 
 import { Camera, CameraType, CameraReadyListener } from "expo-camera";
+import * as ImagePicker from "expo-image-picker";
 import { faCamera } from "@fortawesome/free-solid-svg-icons";
 
-export default function Draw({ saveimage, takeImage }) {
+export default function Draw({ saveimage, takeImage, galleryImage }) {
   const { width, height } = useWindowDimensions();
 
   const [camera, setCamera] = useState(null);
@@ -178,6 +179,32 @@ export default function Draw({ saveimage, takeImage }) {
     }
   }, [capturedImage]);
 
+  const [galleryImages, setGalleryImages] = useState([]);
+
+  const pickImage = async () => {
+    // No permissions request is necessary for launching the image library
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsMultipleSelection: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    console.log("pickimage result", result);
+
+    if (!result.canceled) {
+      galleryImage && galleryImage(result.assets);
+      // setGalleryImages(result.assets);
+      // console.log(JSON.stringify(result));
+    }
+  };
+
+  // useEffect(() => {
+  //   if (galleryImages) {
+  //     galleryImage && galleryImage(galleryImages);
+  //   }
+  // }, [galleryImages]);
+
   return (
     <View style={style.container} className="bg-gray-300">
       <View className="h-[10px]" />
@@ -192,7 +219,7 @@ export default function Draw({ saveimage, takeImage }) {
           "
           >
             <FontAwesomeIcon
-              icon={"plus"}
+              icon={"paintbrush"}
               color={"white"}
               size={20}
               style={{ marginRight: 8 }}
@@ -206,11 +233,30 @@ export default function Draw({ saveimage, takeImage }) {
               setEditorMode(4);
             }}
             className="flex-row justify-center items-center
-          bg-blue-600 px-4 py-3 rounded-full mb-3
+          bg-emerald-600 px-4 py-3 rounded-full mb-3
           "
           >
             <FontAwesomeIcon
-              icon={"plus"}
+              icon={"fa-camera"}
+              color={"white"}
+              size={20}
+              style={{ marginRight: 8 }}
+            />
+            <Text className="text-white text-[20px]">
+              Take Picture using Camera
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              // setEditorMode(4);
+              pickImage();
+            }}
+            className="flex-row justify-center items-center
+          bg-red-600 px-4 py-3 rounded-full mb-3
+          "
+          >
+            <FontAwesomeIcon
+              icon={"fa-images"}
               color={"white"}
               size={20}
               style={{ marginRight: 8 }}
