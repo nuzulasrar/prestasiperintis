@@ -10,6 +10,7 @@ import {
   Modal,
   useWindowDimensions,
   Keyboard,
+  Alert,
 } from "react-native";
 import React, { useCallback, useState, useEffect, useRef } from "react";
 
@@ -125,15 +126,9 @@ export default function Page() {
     plusActiveIndex(activeIndex);
   };
   const receivedImage3 = (image) => {
-    setArraySampleImages3(image);
-    plusActiveIndex(activeIndex);
-  };
-
-  useEffect(() => {
-    let thisarray = [...arraySampleImages3];
-    let thisarraydata = [];
-
-    thisarray.forEach((element) => {
+    setArraySampleImages3([...arraySampleImages3, ...image]);
+    let thisarraydata = [...arrayData3];
+    image.forEach((element) => {
       thisarraydata.push({
         location: "",
         description: "",
@@ -141,9 +136,25 @@ export default function Page() {
         remarks: "",
       });
     });
-
     setArrayData3(thisarraydata);
-  }, [arraySampleImages3]);
+    plusActiveIndex(activeIndex);
+  };
+
+  // useEffect(() => {
+  //   let thisarray = [...arraySampleImages3];
+  //   let thisarraydata = [];
+
+  //   thisarray.forEach((element) => {
+  //     thisarraydata.push({
+  //       location: "",
+  //       description: "",
+  //       mapping_no: "",
+  //       remarks: "",
+  //     });
+  //   });
+
+  //   setArrayData3(thisarraydata);
+  // }, [arraySampleImages3]);
 
   const flatListRef = useRef(null);
   const scrollViewRef = useRef(null);
@@ -859,11 +870,19 @@ export default function Page() {
       .then((json) => {
         console.log("json", json);
 
-        if (json.success) {
+        if (json.success === "success") {
+          setConfirmModal(false);
           setModalVisible(false);
+          // console.log("nice");
         }
       })
       .catch((error) => console.log("ERROR", error));
+  };
+
+  const [confirmModal, setConfirmModal] = useState(false);
+
+  const confirmSubmit = () => {
+    setConfirmModal(true);
   };
 
   const ViewFormRender = ({ item, index }) => {
@@ -872,7 +891,10 @@ export default function Page() {
     // let eachform2 = JSON.parse(eachform);
     // let eachform3 = JSON.parse(eachform2[1].structure)
     return (
-      <View className="w-full bg-gray-200 mb-2 rounded-md p-2">
+      <View
+        className="w-full bg-gray-200 mb-2 rounded-md p-2"
+        style={{ marginBottom: index === viewFormList.length - 1 ? 50 : 8 }}
+      >
         {/* <Text selectable className="text-black"> */}
         {/* {JSON.stringify(eachform2)} */}
         {/* {eachcomponent.map((item2, index2) => {
@@ -1120,9 +1142,9 @@ export default function Page() {
         </Text>
       </View>
       <Text className="ml-3 mb-3 text-black text-[20px] font-bold">
-        Form List
+        Form List ({viewFormList.length})
       </Text>
-      <View className="bg-white w-[95%] self-center rounded-md p-3">
+      <View className="flex-1 bg-white w-[95%] self-center rounded-md p-3">
         {/* {formList.bridgelist.length < 1 ? (
           <Text className="text-black font-semibold text-[20px]">
             No Form Created Yet!
@@ -1764,7 +1786,8 @@ export default function Page() {
             ) : (
               <TouchableOpacity
                 onPress={() => {
-                  submitForm();
+                  // submitForm();
+                  confirmSubmit();
                 }}
                 className="bg-green-600 self-center flex-row justify-center items-center w-4/12 mb-4 py-2 mx-2 rounded-full"
               >
@@ -1878,6 +1901,38 @@ export default function Page() {
                 }}
               >
                 <FontAwesomeIcon icon={"chevron-down"} size={25} />
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
+      <Modal visible={confirmModal} transparent animationType="slide">
+        <View
+          className="flex-1 justify-center items-center"
+          style={{ backgroundColor: "rgba(0,0,0,0.5)" }}
+        >
+          <View
+            className="bg-white rounded-xl p-3 "
+            style={{ width: width - 100 }}
+          >
+            <Text className="text-black text-center text-[2.5vh] mb-6">
+              Confirm to Submit Form?
+            </Text>
+            <View className="w-full flex-row justify-center">
+              <TouchableOpacity
+                onPress={() => submitForm()}
+                className="bg-emerald-500 px-6 py-3 rounded-xl"
+              >
+                <Text className="text-white font-semibold text-[2vh]">Yes</Text>
+              </TouchableOpacity>
+              <View className="w-[25px]" />
+              <TouchableOpacity
+                onPress={() => setConfirmModal(false)}
+                className="bg-red-500 px-6 py-3 rounded-xl"
+              >
+                <Text className="text-white font-semibold text-[2vh]">
+                  Cancel
+                </Text>
               </TouchableOpacity>
             </View>
           </View>
