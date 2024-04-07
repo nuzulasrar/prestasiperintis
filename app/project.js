@@ -830,7 +830,7 @@ export default function Page() {
     }
   };
 
-  const submitForm = () => {
+  const submitForm = (draw, image, photo) => {
     // console.log("form: ", formList.bridgelist);
     var fd = new FormData();
 
@@ -839,6 +839,14 @@ export default function Page() {
 
     fd.append("project_id", thisdata.id);
     fd.append("project_type", thisdata.project_type);
+
+    fd.append("draw", draw);
+    fd.append("image", image);
+    fd.append("photo", photo);
+
+    fd.append("images_detail1", JSON.stringify(arrayData));
+    fd.append("images_detail2", JSON.stringify(arrayData2));
+    fd.append("images_detail3", JSON.stringify(arrayData3));
 
     fetch(API_URL + "/api/submitform", {
       method: "POST",
@@ -854,7 +862,7 @@ export default function Page() {
         if (json.success === "success") {
           setConfirmModal(false);
           setModalVisible(false);
-          // console.log("nice");
+          thisApiCall();
         }
       })
       .catch((error) => console.log("ERROR", error));
@@ -1084,6 +1092,39 @@ export default function Page() {
     const offsetX = event.nativeEvent.contentOffset.x;
     if (templateScrollviewRef3.current) {
       templateScrollviewRef3.current.scrollTo({ x: offsetX, animated: false });
+    }
+  };
+
+  const handleUpload = async () => {
+    const uploadresponse = await uploadImage(
+      arraySampleImages,
+      arraySampleImages2,
+      arraySampleImages3
+    );
+
+    // alert(uploadresponse.message);
+
+    if (uploadresponse.success) {
+      console.log(uploadresponse);
+
+      const arrayOfStrings = uploadresponse.allfilename.split(", ");
+
+      // Separate the strings into three arrays based on whether they contain "draw", "image", or "photo"
+      const drawArray = arrayOfStrings.filter((str) => str.includes("draw"));
+      const imageArray = arrayOfStrings.filter((str) => str.includes("image"));
+      const photoArray = arrayOfStrings.filter((str) => str.includes("photo"));
+
+      const draw = JSON.stringify(drawArray);
+      const image = JSON.stringify(imageArray);
+      const photo = JSON.stringify(photoArray);
+
+      // const here = JSON.parse(draw);
+
+      // console.log(here[0]);
+
+      submitForm(draw, image, photo);
+    } else {
+      alert("fail");
     }
   };
 
@@ -1902,13 +1943,7 @@ export default function Page() {
             <View className="w-full flex-row justify-center">
               <TouchableOpacity
                 // onPress={() => submitForm()}
-                onPress={() =>
-                  uploadImage(
-                    arraySampleImages,
-                    arraySampleImages2,
-                    arraySampleImages3
-                  )
-                }
+                onPress={() => handleUpload()}
                 className="bg-emerald-500 px-6 py-3 rounded-xl"
               >
                 <Text className="text-white font-semibold text-[2vh]">Yes</Text>
