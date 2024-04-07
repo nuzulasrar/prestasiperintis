@@ -30,13 +30,13 @@ import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { getBridgeList } from "../fetches/getBridgeList";
 
 import { getTollList } from "../fetches/getTollList";
+import { uploadImage } from "../fetches/postUploadData";
 
 import { getSubMiitedFormList } from "../fetches/getSubmittedFormList";
 
 import Draw from "./draw";
 
 export default function Page() {
-  console.log("render");
   const { width, height } = useWindowDimensions();
 
   const [image, setImage] = useState(null);
@@ -63,7 +63,7 @@ export default function Page() {
 
   //guna utk change component
   // const [activeIndex, setActiveIndex] = useState(-1);
-  const [activeIndex, setActiveIndex] = useState(9);
+  const [activeIndex, setActiveIndex] = useState(11);
 
   //disable button state
   const [disableButton, setDisableButton] = useState(false);
@@ -98,7 +98,7 @@ export default function Page() {
   const receivedImage = (image) => {
     let thisarray = [...arraySampleImages];
     let thisarraydata = [...arrayData];
-    thisarray.push(image);
+    thisarray.push({ data: image, type: "draw" });
     thisarraydata.push({
       location: "",
       description: "",
@@ -111,7 +111,7 @@ export default function Page() {
   };
   const receivedImage2 = (image) => {
     let thisarray = [...arraySampleImages2];
-    thisarray.push(image);
+    thisarray.push({ data: image, type: "image" });
 
     let thisarraydata = [...arrayData2];
     thisarraydata.push({
@@ -126,7 +126,13 @@ export default function Page() {
     plusActiveIndex(activeIndex);
   };
   const receivedImage3 = (image) => {
-    setArraySampleImages3([...arraySampleImages3, ...image]);
+    let thisimage = [];
+    image.forEach((item) => {
+      thisimage.push({ data: item.uri, type: "photo" });
+    });
+
+    // console.log(thisimage);
+    setArraySampleImages3([...arraySampleImages3, ...thisimage]);
     let thisarraydata = [...arrayData3];
     image.forEach((element) => {
       thisarraydata.push({
@@ -824,31 +830,6 @@ export default function Page() {
     }
   };
 
-  const uploadImage = async () => {
-    var fd = new FormData();
-
-    image.forEach((item, index) => {
-      fd.append(`files${index}`, {
-        uri: item.uri,
-        name: `${index}image.jpg`,
-        type: "image/jpeg",
-      });
-    });
-
-    fetch(API_URL + "/api/upload", {
-      method: "post",
-      body: fd,
-      // headers: {
-      //     'Content-Type': 'multipart/form-data; ',
-      // },
-    })
-      .then((res) => res.json())
-      .then((json) => {
-        alert(JSON.stringify(json));
-      })
-      .catch((error) => console.log(error.message));
-  };
-
   const submitForm = () => {
     // console.log("form: ", formList.bridgelist);
     var fd = new FormData();
@@ -957,7 +938,7 @@ export default function Page() {
           }}
         >
           <RNImage
-            source={{ uri: item }}
+            source={{ uri: item.data }}
             style={{
               width: width * 0.5,
               height: width * 0.5,
@@ -1001,7 +982,7 @@ export default function Page() {
           }}
         >
           <RNImage
-            source={{ uri: item }}
+            source={{ uri: item.data }}
             style={{
               width: width * 0.5,
               height: width * 0.5,
@@ -1045,7 +1026,7 @@ export default function Page() {
           }}
         >
           <RNImage
-            source={{ uri: item.uri }}
+            source={{ uri: item.data }}
             style={{
               width: width * 0.5,
               height: width * 0.5,
@@ -1920,7 +1901,14 @@ export default function Page() {
             </Text>
             <View className="w-full flex-row justify-center">
               <TouchableOpacity
-                onPress={() => submitForm()}
+                // onPress={() => submitForm()}
+                onPress={() =>
+                  uploadImage(
+                    arraySampleImages,
+                    arraySampleImages2,
+                    arraySampleImages3
+                  )
+                }
                 className="bg-emerald-500 px-6 py-3 rounded-xl"
               >
                 <Text className="text-white font-semibold text-[2vh]">Yes</Text>

@@ -42,6 +42,7 @@ export default function Page() {
   };
 
   const uploadImage = async () => {
+    console.log(image);
     var fd = new FormData();
 
     image.forEach((item, index) => {
