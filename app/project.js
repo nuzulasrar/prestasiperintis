@@ -1942,8 +1942,8 @@ export default function Page() {
             </Text>
             <View className="w-full flex-row justify-center">
               <TouchableOpacity
-                // onPress={() => submitForm()}
                 onPress={() => handleUpload()}
+                // onPress={() => console.log(formList.bridgelist)}
                 className="bg-emerald-500 px-6 py-3 rounded-xl"
               >
                 <Text className="text-white font-semibold text-[2vh]">Yes</Text>
