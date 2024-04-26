@@ -879,10 +879,30 @@ export default function Page() {
     let eachform = JSON.parse(item.formdata);
     // let eachform2 = JSON.parse(eachform);
     // let eachform3 = JSON.parse(eachform2[1].structure)
+    // console.log("eachform", eachform);
+
+    let thisarray = [];
+    eachform.forEach((element) => {
+      thisarray.push(JSON.parse(element.structure).component);
+    });
+
+    console.log("thisarray", JSON.stringify(thisarray));
+
     return (
-      <View
+      <TouchableOpacity
         className="w-full bg-gray-200 mb-2 rounded-md p-2"
         style={{ marginBottom: index === viewFormList.length - 1 ? 50 : 8 }}
+        onPress={() =>
+          router.push({
+            pathname: "/formdetail",
+            params: {
+              // form: JSON.stringify(JSON.parse(eachform[0].structure).component),
+              form: encodeURI(
+                JSON.stringify(thisarray).replace(/%/g, " percent ")
+              ),
+            },
+          })
+        }
       >
         {/* <Text selectable className="text-black"> */}
         {/* {JSON.stringify(eachform2)} */}
@@ -896,12 +916,13 @@ export default function Page() {
           );
         })} */}
         {/* </Text> */}
+        {/* <Text>{eachform}</Text> */}
         <Text>{item.id}</Text>
         <Text>{item.project_type}</Text>
         <Text>{item.createdAt}</Text>
         <Text>{item.updatedAt}</Text>
         <View className="h-[20px]" />
-      </View>
+      </TouchableOpacity>
     );
   };
 
