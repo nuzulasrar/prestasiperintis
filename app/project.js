@@ -262,79 +262,22 @@ export default function Page() {
       thisStructure["component"].material[material].type_of_damages[
         type_of_damages
       ].active_details = whichDetail;
-      //set rating of damage
-      thisStructure["component"].material[material].type_of_damages[
-        type_of_damages
-      ].severity_of_damage = material_rating + 1;
 
-      //set tick for the material
-      thisStructure["component"].material[material].type_of_damages[
-        type_of_damages
-      ].tick = 1;
-
-      //set percentage affected
-      if (whichDetail == 1) {
-        thisStructure["component"].material[material].type_of_damages[
-          type_of_damages
-        ].percentage_affected =
-          thisStructure["component"].material[material].type_of_damages[
-            type_of_damages
-          ].severity_of_damage_list[material_rating].details;
-      } else if (whichDetail == 2) {
-        thisStructure["component"].material[material].type_of_damages[
-          type_of_damages
-        ].percentage_affected =
-          thisStructure["component"].material[material].type_of_damages[
-            type_of_damages
-          ].severity_of_damage_list[material_rating].details_2;
-      } else if (whichDetail == 3) {
-        thisStructure["component"].material[material].type_of_damages[
-          type_of_damages
-        ].percentage_affected =
-          thisStructure["component"].material[material].type_of_damages[
-            type_of_damages
-          ].severity_of_damage_list[material_rating].details_3;
-      }
-    }
-    // pernah set
-    else {
-      //sama
+      //kalau confirm 4
       if (
-        String(
-          thisStructure["component"].material[material].type_of_damages[
-            type_of_damages
-          ].severity_of_damage
-        ) == String(Number(material_rating + 1))
-      ) {
-        //set active details
         thisStructure["component"].material[material].type_of_damages[
           type_of_damages
-        ].active_details = 0;
+        ].remarks.includes("rating = 4")
+      ) {
         //set rating of damage
         thisStructure["component"].material[material].type_of_damages[
           type_of_damages
-        ].severity_of_damage = 0;
+        ].severity_of_damage = 4;
 
         //set tick for the material
         thisStructure["component"].material[material].type_of_damages[
           type_of_damages
-        ].tick = 0;
-
-        //set percentage affected
-        thisStructure["component"].material[material].type_of_damages[
-          type_of_damages
-        ].percentage_affected = "";
-      }
-      //x sama
-      else {
-        //set active details
-        thisStructure["component"].material[material].type_of_damages[
-          type_of_damages
-        ].active_details = whichDetail;
-        //set rating of damage
-        thisStructure["component"].material[material].type_of_damages[
-          type_of_damages
-        ].severity_of_damage = material_rating + 1;
+        ].tick = 1;
 
         //set percentage affected
         if (whichDetail == 1) {
@@ -358,6 +301,170 @@ export default function Page() {
             thisStructure["component"].material[material].type_of_damages[
               type_of_damages
             ].severity_of_damage_list[material_rating].details_3;
+        }
+      }
+      //kalau confirm 3
+      else if (
+        thisStructure["component"].material[material].type_of_damages[
+          type_of_damages
+        ].remarks.includes("rating = 3")
+      ) {
+        //set rating of damage
+        thisStructure["component"].material[material].type_of_damages[
+          type_of_damages
+        ].severity_of_damage = 3;
+
+        //set tick for the material
+        thisStructure["component"].material[material].type_of_damages[
+          type_of_damages
+        ].tick = 1;
+
+        //set percentage affected
+        if (whichDetail == 1) {
+          thisStructure["component"].material[material].type_of_damages[
+            type_of_damages
+          ].percentage_affected =
+            thisStructure["component"].material[material].type_of_damages[
+              type_of_damages
+            ].severity_of_damage_list[material_rating].details;
+        } else if (whichDetail == 2) {
+          thisStructure["component"].material[material].type_of_damages[
+            type_of_damages
+          ].percentage_affected =
+            thisStructure["component"].material[material].type_of_damages[
+              type_of_damages
+            ].severity_of_damage_list[material_rating].details_2;
+        } else if (whichDetail == 3) {
+          thisStructure["component"].material[material].type_of_damages[
+            type_of_damages
+          ].percentage_affected =
+            thisStructure["component"].material[material].type_of_damages[
+              type_of_damages
+            ].severity_of_damage_list[material_rating].details_3;
+        }
+      } else {
+        //set rating of damage
+        thisStructure["component"].material[material].type_of_damages[
+          type_of_damages
+        ].severity_of_damage = material_rating + 1;
+
+        //set tick for the material
+        thisStructure["component"].material[material].type_of_damages[
+          type_of_damages
+        ].tick = 1;
+
+        //set percentage affected
+        if (whichDetail == 1) {
+          thisStructure["component"].material[material].type_of_damages[
+            type_of_damages
+          ].percentage_affected =
+            thisStructure["component"].material[material].type_of_damages[
+              type_of_damages
+            ].severity_of_damage_list[material_rating].details;
+        } else if (whichDetail == 2) {
+          thisStructure["component"].material[material].type_of_damages[
+            type_of_damages
+          ].percentage_affected =
+            thisStructure["component"].material[material].type_of_damages[
+              type_of_damages
+            ].severity_of_damage_list[material_rating].details_2;
+        } else if (whichDetail == 3) {
+          thisStructure["component"].material[material].type_of_damages[
+            type_of_damages
+          ].percentage_affected =
+            thisStructure["component"].material[material].type_of_damages[
+              type_of_damages
+            ].severity_of_damage_list[material_rating].details_3;
+        }
+      }
+    }
+    // pernah set
+    else {
+      if (
+        thisStructure["component"].material[material].type_of_damages[
+          type_of_damages
+        ].remarks.includes("rating = 4")
+      ) {
+        //set active details
+        thisStructure["component"].material[material].type_of_damages[
+          type_of_damages
+        ].active_details = 0;
+        //set rating of damage
+        thisStructure["component"].material[material].type_of_damages[
+          type_of_damages
+        ].severity_of_damage = 0;
+
+        //set tick for the material
+        thisStructure["component"].material[material].type_of_damages[
+          type_of_damages
+        ].tick = 0;
+
+        //set percentage affected
+        thisStructure["component"].material[material].type_of_damages[
+          type_of_damages
+        ].percentage_affected = "";
+      } else {
+        //sama
+        if (
+          String(
+            thisStructure["component"].material[material].type_of_damages[
+              type_of_damages
+            ].severity_of_damage
+          ) == String(Number(material_rating + 1))
+        ) {
+          //set active details
+          thisStructure["component"].material[material].type_of_damages[
+            type_of_damages
+          ].active_details = 0;
+          //set rating of damage
+          thisStructure["component"].material[material].type_of_damages[
+            type_of_damages
+          ].severity_of_damage = 0;
+
+          //set tick for the material
+          thisStructure["component"].material[material].type_of_damages[
+            type_of_damages
+          ].tick = 0;
+
+          //set percentage affected
+          thisStructure["component"].material[material].type_of_damages[
+            type_of_damages
+          ].percentage_affected = "";
+        }
+        //x sama
+        else {
+          //set active details
+          thisStructure["component"].material[material].type_of_damages[
+            type_of_damages
+          ].active_details = whichDetail;
+          //set rating of damage
+          thisStructure["component"].material[material].type_of_damages[
+            type_of_damages
+          ].severity_of_damage = material_rating + 1;
+
+          //set percentage affected
+          if (whichDetail == 1) {
+            thisStructure["component"].material[material].type_of_damages[
+              type_of_damages
+            ].percentage_affected =
+              thisStructure["component"].material[material].type_of_damages[
+                type_of_damages
+              ].severity_of_damage_list[material_rating].details;
+          } else if (whichDetail == 2) {
+            thisStructure["component"].material[material].type_of_damages[
+              type_of_damages
+            ].percentage_affected =
+              thisStructure["component"].material[material].type_of_damages[
+                type_of_damages
+              ].severity_of_damage_list[material_rating].details_2;
+          } else if (whichDetail == 3) {
+            thisStructure["component"].material[material].type_of_damages[
+              type_of_damages
+            ].percentage_affected =
+              thisStructure["component"].material[material].type_of_damages[
+                type_of_damages
+              ].severity_of_damage_list[material_rating].details_3;
+          }
         }
       }
     }
@@ -794,7 +901,7 @@ export default function Page() {
             style={{ marginRight: 8 }}
           />
           <Text className="text-black font-bold text-[20px]">
-            {thisstructure.component.component_details.name}
+            {thisstructure.component.component_details.name} {item.position}
           </Text>
         </View>
         {materialNames.map((thisItem, thisIndex) => {
@@ -886,7 +993,7 @@ export default function Page() {
       thisarray.push(JSON.parse(element.structure).component);
     });
 
-    console.log("thisarray", JSON.stringify(thisarray));
+    // console.log("thisarray", JSON.stringify(thisarray));
 
     return (
       <TouchableOpacity
