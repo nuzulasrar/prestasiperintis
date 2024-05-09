@@ -149,6 +149,21 @@ export default function Draw({ saveimage, takeImage, galleryImage }) {
     require("../assets/ATP2020/TANJUNG_MALIM-1.png"),
     require("../assets/ATP2020/YONG_PENG_UTARA-1.png"),
   ];
+  const BRIDGE_TYPICAL_DRAWING = [
+    require("../assets/BRIDGE_TYPICAL_DRAWING/1.pdf"),
+    require("../assets/BRIDGE_TYPICAL_DRAWING/2.pdf"),
+    require("../assets/BRIDGE_TYPICAL_DRAWING/3.pdf"),
+    require("../assets/BRIDGE_TYPICAL_DRAWING/4.pdf"),
+    require("../assets/BRIDGE_TYPICAL_DRAWING/5.pdf"),
+    require("../assets/BRIDGE_TYPICAL_DRAWING/6.pdf"),
+    require("../assets/BRIDGE_TYPICAL_DRAWING/7.pdf"),
+    require("../assets/BRIDGE_TYPICAL_DRAWING/8.pdf"),
+    require("../assets/BRIDGE_TYPICAL_DRAWING/9.pdf"),
+    require("../assets/BRIDGE_TYPICAL_DRAWING/10.pdf"),
+    require("../assets/BRIDGE_TYPICAL_DRAWING/11.pdf"),
+    require("../assets/BRIDGE_TYPICAL_DRAWING/12.pdf"),
+    require("../assets/BRIDGE_TYPICAL_DRAWING/13.pdf"),
+  ];
 
   function Gallery1({ item, index }) {
     return (

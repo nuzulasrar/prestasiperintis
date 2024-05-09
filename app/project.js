@@ -63,7 +63,7 @@ export default function Page() {
 
   //guna utk change component
   // const [activeIndex, setActiveIndex] = useState(-1);
-  const [activeIndex, setActiveIndex] = useState(11);
+  const [activeIndex, setActiveIndex] = useState(-1);
 
   //disable button state
   const [disableButton, setDisableButton] = useState(false);
@@ -214,7 +214,7 @@ export default function Page() {
     console.log("activeIndex : ", activeIndex);
   }, [activeIndex]);
 
-  const captureFormInfo = useCallback((name, value) => {
+  const captureFormInfo = (name, value) => {
     // if (debounceTimer) {
     //   clearTimeout(debounceTimer);
     // }
@@ -223,7 +223,17 @@ export default function Page() {
     setFormInfo({ ...formInfo, [name]: value });
     //   }, 500) // Adjust the delay as needed
     // );
-  }, []);
+  };
+  // const captureFormInfo = useCallback((name, value) => {
+  //   // if (debounceTimer) {
+  //   //   clearTimeout(debounceTimer);
+  //   // }
+  //   // setDebounceTimer(
+  //   //   setTimeout(() => {
+  //   setFormInfo({ ...formInfo, [name]: value });
+  //   //   }, 500) // Adjust the delay as needed
+  //   // );
+  // }, []);
 
   useEffect(() => {
     // Clean up any existing debounce timer when the component unmounts
@@ -1005,8 +1015,9 @@ export default function Page() {
             params: {
               // form: JSON.stringify(JSON.parse(eachform[0].structure).component),
               form: encodeURI(
-                JSON.stringify(thisarray).replace(/%/g, " percent ")
+                JSON.stringify(eachform).replace(/%/g, " percent ")
               ),
+              id: String(item.id),
             },
           })
         }
