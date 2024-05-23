@@ -948,7 +948,7 @@ export default function Page() {
   };
 
   const submitForm = (draw, image, photo) => {
-    // console.log("form: ", formList.bridgelist);
+    console.log("form: ", formList.bridgelist);
     var fd = new FormData();
 
     fd.append("name", JSON.stringify(formList.bridgelist));
@@ -2081,7 +2081,20 @@ export default function Page() {
             </Text>
             <View className="w-full flex-row justify-center">
               <TouchableOpacity
-                onPress={() => handleUpload()}
+                onPress={() => {
+                  if (
+                    arraySampleImages?.length > 0 ||
+                    arraySampleImages2?.length > 0 ||
+                    arraySampleImages3?.length > 0
+                  ) {
+                    handleUpload();
+                  } else {
+                    // console.log("sadasd");
+                    // let empty = [];
+                    const empty = JSON.stringify([]);
+                    submitForm(empty, empty, empty);
+                  }
+                }}
                 // onPress={() => console.log(formList.bridgelist)}
                 className="bg-emerald-500 px-6 py-3 rounded-xl"
               >

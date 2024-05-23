@@ -30,7 +30,12 @@ import { Camera, CameraType, CameraReadyListener } from "expo-camera";
 import * as ImagePicker from "expo-image-picker";
 import { faCamera } from "@fortawesome/free-solid-svg-icons";
 
-export default function Draw({ saveimage, takeImage, galleryImage }) {
+export default function Draw({
+  saveimage,
+  takeImage,
+  galleryImage,
+  projectType,
+}) {
   const { width, height } = useWindowDimensions();
 
   const [camera, setCamera] = useState(null);
@@ -150,19 +155,11 @@ export default function Draw({ saveimage, takeImage, galleryImage }) {
     require("../assets/ATP2020/YONG_PENG_UTARA-1.png"),
   ];
   const BRIDGE_TYPICAL_DRAWING = [
-    require("../assets/BRIDGE_TYPICAL_DRAWING/1.pdf"),
-    require("../assets/BRIDGE_TYPICAL_DRAWING/2.pdf"),
-    require("../assets/BRIDGE_TYPICAL_DRAWING/3.pdf"),
-    require("../assets/BRIDGE_TYPICAL_DRAWING/4.pdf"),
-    require("../assets/BRIDGE_TYPICAL_DRAWING/5.pdf"),
-    require("../assets/BRIDGE_TYPICAL_DRAWING/6.pdf"),
-    require("../assets/BRIDGE_TYPICAL_DRAWING/7.pdf"),
-    require("../assets/BRIDGE_TYPICAL_DRAWING/8.pdf"),
-    require("../assets/BRIDGE_TYPICAL_DRAWING/9.pdf"),
-    require("../assets/BRIDGE_TYPICAL_DRAWING/10.pdf"),
-    require("../assets/BRIDGE_TYPICAL_DRAWING/11.pdf"),
-    require("../assets/BRIDGE_TYPICAL_DRAWING/12.pdf"),
-    require("../assets/BRIDGE_TYPICAL_DRAWING/13.pdf"),
+    require("../assets/BRIDGE_TYPICAL_DRAWING/1_ABUTMENT1.jpg"),
+    require("../assets/BRIDGE_TYPICAL_DRAWING/2_TYPICAL_MID_SECTION.jpg"),
+    require("../assets/BRIDGE_TYPICAL_DRAWING/3_ABUTMENT2.jpg"),
+    require("../assets/BRIDGE_TYPICAL_DRAWING/4_TYPICAL_PLAN_VIEW.jpg"),
+    require("../assets/BRIDGE_TYPICAL_DRAWING/5_PLAIN_LAYOUT.jpg"),
   ];
 
   function Gallery1({ item, index }) {
@@ -186,7 +183,11 @@ export default function Draw({ saveimage, takeImage, galleryImage }) {
 
   const [capturedImage, setCapturedImage] = useState();
 
-  const image = useImage(ATP2020[selectedImage]);
+  const image = useImage(
+    projectType === "Toll"
+      ? ATP2020[selectedImage]
+      : BRIDGE_TYPICAL_DRAWING[selectedImage]
+  );
 
   useEffect(() => {
     if (capturedImage) {
@@ -297,7 +298,7 @@ export default function Draw({ saveimage, takeImage, galleryImage }) {
           </View>
           <FlatList
             numColumns={2}
-            data={ATP2020}
+            data={projectType === "Toll" ? ATP2020 : BRIDGE_TYPICAL_DRAWING}
             renderItem={({ item, index }) => (
               <Gallery1 item={item} index={index} />
             )}
