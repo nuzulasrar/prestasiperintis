@@ -72,6 +72,7 @@ export default function Draw({
     );
   }
 
+  const [history, setHistory] = useState([]);
   const [paths, setPaths] = useState([]);
   const [color, setColor] = useState(Colors[0]);
 
@@ -82,8 +83,16 @@ export default function Draw({
 
   const [strokeWidth, setStrokeWidth] = useState(strokes[0]);
 
+  const undo = () => {
+    if (history.length > 0) {
+      setPaths(history[history.length - 1]); // Revert to the last saved paths
+      setHistory(history.slice(0, history.length - 1)); // Remove the last saved paths from history
+    }
+  };
+
   const onDrawingStart = useCallback(
     (touchInfo) => {
+      setHistory([...history, paths]);
       setPaths((currentPaths) => {
         const { x, y } = touchInfo;
         const newPath = Skia.Path.Make();
@@ -97,8 +106,9 @@ export default function Draw({
           },
         ];
       });
+      // console.log("start");
     },
-    [color, strokeWidth]
+    [color, strokeWidth, paths, history]
   );
 
   const onDrawingActive = useCallback((touchInfo) => {
@@ -112,6 +122,7 @@ export default function Draw({
       currentPath.path.quadTo(lastPoint.x, lastPoint.y, xMid, yMid);
       return [...currentPaths.slice(0, currentPaths.length - 1), currentPath];
     });
+    // console.log("active");
   }, []);
 
   const touchHandler = useTouchHandler(
@@ -335,12 +346,14 @@ export default function Draw({
               strokeWidth={strokeWidth}
               setColor={setColor}
               setStrokeWidth={setStrokeWidth}
+              undo={undo}
             />
             <View className="flex-row">
               <TouchableOpacity
                 className="self-center flex-row justify-center items-center rounded-l-lg bg-yellow-400 px-2 py-2"
                 onPress={() => {
-                  setPaths([]);
+                  // setPaths([]);
+                  setPaths(oldPaths);
                 }}
               >
                 <FontAwesomeIcon icon="arrows-rotate" size={14} color="black" />
@@ -486,9 +499,9 @@ export default function Draw({
 
 const Colors = ["black", "red", "blue", "green", "yellow", "white"];
 
-const strokes = [2, 4, 6, 8, 10, 12, 14, 16, 18, 20];
+const strokes = [0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75];
 
-const Toolbar = ({ color, strokeWidth, setColor, setStrokeWidth }) => {
+const Toolbar = ({ color, strokeWidth, setColor, setStrokeWidth, undo }) => {
   const [showStrokes, setShowStrokes] = useState(false);
 
   const handleStrokeWidthChange = (stroke) => {
@@ -530,6 +543,9 @@ const Toolbar = ({ color, strokeWidth, setColor, setStrokeWidth }) => {
             onPress={() => handleChangeColor(item)}
           />
         ))}
+        <TouchableOpacity onPress={undo} style={style.undoButton}>
+          <Text>Undo</Text>
+        </TouchableOpacity>
       </View>
     </>
   );
@@ -594,5 +610,8 @@ const style = StyleSheet.create({
     height: 25,
     borderRadius: 100,
     marginHorizontal: 5,
+  },
+  undoButton: {
+    marginLeft: 10,
   },
 });

@@ -6,12 +6,12 @@ import {
   TouchableOpacity,
   FlatList,
   Button,
-  Image as RNImage,
   Modal,
   useWindowDimensions,
   Keyboard,
   Alert,
   StyleSheet,
+  Image,
 } from "react-native";
 import React, { useCallback, useState, useEffect, useRef } from "react";
 
@@ -38,21 +38,27 @@ import { getSubMiitedFormList } from "../fetches/getSubmittedFormList";
 import Draw from "./draw";
 
 const Formdetail = () => {
-  const { form, id } = useLocalSearchParams();
+  const { width, height } = useWindowDimensions();
+  const { form, properimages, id } = useLocalSearchParams();
   const parsed = decodeURIComponent(form);
-  console.log(JSON.stringify(JSON.parse(parsed), 0, 2));
+  const parsedImages = JSON.parse(properimages);
+  // console.log(JSON.stringify(JSON.parse(parsed), 0, 2));
 
   const [formList, setFormList] = useState([]);
-  const [activeIndex, setActiveIndex] = useState(4);
+  const [activeIndex, setActiveIndex] = useState(0);
 
   useEffect(() => {
     setFormList(JSON.parse(parsed));
   }, []);
 
+  useEffect(() => {
+    console.log("formList", formList);
+  }, [formList]);
+
   const FormItems = ({ item, index }) => {
-    // if (index !== activeIndex) {
-    //   return;
-    // }
+    if (index !== activeIndex) {
+      return;
+    }
 
     let materialNames = [];
     let ratingOfMember = [];
@@ -410,7 +416,7 @@ const Formdetail = () => {
     }
 
     return (
-      <View className="mb-5 border-b-2">
+      <View className="border-b-2" style={{ marginBottom: 200 }}>
         {/* debug value */}
         {/* <Text selectable>{JSON.stringify(JSON.parse(formList.bridgelist[activeIndex].structure).component)}</Text> */}
         <View className="bg-yellow-400 p-2 flex-row justify-start items-center mb-4">
@@ -421,7 +427,8 @@ const Formdetail = () => {
             style={{ marginRight: 8 }}
           />
           <Text className="text-black font-bold text-[20px]">
-            {thisstructure.component.component_details.name} {item.position}
+            {thisstructure.component.component_details.name} {item.position}{" "}
+            {index}
           </Text>
         </View>
         {materialNames.map((thisItem, thisIndex) => {
@@ -770,7 +777,7 @@ const Formdetail = () => {
           <FontAwesomeIcon icon="arrow-left" size={25} color="white" />
         </TouchableOpacity>
         <Text className="text-white text-[20px] font-semibold">
-          Form Details - Edit Information
+          Form Details - Edit Information {formList.length}
         </Text>
         <TouchableOpacity
           onPress={() => updateForm()}
@@ -781,22 +788,67 @@ const Formdetail = () => {
         </TouchableOpacity>
       </View>
       <Text>ID: {id}</Text>
+      <Text>properimages: {properimages}</Text>
       <View className="flex-1 justify-center- items-center">
         {/* <Text>{parsed}</Text> */}
-        <FlatList
-          // ref={flatListRef}
-          data={formList}
-          renderItem={({ item, index }) => (
-            <FormItems item={item} index={index} />
-          )}
-          keyExtractor={(item) => item.id}
-          contentContainerStyle={{
-            flexGrow: 1,
-            paddingHorizontal: 15,
-            marginTop: 10,
-          }}
-          extraData={activeIndex}
-        />
+        {activeIndex < formList.length && (
+          <FlatList
+            // ref={flatListRef}
+            data={formList}
+            renderItem={({ item, index }) => (
+              <FormItems item={item} index={index} />
+            )}
+            keyExtractor={(item) => item.id}
+            contentContainerStyle={{
+              flexGrow: 1,
+              paddingHorizontal: 15,
+              marginTop: 10,
+            }}
+            extraData={activeIndex}
+          />
+        )}
+        {activeIndex === formList.length ? (
+          <View className="bg-red-100" style={{ maxHeight: height / 1.5 }}>
+            {/* <Text>asdasdasd</Text>
+            <Text>{JSON.stringify(parsedImages)}</Text>
+            <Text>{JSON.stringify(parsedImages[0])}</Text> */}
+            <Text>{JSON.stringify(parsedImages[1])}</Text>
+
+            <FlatList
+              data={parsedImages}
+              renderItem={({ item, index }) => {
+                // return <Text>{item}</Text>;
+                return (
+                  <View>
+                    <Image
+                      src={`https://inspection-dev.prestasiperintis.com/uploads/${item}`}
+                      style={{ width: 150, height: 150 }}
+                    />
+                  </View>
+                );
+              }}
+            />
+          </View>
+        ) : null}
+
+        <View className="w-full flex-row justify-around items-center my-3">
+          <TouchableOpacity
+            onPress={() => {
+              setActiveIndex(activeIndex - 1);
+            }}
+            className="bg-blue-500 px-6 py-2 rounded-full"
+          >
+            <Text className="text-white font-bold text-[18px]">Previous</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              setActiveIndex(activeIndex + 1);
+            }}
+            className="bg-green-500 px-6 py-2 rounded-full"
+          >
+            <Text className="text-white font-bold text-[18px]">Next</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </View>
   );

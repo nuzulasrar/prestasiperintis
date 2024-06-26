@@ -541,6 +541,44 @@ export default function Page() {
     setFormList(thisMaterial);
   };
 
+  const [tempValue, setTempValue] = useState("");
+
+  const timeout = useRef(null);
+
+  const percentageRefs = useRef([]);
+  const remarksRefs = useRef([]);
+  const ratingRefs = useRef([]);
+
+  const captureInput3 = (type, value, component, material, type_of_damages) => {
+    //ambik yg lama
+    const thisMaterial = { ...formList };
+
+    //parse structure
+    let thisStructure = JSON.parse(
+      thisMaterial.bridgelist[component].structure
+    );
+
+    thisStructure.component.material[material].type_of_damages[type_of_damages][
+      type
+    ] = value;
+
+    thisMaterial.bridgelist[component].structure =
+      JSON.stringify(thisStructure);
+
+    // console.log(thisMaterial.bridgelist[component].structure);
+    // console.log(
+    //   JSON.stringify(
+    //     thisStructure.component.material[material].type_of_damages[
+    //       type_of_damages
+    //     ],
+    //     null,
+    //     0
+    //   )
+    // );
+
+    setFormList(thisMaterial);
+  };
+
   const FormItems = ({ item, index }) => {
     if (index !== activeIndex) {
       return;
@@ -850,6 +888,22 @@ export default function Page() {
                           </Text>
                         </View>
                         <TextInput
+                          ref={(ref) => (percentageRefs.current[index] = ref)}
+                          onChangeText={(e) => {
+                            clearTimeout(timeout.current);
+                            percentageRefs.current[index].setNativeProps({
+                              text: e,
+                            });
+                            timeout.current = setTimeout(() => {
+                              captureInput3(
+                                "percentage_affected",
+                                e,
+                                index,
+                                index2,
+                                index3
+                              );
+                            }, 2000);
+                          }}
                           value={String(item3.percentage_affected)}
                           className="bg-gray-100 rounded-md h-[35px] pl-3"
                         />
@@ -867,6 +921,22 @@ export default function Page() {
                           </Text>
                         </View>
                         <TextInput
+                          ref={(ref) => (remarksRefs.current[index] = ref)}
+                          onChangeText={(e) => {
+                            clearTimeout(timeout.current);
+                            remarksRefs.current[index].setNativeProps({
+                              text: e,
+                            });
+                            timeout.current = setTimeout(() => {
+                              captureInput3(
+                                "remarks",
+                                e,
+                                index,
+                                index2,
+                                index3
+                              );
+                            }, 2000);
+                          }}
                           value={String(item3.remarks)}
                           className="bg-gray-100 rounded-md h-[35px] pl-3"
                         />
@@ -884,6 +954,22 @@ export default function Page() {
                           </Text>
                         </View>
                         <TextInput
+                          ref={(ref) => (ratingRefs.current[index] = ref)}
+                          onChangeText={(e) => {
+                            clearTimeout(timeout.current);
+                            ratingRefs.current[index].setNativeProps({
+                              text: e,
+                            });
+                            timeout.current = setTimeout(() => {
+                              captureInput3(
+                                "severity_of_damage",
+                                e,
+                                index,
+                                index2,
+                                index3
+                              );
+                            }, 2000);
+                          }}
                           value={String(item3.severity_of_damage)}
                           className="bg-gray-100 rounded-md h-[35px] pl-3"
                         />
@@ -994,6 +1080,7 @@ export default function Page() {
   const ViewFormRender = ({ item, index }) => {
     let eachcomponent = JSON.parse(item.formdata);
     let eachform = JSON.parse(item.formdata);
+    let properimages = item.properimages;
     // let eachform2 = JSON.parse(eachform);
     // let eachform3 = JSON.parse(eachform2[1].structure)
     // console.log("eachform", eachform);
@@ -1017,6 +1104,7 @@ export default function Page() {
               form: encodeURI(
                 JSON.stringify(eachform).replace(/%/g, " percent ")
               ),
+              properimages: properimages,
               id: String(item.id),
             },
           })
@@ -1035,10 +1123,26 @@ export default function Page() {
         })} */}
         {/* </Text> */}
         {/* <Text>{eachform}</Text> */}
-        <Text>{item.id}</Text>
-        <Text>{item.project_type}</Text>
-        <Text>{item.createdAt}</Text>
-        <Text>{item.updatedAt}</Text>
+        <Text className="font-bold text-black">
+          ID: <Text className="font-normal">{item.id}</Text>
+        </Text>
+        {/* <Text className="font-bold text-black">
+          Project Type: <Text className="font-normal">{item.project_type}</Text>
+        </Text> */}
+        <Text className="font-bold text-black">
+          Bridge Name:{" "}
+          <Text className="font-normal">
+            {JSON.parse(item.details).bridge_name
+              ? JSON.parse(item.details).bridge_name
+              : null}
+          </Text>
+        </Text>
+        <Text className="font-bold text-black">
+          Created At: <Text className="font-normal">{item.createdAt}</Text>
+        </Text>
+        <Text className="font-bold text-black">
+          Updated At: <Text className="font-normal">{item.updatedAt}</Text>
+        </Text>
         <View className="h-[20px]" />
       </TouchableOpacity>
     );
@@ -1630,7 +1734,7 @@ export default function Page() {
                     return (
                       <View className="mr-2" style={{ width: width * 0.5 }}>
                         <Text className="mb-2">
-                          {JSON.stringify(arrayData[index])}
+                          {/* {JSON.stringify(arrayData[index])} */}
                         </Text>
                         <View className="w-full px-1 mb-2">
                           <Text className="text-black font-semibold mb-1">
@@ -1721,7 +1825,7 @@ export default function Page() {
                     return (
                       <View className="mr-2" style={{ width: width * 0.5 }}>
                         <Text className="mb-2">
-                          {JSON.stringify(arrayData2[index])}
+                          {/* {JSON.stringify(arrayData2[index])} */}
                         </Text>
                         <View className="w-full px-1 mb-2">
                           <Text className="text-black font-semibold mb-1">
@@ -1812,7 +1916,7 @@ export default function Page() {
                     return (
                       <View className="mr-2" style={{ width: width * 0.5 }}>
                         <Text className="mb-2">
-                          {JSON.stringify(arrayData3[index])}
+                          {/* {JSON.stringify(arrayData3[index])} */}
                         </Text>
                         <View className="w-full px-1 mb-2">
                           <Text className="text-black font-semibold mb-1">
@@ -1883,7 +1987,31 @@ export default function Page() {
                 size={16}
               />
             </TouchableOpacity> */}
-
+            {activeIndex < formList?.bridgelist?.length && (
+              <View>
+                <FlatList
+                  horizontal
+                  showsHorizontalScrollIndicator={false}
+                  bounces={false}
+                  data={formList.bridgelist}
+                  renderItem={({ item, index }) => {
+                    let thisstructure = JSON.parse(item.structure);
+                    return (
+                      <View className="p-2">
+                        <TouchableOpacity
+                          onPress={() => setActiveIndex(index)}
+                          className="px-6 py-2 bg-yellow-400 rounded-full"
+                        >
+                          <Text className="text-black font-bold text-[16px]">
+                            {thisstructure.component.component_details.name}
+                          </Text>
+                        </TouchableOpacity>
+                      </View>
+                    );
+                  }}
+                />
+              </View>
+            )}
             {/* main flatlist */}
             <FlatList
               ref={flatListRef}
@@ -1931,7 +2059,7 @@ export default function Page() {
               disabled={disableButton}
             >
               <Text className="text-white text-[18px] font-semibold">
-                Previous
+                Previous {tempValue}
               </Text>
             </TouchableOpacity>
             {activeIndex !== formList?.bridgelist?.length + 1 ? (
@@ -2002,8 +2130,11 @@ export default function Page() {
             </View>
             <View style={{ height: height, width: width }}>
               <View style={{ height: height * 0.13 }} />
+              {/* <Text className="text-white">
+                {JSON.stringify(arraySampleImages[zoomIndex]?.data)}
+              </Text> */}
               <RNImage
-                source={{ uri: arraySampleImages[zoomIndex] }}
+                source={{ uri: arraySampleImages[zoomIndex]?.data }}
                 style={{
                   height: "70%",
                   width: "100%",
