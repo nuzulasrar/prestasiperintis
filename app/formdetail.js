@@ -42,7 +42,7 @@ const Formdetail = () => {
   const { form, properimages, id } = useLocalSearchParams();
   const parsed = decodeURIComponent(form);
   const parsedImages = JSON.parse(properimages);
-  // console.log(JSON.stringify(JSON.parse(parsed), 0, 2));
+  console.log(JSON.stringify(JSON.parse(parsed), 0, 2));
 
   const [formList, setFormList] = useState([]);
   const [activeIndex, setActiveIndex] = useState(0);
@@ -52,7 +52,7 @@ const Formdetail = () => {
   }, []);
 
   useEffect(() => {
-    console.log("formList", formList);
+    // console.log("formList", formList);
   }, [formList]);
 
   const FormItems = ({ item, index }) => {
@@ -788,9 +788,33 @@ const Formdetail = () => {
         </TouchableOpacity>
       </View>
       <Text>ID: {id}</Text>
-      <Text>properimages: {properimages}</Text>
+      {/* <Text>properimages: {properimages}</Text> */}
       <View className="flex-1 justify-center- items-center">
-        {/* <Text>{parsed}</Text> */}
+        {/* <Text>{JSON.stringify(formList[1].position)}</Text> */}
+        {/* <View> */}
+        <FlatList
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          bounces={false}
+          data={formList}
+          renderItem={({ item, index }) => {
+            let thisstructure = JSON.parse(item.structure);
+            return (
+              <View className="p-2">
+                <TouchableOpacity
+                  onPress={() => setActiveIndex(index)}
+                  className="px-6 py-2 bg-yellow-400 rounded-full"
+                >
+                  <Text className="text-black font-bold text-[16px]">
+                    {thisstructure.component.component_details.name}
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            );
+          }}
+          style={{ height: 90 }}
+        />
+        {/* </View> */}
         {activeIndex < formList.length && (
           <FlatList
             // ref={flatListRef}

@@ -126,7 +126,7 @@ export default function Page() {
           Draw
         </Text>
       </TouchableOpacity> */}
-      <TouchableOpacity
+      {/* <TouchableOpacity
         onPress={() =>
           router.push({
             pathname: "/form",
@@ -137,7 +137,7 @@ export default function Page() {
         <Text className="text-white font-semibold text-[24px] text-center">
           Upload
         </Text>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
       {/* <TouchableOpacity onPress={() => router.push({
                 pathname: "/about",
                 params: { id: 'bacon', name: "Ahmad" }
