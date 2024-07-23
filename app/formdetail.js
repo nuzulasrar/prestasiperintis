@@ -832,22 +832,32 @@ const Formdetail = () => {
           />
         )}
         {activeIndex === formList.length ? (
-          <View className="bg-red-100" style={{ maxHeight: height / 1.5 }}>
+          <View className="" style={{ maxHeight: height / 1.5 }}>
             {/* <Text>asdasdasd</Text>
             <Text>{JSON.stringify(parsedImages)}</Text>
             <Text>{JSON.stringify(parsedImages[0])}</Text> */}
-            <Text>{JSON.stringify(parsedImages[1])}</Text>
+            {/* <Text>{JSON.stringify(parsedImages)}</Text> */}
 
             <FlatList
               data={parsedImages}
               renderItem={({ item, index }) => {
                 // return <Text>{item}</Text>;
                 return (
-                  <View>
+                  <View className="mb-8">
                     <Image
                       src={`https://inspection-dev.prestasiperintis.com/uploads/${item}`}
-                      style={{ width: 150, height: 150 }}
+                      style={{ width: width * 0.75, height: width * 0.75 }}
+                      resizeMode="contain"
                     />
+                    <Text className="text-black text-center my-3">{item}</Text>
+                    <View className="flex-row justify-center items-center">
+                      <TouchableOpacity className="px-6 py-3 bg-yellow-400 rounded-3xl mx-3">
+                        <Text className="text-black font-semibold">Edit</Text>
+                      </TouchableOpacity>
+                      <TouchableOpacity className="px-6 py-3 bg-red-600 rounded-3xl mx-3">
+                        <Text className="text-white font-semibold">Delete</Text>
+                      </TouchableOpacity>
+                    </View>
                   </View>
                 );
               }}
