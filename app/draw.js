@@ -579,7 +579,7 @@ const style = StyleSheet.create({
   toolbar: {
     backgroundColor: "#ffffff",
     height: 45,
-    width: 275,
+    // width: 275,
     borderRadius: 100,
     borderColor: "#f0f0f0",
     borderWidth: 1,

@@ -11,6 +11,7 @@ import {
   useWindowDimensions,
   Keyboard,
   Alert,
+  ActivityIndicator,
 } from "react-native";
 import React, { useCallback, useState, useEffect, useRef } from "react";
 
@@ -46,6 +47,8 @@ export default function Page() {
   const thisdata = JSON.parse(data);
 
   const [modalVisible, setModalVisible] = useState(false);
+
+  const [loading, setLoading] = useState(false);
 
   const [zoomModalVisible, setZoomModalVisible] = useState(false);
 
@@ -180,6 +183,8 @@ export default function Page() {
   }, [activeIndex]);
 
   const thisApiCall = async () => {
+    setLoading(true);
+
     let returnApiCall;
 
     if (thisdata.project_type === "Toll") {
@@ -187,6 +192,8 @@ export default function Page() {
     } else if (thisdata.project_type === "Bridge") {
       returnApiCall = await getBridgeList();
     }
+
+    setLoading(false);
 
     setFormList(returnApiCall);
     let returnViewFormData = await getSubMiitedFormList(thisdata.id);
@@ -1060,12 +1067,15 @@ export default function Page() {
     })
       .then((res) => res.json())
       .then((json) => {
-        console.log("json", json);
+        // console.log("json", json);
 
         if (json.success === "success") {
+          console.log("success");
           setConfirmModal(false);
           setModalVisible(false);
           thisApiCall();
+        } else {
+          console.log("fail");
         }
       })
       .catch((error) => console.log("ERROR", error));
@@ -1080,6 +1090,9 @@ export default function Page() {
   const ViewFormRender = ({ item, index }) => {
     let eachcomponent = JSON.parse(item.formdata);
     let eachform = JSON.parse(item.formdata);
+    let images1 = item.images1;
+    let images2 = item.images2;
+    let images3 = item.images3;
     let properimages = item.properimages;
     // let eachform2 = JSON.parse(eachform);
     // let eachform3 = JSON.parse(eachform2[1].structure)
@@ -1104,6 +1117,9 @@ export default function Page() {
               form: encodeURI(
                 JSON.stringify(eachform).replace(/%/g, " percent ")
               ),
+              images1: images1,
+              images2: images2,
+              images3: images3,
               properimages: properimages,
               id: String(item.id),
             },
@@ -1418,15 +1434,19 @@ export default function Page() {
           <Text className="text-black font-semibold text-[20px]"></Text>
         )} */}
         {/* <Text className="text-black">{JSON.stringify(viewFormList)}</Text> */}
-        <FlatList
-          data={viewFormList}
-          ListEmptyComponent={() => (
-            <Text className="text-black">No Submmited Form Yet</Text>
-          )}
-          renderItem={({ item, index }) => (
-            <ViewFormRender item={item} index={index} />
-          )}
-        />
+        {loading ? (
+          <ActivityIndicator color={"blue"} size={"small"} />
+        ) : (
+          <FlatList
+            data={viewFormList}
+            ListEmptyComponent={() => (
+              <Text className="text-black">No Submmited Form Yet</Text>
+            )}
+            renderItem={({ item, index }) => (
+              <ViewFormRender item={item} index={index} />
+            )}
+          />
+        )}
       </View>
 
       <TouchableOpacity

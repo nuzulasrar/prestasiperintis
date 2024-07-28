@@ -39,13 +39,41 @@ import Draw from "./draw";
 
 const Formdetail = () => {
   const { width, height } = useWindowDimensions();
-  const { form, properimages, id } = useLocalSearchParams();
+  const { form, images1, images2, images3, properimages, id } =
+    useLocalSearchParams();
   const parsed = decodeURIComponent(form);
   const parsedImages = JSON.parse(properimages);
+  const parsedImages1 = JSON.parse(images1);
+  const parsedImages2 = JSON.parse(images2);
+  const parsedImages3 = JSON.parse(images3);
+
+  let allImages = [
+    ...parsedImages1,
+    ...parsedImages2,
+    ...parsedImages3,
+    ...parsedImages,
+  ];
+
+  const [images, setImages] = useState(allImages);
+  const [newImages, setNewImages] = useState([]);
+  const [deleteImages, setDeleteImages] = useState([]);
+
   console.log(JSON.stringify(JSON.parse(parsed), 0, 2));
 
   const [formList, setFormList] = useState([]);
   const [activeIndex, setActiveIndex] = useState(0);
+
+  const receivedImage = (image) => {
+    // alert(JSON.stringify(image));
+    let thisarray = [...newImages];
+    thisarray.push(image);
+
+    setNewImages(thisarray);
+
+    setActiveIndex(activeIndex + 1);
+  };
+  const receivedImage2 = () => {};
+  const receivedImage3 = () => {};
 
   useEffect(() => {
     setFormList(JSON.parse(parsed));
@@ -747,8 +775,12 @@ const Formdetail = () => {
 
   const updateForm = () => {
     // console.log("form: ", formList.bridgelist);
+
+    console.log("deleteList", deleteImages);
+
     var fd = new FormData();
 
+    fd.append("deleteImages", JSON.stringify(deleteImages));
     fd.append("form", JSON.stringify(formList));
     fd.append("id", JSON.stringify(id));
 
@@ -766,6 +798,66 @@ const Formdetail = () => {
       .catch((error) => console.log("ERROR", error));
   };
 
+  const comfirmDeletee = (name) => {
+    Alert.alert(
+      "Confirm",
+      "Are you sure you want to delete?",
+      [
+        {
+          text: "No",
+          onPress: () => {},
+          style: "cancel",
+        },
+        {
+          text: "Yes",
+          onPress: () => deletee(name),
+        },
+      ],
+      { cancelable: false }
+    );
+  };
+
+  const deletee = (name) => {
+    let thisArray = [...images];
+    let deleteArray = [...deleteImages];
+
+    // let alreadyexisted = thisarray.includes(name);
+
+    thisArray = thisArray.filter((item) => item !== name);
+    deleteArray.push(name);
+
+    setImages(thisArray);
+    setDeleteImages(deleteArray);
+
+    // thisarray.splice(index, 1);
+    // setNewImages(thisarray);
+  };
+
+  const comfirmDelete2 = (index) => {
+    Alert.alert(
+      "Confirm",
+      "Are you sure you want to delete?",
+      [
+        {
+          text: "No",
+          onPress: () => {},
+          style: "cancel",
+        },
+        {
+          text: "Yes",
+          onPress: () => delete2(index),
+        },
+      ],
+      { cancelable: false }
+    );
+  };
+
+  const delete2 = (index) => {
+    let thisarray = [...newImages];
+    thisarray.splice(index, 1);
+    setNewImages(thisarray);
+  };
+
   return (
     <View className="flex-1 justify-start bg-gray-200">
       <View className="h-[50px]" />
@@ -781,39 +873,41 @@ const Formdetail = () => {
         </Text>
         <TouchableOpacity
           onPress={() => updateForm()}
-          className="bg-transparent flex-row justify-start items-center pl-[15px] h-[50px] w-[100px]"
+          className="bg-green-600 flex-row justify-center items-center h-[50px] w-[100px]"
         >
           {/* <FontAwesomeIcon icon="arrow-left" size={25} color="transparent" /> */}
-          <Text className="text-white">Update</Text>
+          <Text className="text-white font-bold">Update</Text>
         </TouchableOpacity>
       </View>
-      <Text>ID: {id}</Text>
+      {/* <Text>ID: {id}</Text> */}
       {/* <Text>properimages: {properimages}</Text> */}
       <View className="flex-1 justify-center- items-center">
         {/* <Text>{JSON.stringify(formList[1].position)}</Text> */}
         {/* <View> */}
-        <FlatList
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          bounces={false}
-          data={formList}
-          renderItem={({ item, index }) => {
-            let thisstructure = JSON.parse(item.structure);
-            return (
-              <View className="p-2">
-                <TouchableOpacity
-                  onPress={() => setActiveIndex(index)}
-                  className="px-6 py-2 bg-yellow-400 rounded-full"
-                >
-                  <Text className="text-black font-bold text-[16px]">
-                    {thisstructure.component.component_details.name}
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            );
-          }}
-          style={{ height: 90 }}
-        />
+        {activeIndex < formList.length && (
+          <FlatList
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            bounces={false}
+            data={formList}
+            renderItem={({ item, index }) => {
+              let thisstructure = JSON.parse(item.structure);
+              return (
+                <View className="p-2">
+                  <TouchableOpacity
+                    onPress={() => setActiveIndex(index)}
+                    className="px-6 py-2 bg-yellow-400 rounded-full"
+                  >
+                    <Text className="text-black font-bold text-[16px]">
+                      {thisstructure.component.component_details.name}
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              );
+            }}
+            style={{ height: 90 }}
+          />
+        )}
         {/* </View> */}
         {activeIndex < formList.length && (
           <FlatList
@@ -832,35 +926,81 @@ const Formdetail = () => {
           />
         )}
         {activeIndex === formList.length ? (
-          <View className="" style={{ maxHeight: height / 1.5 }}>
+          <View style={{ width: "100%", height: height * 0.75 }}>
+            <Draw
+              saveimage={receivedImage}
+              takeImage={receivedImage2}
+              galleryImage={receivedImage3}
+            />
+          </View>
+        ) : null}
+        {activeIndex === formList.length + 1 ? (
+          <View className="" style={{ maxHeight: height * 0.8, width: width }}>
             {/* <Text>asdasdasd</Text>
             <Text>{JSON.stringify(parsedImages)}</Text>
             <Text>{JSON.stringify(parsedImages[0])}</Text> */}
             {/* <Text>{JSON.stringify(parsedImages)}</Text> */}
-
+            <Text className="text-black p-2 mb-4 text-[20px] bg-yellow-400">
+              Existing Image ({images.length})
+            </Text>
             <FlatList
-              data={parsedImages}
+              data={images}
               renderItem={({ item, index }) => {
                 // return <Text>{item}</Text>;
                 return (
-                  <View className="mb-8">
+                  <View className="mb-8 w-full justify-center items-center">
                     <Image
-                      src={`https://inspection-dev.prestasiperintis.com/uploads/${item}`}
+                      src={`${API_URL}/uploads/${item}`}
                       style={{ width: width * 0.75, height: width * 0.75 }}
                       resizeMode="contain"
                     />
                     <Text className="text-black text-center my-3">{item}</Text>
                     <View className="flex-row justify-center items-center">
-                      <TouchableOpacity className="px-6 py-3 bg-yellow-400 rounded-3xl mx-3">
+                      {/* <TouchableOpacity className="px-6 py-3 bg-yellow-400 rounded-3xl mx-3">
                         <Text className="text-black font-semibold">Edit</Text>
-                      </TouchableOpacity>
-                      <TouchableOpacity className="px-6 py-3 bg-red-600 rounded-3xl mx-3">
+                      </TouchableOpacity> */}
+                      <TouchableOpacity
+                        className="px-6 py-3 bg-red-600 rounded-3xl mx-3"
+                        onPress={() => comfirmDeletee(item)}
+                      >
                         <Text className="text-white font-semibold">Delete</Text>
                       </TouchableOpacity>
                     </View>
                   </View>
                 );
               }}
+              style={{ marginBottom: 16 }}
+            />
+            <Text className="text-black p-2 mb-4 text-[20px] bg-yellow-400">
+              New Image ({newImages.length})
+            </Text>
+            <FlatList
+              data={newImages}
+              renderItem={({ item, index }) => {
+                // return <Text>{item}</Text>;
+                return (
+                  <View className="mb-8 w-full justify-center items-center">
+                    <Image
+                      src={item}
+                      style={{ width: width * 0.75, height: width * 0.75 }}
+                      resizeMode="contain"
+                    />
+                    {/* <Text className="text-black text-center my-3">{item}</Text> */}
+                    <View className="flex-row justify-center items-center">
+                      {/* <TouchableOpacity className="px-6 py-3 bg-yellow-400 rounded-3xl mx-3">
+                        <Text className="text-black font-semibold">Edit</Text>
+                      </TouchableOpacity> */}
+                      <TouchableOpacity
+                        onPress={() => comfirmDelete2(index)}
+                        className="px-6 py-3 bg-red-600 rounded-3xl mx-3"
+                      >
+                        <Text className="text-white font-semibold">Delete</Text>
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+                );
+              }}
+              style={{ marginBottom: 16 }}
             />
           </View>
         ) : null}
@@ -874,14 +1014,17 @@ const Formdetail = () => {
           >
             <Text className="text-white font-bold text-[18px]">Previous</Text>
           </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => {
-              setActiveIndex(activeIndex + 1);
-            }}
-            className="bg-green-500 px-6 py-2 rounded-full"
-          >
-            <Text className="text-white font-bold text-[18px]">Next</Text>
-          </TouchableOpacity>
+          {activeIndex < formList.length + 1 ? (
+            <TouchableOpacity
+              onPress={() => {
+                if (activeIndex < formList.length + 1)
+                  setActiveIndex(activeIndex + 1);
+              }}
+              className="bg-green-500 px-6 py-2 rounded-full"
+            >
+              <Text className="text-white font-bold text-[18px]">Next</Text>
+            </TouchableOpacity>
+          ) : null}
         </View>
       </View>
     </View>
