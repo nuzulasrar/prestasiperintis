@@ -952,9 +952,12 @@ const Formdetail = () => {
                     <Image
                       src={`${API_URL}/uploads/${item}`}
                       style={{ width: width * 0.75, height: width * 0.75 }}
-                      resizeMode="contain"
+                      // resizeMode="contain"
                     />
-                    <Text className="text-black text-center my-3">{item}</Text>
+                    <Text
+                      className="text-black text-center my-3"
+                      selectable
+                    >{`${API_URL}/uploads/${item}`}</Text>
                     <View className="flex-row justify-center items-center">
                       {/* <TouchableOpacity className="px-6 py-3 bg-yellow-400 rounded-3xl mx-3">
                         <Text className="text-black font-semibold">Edit</Text>
